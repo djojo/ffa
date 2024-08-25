@@ -1,0 +1,84 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    Edwiser RemUI
+    @package theme_remui
+    @copyright (c) 2023 WisdmLabs (https://wisdmlabs.com/)
+    @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+
+}}
+{{!
+    @template theme_remui/smartch_info
+}}
+
+
+{{! modification smartch dashboard}}
+
+
+{{! 
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="0.5" y="0.5" width="23" height="23" rx="11.5" stroke="white"/>
+</svg> }}
+
+
+<h3 class="FFF-title1" style="display: flex;align-items: center;margin-top:50px;">
+    
+    <svg class="fff-icon" onclick="document.getElementById('fff-recommended').scrollBy({top: 0, left: -30, behavior: 'smooth'});" width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M22.7071 11.2929C23.0976 11.6834 23.0976 12.3166 22.7071 12.7071L16.4142 19L22.7071 25.2929C23.0976 25.6834 23.0976 26.3166 22.7071 26.7071C22.3166 27.0976 21.6834 27.0976 21.2929 26.7071L14.2929 19.7071C13.9024 19.3166 13.9024 18.6834 14.2929 18.2929L21.2929 11.2929C21.6834 10.9024 22.3166 10.9024 22.7071 11.2929Z" fill="#00315a"/>
+        <rect x="1" y="1" width="36" height="36" rx="18" stroke="#00315a" stroke-width="2"/>
+    </svg>
+
+
+    <svg class="fff-icon" onclick="document.getElementById('fff-recommended').scrollBy({top: 0, left: 30, behavior: 'smooth'});" width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M15.2929 26.7071C14.9024 26.3166 14.9024 25.6834 15.2929 25.2929L21.5858 19L15.2929 12.7071C14.9024 12.3166 14.9024 11.6834 15.2929 11.2929C15.6834 10.9024 16.3166 10.9024 16.7071 11.2929L23.7071 18.2929C24.0976 18.6834 24.0976 19.3166 23.7071 19.7071L16.7071 26.7071C16.3166 27.0976 15.6834 27.0976 15.2929 26.7071Z" fill="#00315a"/>
+        <rect x="1" y="1" width="36" height="36" rx="18" stroke="#00315a" stroke-width="2"/>
+    </svg>
+
+    <span class="FFABlack FFF-Blue" style="margin-right:10px;">Mes </span><span class="FFABlack FFF-Gold">Recommendations</span> 
+</h3>
+
+<div class="fff-my-courses-caroussel">
+
+    <div class="fff-my-courses-caroussel-items" id="fff-recommended">
+
+    </div>
+
+</div>
+
+
+{{#js}}
+	require(['jquery', 'core/ajax'], function($, Ajax) {
+		$(document).ready(function(){
+			let service_name = 'theme_remui_get_smartch_my_courses';
+			let cuserrecommended = Ajax.call([
+			    {
+			        methodname: service_name,
+			        args: {}
+			    }
+			]);
+			cuserrecommended[0].done(function(response) {
+                let data = JSON.parse(response);
+                let courses = data.mycourses
+                let html = "";
+                //wait for the block to be ready 
+                $('#fff-recommended').ready(function() {
+                    courses.forEach(el=>{
+                        html += '<div onclick="location.href=`'+el.url+'`" class="fff-course-thumbnail-box" style="background-image:url('+el.img+');"><h5 class="fff-course-thumbnail-title">'+el.fullname+'</h5></div>';
+                    });
+                    {{! document.getElementById('fff-recommended').innerHTML = html; }}
+                });
+			    
+			});
+		});
+	});
+{{/js}}

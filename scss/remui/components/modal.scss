@@ -1,0 +1,492 @@
+.fullwidth-modal .modal-dialog {
+    max-width: 96vw;
+    width: 96vw;
+}
+
+// .moodle-dialogue-base {
+//     .moodle-dialogue-focused {
+//         background: $bg-block-sidebarsection-color;
+//         border: 1px solid $light-border;
+//         filter: drop-shadow(map-get($box-shadows-values, xs));
+//         border-radius: 4px;
+//         @include media-breakpoint-down(sm) {
+//             max-width: $modal-sm;
+//             left: 50% !important;
+//             top: 50% !important;
+//             transform: translate(-50%, -50%);
+//         }
+//         .moodle-dialogue-wrap {
+//             display: flex;
+//             flex-direction: column;
+//             border-radius: inherit;
+//             border: unset;
+
+//             .moodle-dialogue-hd {
+//                 // display: flex;
+//                 // flex-direction: row;
+//                 // justify-content: space-between;
+//                 // align-items: flex-start;
+//                 // padding: 20px 24px 20px 16px;
+//                 // gap: 8px;
+//                 // border-bottom: 1px solid $light-border;
+
+//                 h5 {
+//                     @extend .h-semibold-4;
+//                     color: $heading-color;
+//                 }
+
+//                 .yui3-widget-buttons {
+//                     height: 24px;
+//                     width: 24px;
+
+//                     .closebutton {
+//                         color: $modal-closebutton-color;
+//                         margin: 0px;
+//                         font-size: $block-icon-size;
+//                         height: $block-icon-size;
+//                         width: $block-icon-width;
+//                         display: flex;
+//                         justify-content: center;
+//                         align-items: center;
+//                         line-height: 50%;
+//                     }
+
+//                     button.yui3-button {
+//                         padding: 0px;
+//                     }
+//                 }
+//             }
+
+//             .moodle-dialogue-bd {
+//                 padding-left: 0px;
+
+//                 .dragdrop-keyboard-drag {
+//                     padding: 0;
+//                     margin: 0;
+
+//                     li {
+//                         display: flex;
+//                         flex-direction: row;
+//                         align-items: center;
+//                         padding: 16px 14px;
+//                         gap: 90px;
+//                         height: 48px;
+//                         @extend.text-link-regular;
+//                         color: $paragraph-color;
+//                         a:focus{
+//                             outline: none;
+//                             color: inherit;
+//                             background-color:transparent;
+//                             box-shadow: none;
+//                         }
+//                     }
+//                 }
+//             }
+//         }
+//     }
+// }
+//
+.moodle-dialogue-bd{
+    ul.dragdrop-keyboard-drag {
+        padding: 0;
+        margin: 0;
+        & li {
+            padding: 16px 0px;
+            // height: 48px;
+            @extend.text-link-regular;
+            color: $paragraph-color;
+            &:first-child{
+                padding-top: 0px;
+            }
+            &:last-child{
+                padding-bottom: 0px;
+            }
+            a:focus {
+                outline: none;
+                color: inherit;
+                background-color: transparent;
+                box-shadow: none;
+            }
+        }
+    }
+}
+
+.modal {
+    .modal-header {
+        align-items: center;
+        .edw-icon{
+            display: flex;
+            font-size: $edw-icon-size-large;
+            color:$ic-default;
+        }
+        .modal-title {
+            @include get-typography(4, semibold, desktop);
+            color: $modal-header-text-color;
+
+            @include media-breakpoint-down(sm) {
+                @include get-typography(4, semibold, mobile);
+            }
+        }
+    }
+    .mform fieldset:last-of-type {
+        border: 0;
+    }
+}
+.moodle-dialogue {
+    @include media-breakpoint-down(md) {
+        width: 97% !important;
+    }
+    .moodle-dialogue-content {
+        &.moodle-dialogue-wrap {
+            background-color: $modal-content-bg;
+            border: $modal-content-border-width solid $modal-content-border-color;
+            @include border-radius($modal-content-border-radius);
+            outline: 0;
+
+            .moodle-dialogue-hd.yui3-widget-hd {
+                display: flex;
+                background: $modal-content-bg;
+                padding: $modal-header-padding;
+                color: $modal-header-text-color;
+                border-bottom: $modal-header-border-width solid $modal-header-border-color;
+                max-height: add($edw-icon-size-large, $modal-header-padding-y * 2);
+                @include border-top-radius($modal-content-inner-border-radius);
+                @include get-typography(4, semibold, desktop);
+                margin: 0;
+
+                h5,
+                h3 {
+                    @include get-typography(4, semibold, desktop);
+                    margin: 0;
+
+                    @include media-breakpoint-down(sm) {
+                        @include get-typography(4, semibold, mobile);
+                    }
+                }
+
+                @include media-breakpoint-down(sm) {
+                    @include get-typography(4, semibold, mobile);
+                }
+
+                .closebutton {
+                    padding: 0;
+                    &::after {
+                        content: "\47";
+                        font-family: $remui-icon-font-family;
+                        font-size: $edw-icon-size-large;
+                    }
+                }
+            }
+            .yui3-widget-bd {
+                color: $paragraph-color;
+                padding: $modal-inner-padding;
+            }
+        }
+    }
+}
+.moodle-dialogue-lightbox,
+.yui3-skin-sam .yui3-widget-mask {
+    background: $modal-backdrop-bg
+}
+
+.modal,
+.moodle-dialogue {
+    .filemanager {
+        .form-group {
+            padding: 0;
+        }
+    }
+}
+.modal-sidebar {
+    position: absolute;
+    right: 0;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    height: 100%;
+    margin: 0;
+    background-color: $white;
+    align-content: center;
+
+    .modal-content {
+        overflow-x: hidden;
+        overflow-y: auto;
+        background-color: transparent;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .modal-header {
+        border-bottom: none;
+    }
+
+    .modal-footer {
+        flex-wrap: wrap;
+        border-top: none;
+    }
+}
+.modal.modal-in-page {
+    height: auto;
+}
+.modal {
+    .modal-dialog {
+        .modal-content {
+            .modal-footer {
+                .btn {
+                    margin-left: 8px;
+                }
+            }
+        }
+    }
+}
+.default-blocks-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    grid-gap: 25px;
+
+    .card-wrapper {
+        transition: .15s ease all;
+
+        .card-body {
+            background-image: url([[pix:theme_remui|modalbgmoodle]]);
+            height: 150px;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        &:hover {
+            // transform: scale(1.07);
+            @include get-box-shadow(xs);
+            // box-shadow: 0 9px 10px #0000000f, 0 1px 0 #0000000f;
+
+            .ribbon {
+                left: 0;
+            }
+        }
+    }
+}
+
+.fullwidth-modal{
+    .modal-header{
+        background-color: $bg-small-ui;
+    }
+    .modal-body{
+        padding: map-get($spacerspx,'8');
+        position: relative;
+        @include media-breakpoint-down(sm){
+            // padding: map-get($spacerspx,'6');
+            padding: unset;
+        }
+        .updateinfoalert{
+            width: fit-content;
+            margin: auto;
+            position: fixed;
+            top: 100px;
+            z-index: 1;
+            left: 50%;
+            transform: translate(-50%,-50%);
+        }
+        .add-block-filters-wrapper{
+            @include media-breakpoint-down(sm){
+                padding: map-get($spacerspx,'6');
+                padding-bottom: unset;
+            }
+        }
+        .view-btn-wrapper{
+            display: flex;
+            justify-content: flex-end;
+            gap: map-get($gapspace, '4');
+            .viewbtn{
+                .edw-icon{
+                    display: flex;
+                    color: $ic-default;
+                    font-size: $edw-icon-size-large;
+                }
+                &:focus,&:active,&.active{
+                    // .edw-icon{
+                    //     color: $brand-primary;
+                    // }
+                }
+            }
+        }
+        .modal-subheader{
+            @include media-breakpoint-down(sm){
+                flex-direction: column;
+                .left-filters,.right-filters{
+                    width: 100%;
+                }
+                .edw-tabs-navigation{
+                    .nav-item{
+                        flex: unset !important;
+                    }
+                    .nav-link{
+                        &.active,
+                        &:hover,
+                        &:focus {
+                            color: $brand-primary !important;
+                            // font-weight: 600;
+                            background-color: transparent !important;
+                            border: unset !important;
+                            margin: unset !important;
+                            box-shadow: unset !important;
+                        }
+                    }
+                }
+            }
+        }
+        .default-blocks-wrapper{
+            display: unset;
+            .card-item{
+                position: relative;
+            }
+            .blockurl{
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                z-index: 2;
+            }
+            .card{
+                padding: map-get($spacerspx,'4');
+
+                .card-body{
+                    padding: unset;
+                }
+                .card-footer{
+                    background-color: unset;
+                    padding: unset;
+                    border: unset;
+                    .action-icon-wrapper{
+                        z-index: 3;
+                    }
+                    a{
+                        color: inherit;
+                    }
+                    .edw-icon{
+                        font-size: $edw-icon-size-large;
+                        color: $ic-default;
+                    }
+                }
+            }
+            &.grid-view{
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+                gap:map-get($gapspace, '6')  map-get($gapspace, '8');
+                @include media-breakpoint-down(sm){
+                    padding: 0px  map-get($spacerspx,'6')   map-get($spacerspx,'6')   map-get($spacerspx,'6') ;
+                }
+                .card-wrapper{
+                    border: 1px solid $light-border;
+                    border-radius: 8px;
+                    overflow: hidden;
+                    .card-item{
+                        .card{
+                            gap: map-get($gapspace, '4');
+                            border: unset;
+                            border-radius: unset;
+                            .card-body{
+                                height: 208px;
+                                background-repeat: no-repeat;
+                                background-position: center;
+                                background-size: cover;
+                                border-radius: 4px;
+                                border: unset;
+                                img{
+                                    width: 100%;
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
+            &.list-view{
+                display: grid;
+                grid-template-columns: repeat(2,1fr);
+                gap: 0px  map-get($gapspace, '6');
+                @include media-breakpoint-down(sm){
+                    grid-template-columns: 1fr;
+                }
+                .card-wrapper{
+                    &:hover{
+                        // box-shadow: unset;
+                        z-index: 1;
+                        transform: unset;
+                    }
+                }
+                .card{
+                    flex-direction: row;
+                    border: unset;
+                    gap: map-get($gapspace, '8');
+                    @include media-breakpoint-down(sm){
+                        gap: 0px  map-get($gapspace, '4');
+                    }
+                    border: unset;
+                    border-bottom: 1px solid $light-border;
+                    border-radius: unset;
+                    .card-body{
+                        height: 60px;
+                        width: 60px;
+                        background-image: url([[pix:theme_remui|modallistviewbgmoodle]]);
+                        border: 1px solid $light-border;
+                        border-radius: 4px;
+                        background-repeat: no-repeat;
+                        background-position: center;
+                        background-size: cover;
+                        img{
+                            width: 100%;
+                        }
+                    }
+                    .card-footer{
+                        display: flex;
+                        flex-grow: 1;
+                        align-items: center;
+                    }
+                }
+            }
+        }
+
+    }
+}
+//Additional handling for edwiserpage builder
+.epb_custom_modal{
+    .advancedblocktab{
+        .moodleblock{
+            display: none;
+        }
+    }
+    .moodleblocktab{
+        .advanceblockblocks{
+            display: none;
+        }
+    }
+    .default-blocks-wrapper{
+        .list-group-item {
+            border-radius: 4px;
+            // border: 1px solid $light-border;
+            overflow: hidden;
+            border: unset !important;
+          }
+        .advanceblockblocks{
+            .card-body{
+                background: unset;
+                    border: 1px solid $light-border !important;
+                    border-radius: unset;
+            }
+        }
+        &.list-view{
+            .advanceblockblocks{
+                .card-body{
+                    background: unset !important;
+                }
+            }
+        }
+    }
+
+    .moodleblock{
+        .card-body{
+            img{
+                display: none;
+            }
+        }
+    }
+}

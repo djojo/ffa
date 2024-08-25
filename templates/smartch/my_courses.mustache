@@ -1,0 +1,403 @@
+
+{{! modification smartch FFA dashboard my courses}}
+
+<section id="my_courses">
+
+<h3 class="FFF-title1" style="display: flex;align-items: center;">
+    
+    <div style="display:none;">
+        <svg style="opacity: 0.3;" id="leftcourseicon" class="fff-icon" onclick="moveIconCourse('prev')" width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M22.7071 11.2929C23.0976 11.6834 23.0976 12.3166 22.7071 12.7071L16.4142 19L22.7071 25.2929C23.0976 25.6834 23.0976 26.3166 22.7071 26.7071C22.3166 27.0976 21.6834 27.0976 21.2929 26.7071L14.2929 19.7071C13.9024 19.3166 13.9024 18.6834 14.2929 18.2929L21.2929 11.2929C21.6834 10.9024 22.3166 10.9024 22.7071 11.2929Z" fill="#00315a"/>
+            <rect x="1" y="1" width="36" height="36" rx="18" stroke="#00315a" stroke-width="2"/>
+        </svg>
+
+        <svg class="fff-icon" id="rightcourseicon" onclick="moveIconCourse('next')" width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M15.2929 26.7071C14.9024 26.3166 14.9024 25.6834 15.2929 25.2929L21.5858 19L15.2929 12.7071C14.9024 12.3166 14.9024 11.6834 15.2929 11.2929C15.6834 10.9024 16.3166 10.9024 16.7071 11.2929L23.7071 18.2929C24.0976 18.6834 24.0976 19.3166 23.7071 19.7071L16.7071 26.7071C16.3166 27.0976 15.6834 27.0976 15.2929 26.7071Z" fill="#00315a"/>
+            <rect x="1" y="1" width="36" height="36" rx="18" stroke="#00315a" stroke-width="2"/>
+        </svg>
+    </div>
+
+    <span class="FFABlack FFF-Blue" style="margin-right:10px;margin-left:15px;">Mes </span><span class="FFABlack FFF-Gold">Formations</span> 
+</h3>
+
+<div class="fff-my-courses-caroussel">
+
+    <div class="fff-my-courses-caroussel-items" id="fff-my-courses">
+        <div class="loader_container"><div class="loader-06"></div></div>
+    </div>
+
+</div>
+
+</section>
+
+<section id="my_teams">
+
+<div id="adminteams" style="display:none;">
+<h3 class="FFF-title1" style="display: flex;align-items: center;margin-top:50px;">
+    {{! <span class="FFABlack FFF-Blue" style="margin-right:10px;letter-spacing:1px;">Mes groupes</span>  }}
+    <span class="FFABlack FFF-Blue" style="margin-right:10px;letter-spacing:1px;" id="selectedcoursename"></span>
+</h3>
+<div class="row" id="mycourseteams"></div>
+</div>
+</section>
+
+<script>
+
+    var maxelements = 0;
+    var numbercourses = 0;
+
+    function goToTeam(){
+        let team = document.getElementById('adminteams');
+        let top = team.getBoundingClientRect().top;
+        var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        var topPositionRelativeToPage = top + scrollTop;
+        window.scrollTo({
+            top: topPositionRelativeToPage - 100, // La position de défilement vers le bas souhaitée
+            behavior: "smooth" // Utiliser une animation fluide
+        });
+    }
+
+    var positionNextIcon = 0;
+
+    function moveIconCourse(move){
+
+        //on regarde la largeur de l'ecran
+        let largeur = window.innerWidth;
+        let largeurInterval = Math.floor((largeur - 180)/220);
+        let rest = numbercourses-largeurInterval;
+        
+        //si il y a des encarts gris
+        if(maxelements < 0){
+            if(move == "next" && positionNextIcon < rest){
+                positionNextIcon++;
+                document.getElementById('fff-my-courses').scrollBy({top: 0, left: 30, behavior: 'smooth'});
+            } else if(move == "prev" && positionNextIcon > 0){
+                document.getElementById('fff-my-courses').scrollBy({top: 0, left: -30, behavior: 'smooth'});
+                positionNextIcon--;
+            }
+
+            //si on est à la position 0
+            if(positionNextIcon == 0){
+                document.getElementById('leftcourseicon').style.opacity=0.3; 
+            } else {
+                document.getElementById('leftcourseicon').style.opacity=1; 
+            }
+
+            
+            //console.log('actual :'+positionNextIcon+ ' & max :'+rest );
+            let max = rest - 1;
+
+            //si on est à la position max
+            if(positionNextIcon == rest){
+                document.getElementById('rightcourseicon').style.opacity=0.3; 
+            } else {
+                document.getElementById('rightcourseicon').style.opacity=1; 
+            }
+
+            console.log(positionNextIcon);
+
+        }
+        
+    }
+
+    function getTeams(courseid){
+        
+        //on affiche le bloc équipe
+        document.querySelector("#adminteams").style.display = "block";
+        document.getElementById('mycourseteams').innerHTML = '<div class="loader_container"><div class="loader-06"></div></div>';
+        require(['jquery', 'core/ajax'], function($, Ajax) {
+            $(document).ready(function(){
+                
+                let service_name = 'theme_remui_get_smartch_my_teams_course';
+                let cusercourses = Ajax.call([
+                    {
+                        methodname: service_name,
+                        args: {courseid:courseid}
+                    }
+                ]);
+                cusercourses[0].done(function(response) {
+                    let data = JSON.parse(response);
+                    let html = "";
+
+
+                    
+                    
+                    
+                    //wait for the block to be ready 
+                    $('#mycourseteams').ready(function() {   
+
+                        
+
+                        if(data == "noteam"){
+                            html+= ' <div class="col-md-12 smartch_team_selected" style="opacity:0;">';
+                                html+= '<h3 class="nothing_to_display">Vous n\'avez pas de groupe associé sur cette formation...</h3>';
+                            html+= ' </div>';
+                        } else {
+                            //document.querySelector("#selectedcoursename").innerHTML = "-&nbsp;" + data[0].coursename;
+                            document.querySelector("#selectedcoursename").innerHTML = data[0].coursename;
+                            data.forEach(el=>{
+
+                            html += '<div class="col-md-6 smartch_team_selected" style="opacity:0;padding: 0px 20px 20px 20px; margin-bottom: 20px; border-radius: 15px;">';
+                                html += '<div class="row">';
+                                    html += '<div class="col-md-12 smartch_flex_mobile" style="padding: 20px 0;min-height: 60px;">';
+                                        
+                                        html += '<div>';
+                                        html += '<a href="' + el.url +'/theme/remui/views/adminteam.php?return=dashboard&teamid=' + el.team.id + '"><span class="fff-title-team">' + el.team.name + '</span></a>';
+                                        html += '<div style="font-size:0.8rem";>' + el.date + '</div>';
+                                        html += '</div>';
+                                        html += '<div >';
+                                        let nbmembres;
+                                        if(el.total>1){
+                                            nbmembres = el.total + ' membres';
+                                        } else {
+                                            nbmembres = el.total + ' membre';
+                                        }
+                                            html += '<span style="margin-right:10px;font-size: 0.8rem;">' + nbmembres + '</span>';
+                                            html += '<svg onclick="window.location.href=\'' + el.url +'/theme/remui/views/adminteam.php?return=dashboard&message=1&teamid=' + el.team.id + '#sendmessageteam\'" style="cursor:pointer;" width="20" height="16" viewBox="0 0 20 16" fill="none" xmlns="http://www.w3.org/2000/svg">';
+                                                html += '<path d="M1 4L8.8906 9.2604C9.5624 9.70827 10.4376 9.70827 11.1094 9.2604L19 4M3 15H17C18.1046 15 19 14.1046 19 13V3C19 1.89543 18.1046 1 17 1H3C1.89543 1 1 1.89543 1 3V13C1 14.1046 1.89543 15 3 15Z" stroke="#0B427C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
+                                            html += '</svg>';
+                                        html += '</div>';
+                                    html += '</div>'; //
+                                html += '</div>'; //row
+
+                                html += '<div class="row">';
+                                el.teamates.forEach(user=>{
+                                    html += '<div class="col-xs-6 col-sm-6 col-md-6 col-lg-4" style="padding: 10px; margin-bottom: 20px; border-radius: 15px;">';
+                                        html += '<div onclick="window.location.href=\'' + el.url +'/theme/remui/views/adminteam.php?return=dashboard&teamid=' + el.team.id + '&userid=' + user.id + '#equipe\'" style="cursor:pointer;display: flex;justify-content: space-between;width: 100%;"> ';
+                                            html += '<div>';
+                                                html += '<svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">';
+                                                    html += '<rect width="56" height="56" rx="4.2" fill="#EDF2F7"/>';
+                                                    html += '<path d="M34.5354 20.2707C34.5354 23.6857 31.767 26.4541 28.3521 26.4541C24.9371 26.4541 22.1688 23.6857 22.1688 20.2707C22.1688 16.8558 24.9371 14.0874 28.3521 14.0874C31.767 14.0874 34.5354 16.8558 34.5354 20.2707Z" stroke="#CBD5E0" stroke-width="3.09167" stroke-linecap="round" stroke-linejoin="round"/>';
+                                                    html += '<path d="M28.3521 31.0916C22.3759 31.0916 17.5312 35.9362 17.5312 41.9124H39.1729C39.1729 35.9362 34.3283 31.0916 28.3521 31.0916Z" stroke="#CBD5E0" stroke-width="3.09167" stroke-linecap="round" stroke-linejoin="round"/>';
+                                                html += '</svg>';
+                                            html += '</div>';
+                                            html += '<div style="margin-left: 10px;width: 100%;">';
+                                                html += '<div style="height: 50px;">';
+                                                html += user.firstname + '<br>' + user.lastname;
+                                                html += '</div>';
+                                            html += '</div>';
+                                        html += '</div>';
+                                    html += '</div>';
+                                });
+                                html += '</div>'; //row
+
+
+                                html += '<div class="row" style="margin-top:20px;">';
+                                    html += '<div class="col-md-12">';
+                                        html += '<a class="smartch_btn" href="' + el.url +'/theme/remui/views/adminteam.php?return=dashboard&teamid=' + el.team.id + '">Voir plus</a>';
+                                    html += '</div>';
+                                html += '</div>';
+                            
+
+                                html += '</div>'; //col
+                            });
+                        }          
+                        
+                        
+                        document.getElementById('mycourseteams').innerHTML = html;
+
+                        
+                        let elementstofade = document.getElementsByClassName('smartch_team_selected');
+                        elementstofade.forEach(async el=>{
+                            fading(el);
+                            //await delay(3000);
+                        })
+
+                        //on scroll sur le block equipe
+                        goToTeam()
+                    });
+                    
+                });
+            });
+        }); 
+    }
+    function animateUp(element) {
+        element.style.transform = "translateY(-10px)";
+    }
+
+    function resetAnimation(element) {
+        element.style.transform = "translateY(0)";
+    }
+    function fading(element){
+        var increment = 0.045;
+        var opacity = 0;
+        var instance = window.setInterval(function() {
+            if(element){
+                element.style.opacity = opacity;
+                opacity = opacity + increment;
+                if(opacity > 1){
+                    window.clearInterval(instance);
+                }
+            }
+            
+        },30)
+    }
+fading();
+</script>
+
+
+
+
+{{#js}}
+	require(['jquery', 'core/ajax'], function($, Ajax) {
+		$(document).ready(function(){
+            
+			let service_name = 'theme_remui_get_smartch_my_courses';
+			let cusercourses = Ajax.call([
+			    {
+			        methodname: service_name,
+			        args: {}
+			    }
+			]);
+			cusercourses[0].done(function(response) {
+                {{! alert(response) }}
+				let data = JSON.parse(response);
+                let courses = data.mycourses
+                let html = "";
+
+                {{! alert(data.rolename) }}
+                
+                //wait for the block to be ready 
+                $('#fff-my-courses').ready(function() {
+                    //alert(courses.length)
+                    
+                    courses.forEach(el=>{
+
+                        //On affiche tous les cours
+                        html += '<div onmouseover="animateUp(this.childNodes[1])" onmouseout="resetAnimation(this.childNodes[1])" onclick="location.href=`'+el.url+'`" class="fff-course-thumbnail-box" style="opacity:0;background-position: center;background-image:url('+el.img+');">';
+                        html += '<div class="smartch_layer_thumbnail"></div>';
+                        html += '<h5 class="fff-course-thumbnail-title">'+el.fullname+'<br>';
+                        
+                        //block icons
+                        html += '<div style="font-size: 1rem;display:flex;align-items:center;justify-content:space-between;margin:10px;">';
+                        
+                        //icon duration
+                        html += '<div style="display:flex;align-items:center;">';
+                        html += '<svg style="width:20px;" class="mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">';
+                        html += '<path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"></path>';
+                        html += '</svg>';
+                        html += '<span class="mr-4 FFARegular">12h</span>';
+                        html += '</div>';
+
+                        if(data.rolename == "student"){
+                            //icon session 
+                            html += '<div style="display:flex;align-items:center;">';
+                            html += '<svg style="width:20px;" class="mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">';
+                            html += '<path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z"></path>';
+                            html += '</svg>';
+                            html += '<span class="mr-4 FFARegular">'+el.date1+' '+el.date2+'</span>';
+                            html += '</div>';
+                        }
+
+                        if(data.rolename == "super-admin" || data.rolename == "manager" || data.rolename == "smalleditingteacher"){
+                            //icon category 
+                            html += '<div style="display:flex;align-items:center;">';
+                            html += '<svg style="width:20px;" class="mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">';
+                            html += '<path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z" />';
+                            html += '<path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6Z" />';
+                            html += '</svg>';
+                            html += '<span class="mr-4 FFARegular">'+el.category+'</span>';
+                            html += '</div>';
+                        }
+                        
+
+                        //icon type diplome
+                        html += '<div style="display:flex;align-items:center;">';
+                        html += '<svg style="width:20px;" class="mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">';
+                        html += '<path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5"></path>';
+                        html += '</svg>';
+                        html += '<span class="mr-4 FFARegular">E-Learning</span>';
+                        html += '</div>'
+
+                        html += '</div>'; // fin block icons
+
+                        if(data.rolename == "student"){
+                            //block prog
+                            html += '<div class="smartch_progress_bar_box">';
+                            html += '<div class="smartch_progress_bar">';
+                            html += '<div class="smartch_progress_bar_number" style="display:none;">33.33%</div>';
+                            html += '<div class="smartch_progress_bar_gain" style="width:33.33% !important;"></div>';
+                            html += '</div>';
+                            html += '</div>';
+                        }
+                        
+
+                        html += '</h5>';
+                        html += '</div>'; //fin block
+
+
+                        if(el.notavailable){
+                            {{! html += '<div onmouseout="resetAnimation(this.childNodes[1])" class="fff-course-thumbnail-box" style="opacity:0;background-position: center;background-image:url('+el.img+');"><div class="smartch_layer_thumbnail"></div><h5 class="fff-course-thumbnail-title">'+el.fullname+'<br><span style="font-size: 0.8rem;font-family: \'FFARegular\';">Pas encore accessible</span><br><span style="font-size: 0.8rem;font-family: \'FFARegular\';">'+el.date1+'</span></h5></div>'; }}
+                        } else if(el.freecategory){
+                            {{! html += '<div onmouseover="animateUp(this.childNodes[1])" onmouseout="resetAnimation(this.childNodes[1])" onclick="location.href=`'+el.url+'`" class="fff-course-thumbnail-box" style="opacity:0;background-position: center;background-image:url('+el.img+');"><div class="smartch_layer_thumbnail"></div><h5 class="fff-course-thumbnail-title">'+el.fullname+'<br><span style="font-size: 0.8rem;font-family: \'FFARegular\';">Formation gratuite</span></h5></div>'; }}
+                        } else {
+                            if(data.rolename == "teacher" || data.rolename == "editingteacher" ){
+                                //on va chercher les equipes associés au cours
+                                {{! html += '<div onmouseover="animateUp(this.childNodes[1])" onmouseout="resetAnimation(this.childNodes[1])" onclick="getTeams(\''+el.id+'\');let sel = document.querySelector(\'.selectedgold\');if(sel){sel.classList.remove(\'selectedgold\');}this.classList.add(\'selectedgold\')" class="fff-course-thumbnail-box" style="opacity:0;background-position: center;background-image:url('+el.img+');"><div class="smartch_layer_thumbnail"></div><h5 class="fff-course-thumbnail-title">'+el.fullname+'<br><span style="font-size: 0.8rem;font-family: \'FFARegular\';">'+el.date1+'</span><br><span style="font-size: 0.8rem;font-family: \'FFARegular\';">'+el.date2+'</span></h5></div>'; }}
+                            } else if(data.rolename == "super-admin" || data.rolename == "manager" || data.rolename == "smalleditingteacher"){
+                                
+                                
+                                
+                                
+                            } else {
+                                //On affiche les cours de l'étudiant
+                                {{! html += '<div onmouseover="animateUp(this.childNodes[1])" onmouseout="resetAnimation(this.childNodes[1])" onclick="location.href=`'+el.url+'`" class="fff-course-thumbnail-box" style="opacity:0;background-position: center;background-image:url('+el.img+');"><div class="smartch_layer_thumbnail"></div><h5 class="fff-course-thumbnail-title">'+el.fullname+'<br><span style="font-size: 0.8rem;font-family: \'FFARegular\';">'+el.date1+'</span><br><span style="font-size: 0.8rem;font-family: \'FFARegular\';">'+el.date2+'</span></h5></div>'; }}
+                            }
+                        }
+                        
+                        
+                        
+                        {{! html += '<div onclick="location.href=`'+el.url+'`" class="fff-course-thumbnail-box" style="background-image:url('+el.img+');"><h5 class="fff-course-thumbnail-box-title">'+el.fullname+'</h5><h5 class="fff-course-thumbnail-box-category">'+el.category+'</h5></div>'; }}
+                    });
+
+                    //on regarde la largeur de l'ecran
+                    let largeur = window.innerWidth;
+                    let largeurInterval = Math.floor((largeur - 180)/220);
+                    
+                    //on compte le nombre de cours
+                    let nbcourses = courses.length;
+                    numbercourses = nbcourses;
+                    let nbencarts = largeurInterval - nbcourses;
+                    //on calcule le nombre delement max
+                    maxelements = nbencarts;
+                    //alert(maxelements);
+                    //les encarts gris
+                    if(nbencarts >= 0){
+                        //on désactive la fleche de droite
+                        document.querySelector("#rightcourseicon").style.opacity = 0.3;
+
+                        //on affiche les encarts
+                        for(let i =0;i < nbencarts; i++){
+                            {{! html += '<div class="fff-course-thumbnail-box" style="opacity:0;background-position: center;background-color:gainsboro;"><div class="smartch_layer_thumbnail"></div></div>'; }}
+                            html += '<div class="fff-course-thumbnail-box" style="opacity:0;background-position: center;background-color:gainsboro;"></div>';
+                        }
+                    }
+
+                    
+
+                    document.getElementById('fff-my-courses').innerHTML = html;
+                    let elementstofade = document.getElementsByClassName('fff-course-thumbnail-box');
+                    elementstofade.forEach(async el=>{
+                        fading(el);
+                        //await delay(3000);
+                    })
+                });
+			    
+			});
+		});
+	});
+
+   
+{{/js}}
+
+
+<script>
+ // use a script tag or an external JS file
+ document.addEventListener("DOMContentLoaded", (event) => {
+  // gsap code here!
+  gsap.to("#my_courses", { top: 0 })
+  gsap.to(".FFF-title1-bonjour", { x: 0 })
+  gsap.to(".FFF-title1", { x: 0 })
+ });
+
+</script>

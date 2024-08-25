@@ -1,0 +1,104 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    Edwiser RemUI
+    @package theme_remui
+    @copyright (c) 2023 WisdmLabs (https://wisdmlabs.com/)
+    @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+
+}}
+{{!
+    @template theme_remui/smartch_info
+}}
+
+
+{{! modification smartch dashboard}}
+
+<div id="smartch_stats" style="display:none;">
+<h3 class="FFF-title1" style="margin-top:50px;letter-spacing:1px;">
+
+    <span class="FFABlack FFF-Blue">Mon </span><span class="FFABlack FFF-Gold">Suivi</span> 
+    {{! <svg class="fff-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M11 14H10V10H9M10 6H10.01M19 10C19 14.9706 14.9706 19 10 19C5.02944 19 1 14.9706 1 10C1 5.02944 5.02944 1 10 1C14.9706 1 19 5.02944 19 10Z" stroke="#00315a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg> }}
+
+</h3>
+
+<div class="row" style="width: 100vw;
+    left: 0;
+    position: absolute;">
+
+    <div id="rowstats" class="col-sm-6 col-md-6 col-lg-3">
+        <div class="fff-box-stats" style="border-right: 1px solid #00315a;">
+            <h1 id="statscoursesenrolled">0</h1>
+            <h5>Formation(s) <br>en cours</h5>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-6 col-lg-3">
+        <div class="fff-box-stats" style="border-right: 1px solid #00315a;">
+            <h1 id="statsactivitiescompleted">0</h1>
+            <h5>Activité(s) terminée(s)</h5>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-6 col-lg-3">
+        <div class="fff-box-stats" style="border-right: 1px solid #00315a;">
+            <h1 id="statsgeneralprogress">0%</h1>
+            <h5>De progression<br/> générale</h5>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-6 col-lg-3">
+        <div class="fff-box-stats">
+            <h1 id="statscoursescompleted">0</h1>
+            <h5>Formation(s) terminée(s)</h5>
+        </div>
+    </div>
+
+</div>
+
+
+<div id="blockstatsresponsive"></div>
+
+</div>  {{! displaynone }}
+
+
+{{#js}}
+	require(['jquery', 'core/ajax'], function($, Ajax) {
+		$(document).ready(function(){
+			let service_name = 'theme_remui_get_smartch_stats';
+			let cuserformations = Ajax.call([
+			    {
+			        methodname: service_name,
+			        args: {}
+			    }
+			]);
+			cuserformations[0].done(function(response) {
+                console.log(response);
+                
+				let stats = JSON.parse(response);
+                {{! alert(response) }}
+                let html = "";
+                {{! alert(stats.coursesenrolled); }}
+                //wait for the block to be ready 
+                $('#rowstats').ready(function() {
+                    document.getElementById('statscoursesenrolled').innerHTML = stats.coursesenrolled;
+                    document.getElementById('statsactivitiescompleted').innerHTML = stats.activitiescomplete;
+                    document.getElementById('statsgeneralprogress').innerHTML = stats.statsgeneralprogress + '%';
+                    document.getElementById('statscoursescompleted').innerHTML = stats.coursescompleted;
+                });
+
+                
+			    
+			});
+		});
+	});
+{{/js}}

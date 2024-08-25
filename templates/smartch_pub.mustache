@@ -1,0 +1,106 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    Edwiser RemUI
+    @package theme_remui
+    @copyright (c) 2023 WisdmLabs (https://wisdmlabs.com/)
+    @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+
+}}
+{{!
+    @template theme_remui/smartch_info
+}}
+
+
+{{! modification smartch dashboard}}
+
+{{! <h3 class="FFF-title1"><span class="FFABlack FFF-Blue">PUB </span><span class="FFABlack FFF-Gold">FFF</span> </h3> }}
+
+<script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" rel="stylesheet">
+
+
+
+<div class="row" id="encartpub">
+    
+    <div class="col-sm-12 col-md-6">
+        <div class="splide" role="group">
+            <div class="splide__track">
+                    <ul class="splide__list">
+                        {{! <li class="splide__slide"><img style="width:100%;" src="/theme/remui/pix/fff1.png" /></li> }}
+                        {{! <li class="splide__slide"><img id="sliderimage0" style="display:none;width: 100%; height: 100%;max-height: 550px; object-fit: contain;" /></li>
+                        <li class="splide__slide"><img id="sliderimage1" style="display:none;width: 100%; height: 100%;max-height: 550px; object-fit: contain;" /></li>
+                        <li class="splide__slide"><img id="sliderimage2" style="display:none;width: 100%; height: 100%;max-height: 550px; object-fit: contain;" /></li>
+                        <li class="splide__slide"><img id="sliderimage3" style="display:none;width: 100%; height: 100%;max-height: 550px; object-fit: contain;" /></li>
+                        <li class="splide__slide"><img id="sliderimage4" style="display:none;width: 100%; height: 100%;max-height: 550px; object-fit: contain;" /></li> }}
+                        {{! <li class="splide__slide"><img id="sliderimage3" style="width: 100%; height: 100%;max-height: 550px; object-fit: contain;" /></li> }}
+                        {{! <li class="splide__slide"><img style="width:100%;" src="http://localhost:8888/smartch/theme/remui/pix/fff1.png" /></li>
+                        <li class="splide__slide"><img style="width:100%;" src="http://localhost:8888/smartch/theme/remui/pix/fff0.png" /></li>
+                        <li class="splide__slide"><img style="width:100%;" src="http://localhost:8888/smartch/theme/remui/pix/fff3.png" /></li> }}
+                    </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-6"><img id="imagefixe" style="width: 100%; height: 100%;max-height: 550px; object-fit: contain;" /></div>
+</div>
+
+<div class="row" id="encartpubempty"></div>
+
+{{! <script>
+  document.addEventListener( 'DOMContentLoaded', function() {
+    var splide = new Splide( '.splide' );
+    splide.mount();
+  } );
+</script> }}
+
+<script>
+
+
+    //window.document.onload = function(e){ 
+    //    changeHigh();
+    //}
+
+    //window.addEventListener('load', changeHigh(), false);
+
+    window.onresize = function(e){
+        //changeHigh();
+    }
+
+    //changeHigh();
+
+    function changeHigh(){
+        let encartpub = document.querySelector("#encartpub");
+
+        if (encartpub) {
+            // Récupérer la hauteur de l'élément en pixels
+            var hauteur = encartpub.clientHeight;
+
+            //alert(hauteur);
+
+            let highelement = hauteur/2 + 200;
+
+            let encartpubempty = document.querySelector("#encartpubempty")
+            
+            if(encartpubempty){
+                encartpubempty.style.height = highelement + 'px';
+                //console.log(encartpubempty.style.height)
+            }
+
+            //console.log("La hauteur de #encartpub est : " + hauteur + "px");
+        } else {
+            //console.log("L'élément #encartpub n'a pas été trouvé.");
+        }
+    }
+    
+
+</script>

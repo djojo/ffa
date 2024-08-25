@@ -1,0 +1,248 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+    Edwiser RemUI
+    @package theme_remui
+    @copyright (c) 2023 WisdmLabs (https://wisdmlabs.com/)
+    @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+}}
+{{!
+
+    @template theme_remui/navbar
+
+    This template renders the top navbar.
+
+    Example context (json):
+    {
+        "output": {
+            "should_display_navbar_logo": true,
+            "get_compact_logo_url": "http://placekitten.com/50/50",
+            "custom_menu": "<li>..</li>",
+            "page_heading_menu": "<li>..</li>",
+            "search_box": "<div><input type='text'></div>",
+            "navbar_plugin_output": "<div class='dropdown'>Messaging</div>",
+            "user_menu": "<div class='dropdown'>John Doe</div>"
+        },
+        "config": {
+            "wwwroot": "#",
+            "homeurl": "/my/"
+        },
+        "sitename": "Moodle Site",
+        "mobileprimarynav": [
+            {
+                "text": "Dashboard",
+                "url": "/my",
+                "isactive": true
+            },
+            {
+                "text": "Site home",
+                "url": "/",
+                "isactive": false
+            },
+            {
+                "text": "My courses",
+                "url": "/course",
+                "isactive": false
+            }
+        ]
+    }
+}}
+
+
+
+<img class="smartch_background_header" src="{{{ config.wwwroot }}}/theme/remui/pix/background-header.png" />
+<nav id="smartch-header" class="navbar fixed-top navbar-expand {{navlayout}}" aria-label="{{#str}}sitemenubar, admin{{/str}}">
+    <a href="{{{ config.homeurl }}}" class="navbar-brand d-md-flex align-items-center m-0 aabtn" aria-label="{{ sitename }} - {{#str}}brandname, theme_remui{{/str}}" title="{{ sitename }}">
+    {{! SAVE -> d-none mobile <a class="navbar-brand d-none d-md-flex align-items-center m-0 aabtn" }}
+       
+        <svg width="194" height="60" viewBox="0 0 194 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M64.9113 13.2938H37.2418V20.8629H47.3276V41.5638H54.8733V20.8629H64.9113" fill="white"/>
+            <path d="M18.11 13.2938L0 29.642V41.5638H7.22878L22.4297 36.9333V41.5638H30.1685V13.2938H18.11ZM22.4297 29.4156L8.16943 33.8112V32.3165L22.4297 19.6299" fill="white"/>
+            <path d="M194 13.2938H165.133V41.5638H190.589V33.999H180.121L194 20.8535V13.2938ZM184.025 20.4934L173 30.7713V20.4934" fill="white"/>
+            <path d="M186.038 6.96031L183.728 0L172.881 3.6358L175.19 10.5961" fill="white"/>
+            <path d="M141.124 33.9878V13.2947H133.45L133.452 41.5647H159.193V33.9878" fill="white"/>
+            <path d="M126.147 27.2753L123.405 12.6232L115.8 14.0201L117.561 23.1833H78.8622L80.6222 14.0201L73.0158 12.6232L70.2767 27.2753L73.0158 41.93L80.6222 40.5331L78.8417 31.2695H117.58L115.8 40.5331L123.405 41.93" fill="white"/>
+            <path d="M16.8327 53.3801H19.9221V54.2514H17.8204V55.842H19.7307V56.727H17.8204V58.1916H16.8327" fill="white"/>
+            <path d="M27.0492 53.3801H28.523C29.9976 53.3801 31.0476 54.3637 31.0476 55.7863C31.0476 57.208 30.0044 58.1916 28.523 58.1916H27.0492V53.3801ZM28.4743 57.3221C29.5388 57.3221 30.0249 56.6849 30.0249 55.7863C30.0249 54.8885 29.5388 54.2514 28.4743 54.2514H28.0368V57.3221" fill="white"/>
+            <path d="M41.7135 58.1916H40.5712L39.7818 56.9748C39.6904 56.9885 39.5913 56.9962 39.499 56.9962H39.1615V58.1915H38.173V53.3801H39.499C40.8395 53.3801 41.6418 54.0232 41.6418 55.1989C41.6418 55.9483 41.3111 56.4225 40.719 56.6909L41.7135 58.1916ZM39.4708 56.1327C40.2748 56.1327 40.6268 55.8772 40.6268 55.1989C40.6268 54.5189 40.2611 54.2497 39.4708 54.2497H39.1615V56.1327" fill="white"/>
+            <path d="M45.178 53.3381H45.2634L47.4549 58.1924H46.4177L46.1938 57.647H44.2476L44.0212 58.1924H43.0694L45.178 53.3381ZM45.8401 56.8195L45.4949 55.9843C45.3548 55.6456 45.2062 55.1208 45.2062 55.1208C45.2062 55.1208 45.0643 55.6456 44.9242 55.9843L44.5791 56.8195" fill="white"/>
+            <path d="M49.5797 54.2505H48.2118V53.3793H51.9343V54.2505H50.5673V58.1916H49.5797" fill="white"/>
+            <path d="M53.737 58.1916H54.7238V53.3801H53.737V58.1916Z" fill="white"/>
+            <path d="M56.6316 55.7854C56.6316 54.3637 57.7312 53.3167 59.1144 53.3167C60.4959 53.3167 61.5946 54.3637 61.5946 55.7854C61.5946 57.208 60.4959 58.255 59.1144 58.255C57.7312 58.255 56.6316 57.208 56.6316 55.7854ZM60.5805 55.7854C60.5805 54.8867 59.9876 54.2008 59.1144 54.2008C58.2387 54.2008 57.6475 54.8867 57.6475 55.7854C57.6475 56.6858 58.2387 57.3709 59.1144 57.3709C59.9876 57.3709 60.5805 56.6858 60.5805 55.7854Z" fill="white"/>
+            <path d="M64.9121 55.9561C64.6738 55.7288 64.3414 55.2975 64.3414 55.2975C64.3414 55.2975 64.4115 55.8291 64.4115 56.1756V58.1915H63.4888V53.3381H63.5853L66.0049 55.6165C66.2373 55.8351 66.5687 56.2742 66.5687 56.2742C66.5687 56.2742 66.5055 55.7288 66.5055 55.3978V53.3801H67.43V58.2336H67.3309" fill="white"/>
+            <path d="M72.0973 53.3801H75.1859V54.2514H73.0842V55.842H74.9962V56.727H73.0842V58.1916H72.0973" fill="white"/>
+            <path d="M80.6111 58.1916H79.4679L78.6794 56.9748C78.5871 56.9885 78.4889 56.9962 78.3974 56.9962H78.06V58.1915H77.0715V53.3801H78.3974C79.738 53.3801 80.5411 54.0232 80.5411 55.1989C80.5411 55.9483 80.2087 56.4225 79.6166 56.6909L80.6111 58.1916ZM78.3684 56.1327C79.1723 56.1327 79.5261 55.8772 79.5261 55.1989C79.5261 54.5189 79.1578 54.2497 78.3684 54.2497H78.06V56.1327" fill="white"/>
+            <path d="M84.1755 53.3381H84.2601L86.4516 58.1924H85.4144L85.1897 57.647H83.2443L83.0187 58.1924H82.067L84.1755 53.3381ZM84.8359 56.8195L84.4925 55.9843C84.3507 55.6456 84.2029 55.1208 84.2029 55.1208C84.2029 55.1208 84.0619 55.6456 83.9218 55.9843L83.5749 56.8195" fill="white"/>
+            <path d="M89.5777 55.9561C89.3393 55.7288 89.0078 55.2975 89.0078 55.2975C89.0078 55.2975 89.0779 55.8291 89.0779 56.1756V58.1915H88.1543V53.3381H88.2525L90.6704 55.6165C90.9037 55.8351 91.2343 56.2742 91.2343 56.2742C91.2343 56.2742 91.1711 55.7288 91.1711 55.3978V53.3801H92.0955V58.2336H91.9972" fill="white"/>
+            <path d="M101.567 53.3381H101.65L103.844 58.1924H102.805L102.581 57.647H100.636L100.409 58.1924H99.4576L101.567 53.3381ZM102.227 56.8195L101.884 55.9843C101.742 55.6456 101.593 55.1208 101.593 55.1208C101.593 55.1208 101.453 55.6456 101.312 55.9843L100.966 56.8195" fill="white"/>
+            <path d="M105.567 58.1916H106.552V53.3801H105.567V58.1916Z" fill="white"/>
+            <path d="M108.208 57.244L109.012 56.7767C109.224 57.1231 109.498 57.3787 109.986 57.3787C110.393 57.3787 110.654 57.1729 110.654 56.8899C110.654 56.5503 110.387 56.4294 109.935 56.2322L109.688 56.1267C108.976 55.8214 108.504 55.439 108.504 54.6329C108.504 53.8895 109.068 53.3235 109.949 53.3235C110.576 53.3235 111.029 53.5431 111.353 54.1167L110.584 54.6115C110.416 54.3071 110.232 54.1871 109.949 54.1871C109.66 54.1871 109.476 54.3697 109.476 54.6115C109.476 54.9082 109.66 55.0291 110.083 55.2126L110.329 55.3198C111.17 55.6799 111.641 56.0478 111.641 56.8744C111.641 57.7679 110.945 58.2559 110.006 58.2559C109.09 58.2559 108.498 57.8168 108.208 57.244Z" fill="white"/>
+            <path d="M113.464 53.3801H116.637V54.2514H114.453V55.4776H116.376V56.3265H114.453V57.3221H116.736V58.1916H113.464" fill="white"/>
+            <path d="M121.321 53.3801H122.794C124.267 53.3801 125.318 54.3637 125.318 55.7863C125.318 57.208 124.275 58.1916 122.794 58.1916H121.321V53.3801ZM122.745 57.3221C123.809 57.3221 124.294 56.6849 124.294 55.7863C124.294 54.8885 123.809 54.2514 122.745 54.2514H122.308V57.3221" fill="white"/>
+            <path d="M130.705 53.3381H130.79L132.982 58.1924H131.945L131.721 57.647H129.774L129.549 58.1924H128.596L130.705 53.3381ZM131.366 56.8195L131.022 55.9843C130.881 55.6456 130.733 55.1208 130.733 55.1208C130.733 55.1208 130.592 55.6456 130.451 55.9843L130.105 56.8195" fill="white"/>
+            <path d="M135.109 54.2505H133.74V53.3793H137.464V54.2505H136.095V58.1916H135.109" fill="white"/>
+            <path d="M139.243 53.3801H140.231V55.842H142.282V53.3801H143.269V58.1916H142.282V56.727H140.231V58.1916H139.243" fill="white"/>
+            <path d="M145.323 53.3801H146.31V57.3221H148.482V58.1916H145.323" fill="white"/>
+            <path d="M156.667 54.2505H155.299V53.3793H159.021V54.2505H157.654V58.1916H156.667" fill="white"/>
+            <path d="M160.822 58.1916H161.81V53.3801H160.822V58.1916Z" fill="white"/>
+            <path d="M163.465 57.244L164.269 56.7767C164.481 57.1231 164.755 57.3787 165.243 57.3787C165.65 57.3787 165.911 57.1729 165.911 56.8899C165.911 56.5503 165.644 56.4294 165.192 56.2322L164.946 56.1267C164.232 55.8214 163.762 55.439 163.762 54.6329C163.762 53.8895 164.325 53.3235 165.206 53.3235C165.834 53.3235 166.285 53.5431 166.61 54.1167L165.841 54.6115C165.673 54.3071 165.489 54.1871 165.206 54.1871C164.918 54.1871 164.734 54.3697 164.734 54.6115C164.734 54.9082 164.918 55.0291 165.34 55.2126L165.588 55.3198C166.425 55.6799 166.9 56.0478 166.9 56.8744C166.9 57.7679 166.201 58.2559 165.263 58.2559C164.346 58.2559 163.755 57.8168 163.465 57.244Z" fill="white"/>
+            <path d="M168.722 53.3304H168.799L171.16 55.9355L173.488 53.3304H173.572V58.1915H172.619V56.3874C172.619 56.0615 172.655 55.5462 172.655 55.5462C172.655 55.5462 172.367 55.9698 172.141 56.2244L171.189 57.2929H171.097L170.145 56.2244C169.918 55.9698 169.63 55.5462 169.63 55.5462C169.63 55.5462 169.666 56.0615 169.666 56.3874V58.1915H168.722" fill="white"/>
+            <path d="M175.626 53.3801H178.799V54.2514H176.614V55.4776H178.538V56.3265H176.614V57.3221H178.897V58.1916H175.626" fill="white"/>
+            <path d="M21.8068 53.3801H24.9799V54.2514H22.7944V55.4776H24.7185V56.3265H22.7944V57.3221H25.0782V58.1916H21.8068" fill="white"/>
+            <path d="M24.1905 52.2697L23.9538 51.5605L22.6962 51.9841L22.9337 52.6942" fill="white"/>
+            <path d="M32.9281 53.3801H36.1003V54.2514H33.9157V55.4776H35.8398V56.3265H33.9157V57.3221H36.1995V58.1916H32.9281" fill="white"/>
+            <path d="M35.3109 52.2697L35.0743 51.5605L33.8166 51.9841L34.0541 52.6942" fill="white"/>
+            <path d="M150.332 53.3801H153.505V54.2514H151.318V55.4776H153.243V56.3265H151.318V57.3221H153.603V58.1916H150.332" fill="white"/>
+            <path d="M152.714 52.2697L152.479 51.5605L151.221 51.9841L151.458 52.6942" fill="white"/>
+            <path d="M93.8845 55.7897C93.8845 54.3654 94.9807 53.3235 96.3554 53.3235C97.2234 53.3235 97.8462 53.6357 98.2777 54.3079L97.5224 54.8465C97.2952 54.4786 96.9073 54.2162 96.3554 54.2162C95.4882 54.2162 94.9021 54.8902 94.9021 55.7897C94.9021 56.6901 95.4882 57.377 96.3554 57.377C96.9773 57.377 97.3234 57.0794 97.5925 56.6687L98.3614 57.2003C97.9453 57.8511 97.2806 58.2627 96.3554 58.2627C94.9807 58.2627 93.8845 57.214 93.8845 55.7897Z" fill="white"/>
+            <path d="M96.8705 59.5747L96.633 58.8655L95.3763 59.29L95.6129 60" fill="white"/>
+            <path d="M128.13 54.0902L127.893 53.3801L126.635 53.8054L126.872 54.5146" fill="white"/>
+        </svg>
+
+    </a>
+
+    
+
+
+    <div class="sub-nav">
+        <div class="navbar-toggler-wrapper">
+            <button class="navbar-toggler aabtn d-block d-lg-none border-0 h-100 p-0" data-toggler="drawers" data-action="toggle" data-target="theme_remui-drawers-primary">
+                <span class="edw-icon edw-icon-Mobile-menu"></span>
+                <span class="sr-only">{{#str}}sidepanel, core{{/str}}</span>
+            </button>
+        </div>
+
+        {{#primarymoremenu}}
+            <div id="navmenuadmin" class="primary-navigation" style="display:flex;align-items:center;">
+                <!--On divise la en fonction des roles -->
+                
+                <!--On cache le menu de base-->
+                <div style="display:none">
+                    {{> core/moremenu}}
+                </div>
+                
+                
+            </div>
+        {{/primarymoremenu}}
+        
+        <!-- <ul class="navbar-nav d-none d-md-flex my-1 px-1">-->
+        <!-- page_heading_menu -->
+        {{{ output.page_heading_menu }}}
+        <!-- </ul> -->
+
+        <div id="usernavigation" class="navbar-nav ml-3">
+           
+           {{#edwisermenu}}
+                <div class="edwiser-navigation">
+                    {{> core/moremenu}}
+                </div>
+            {{/edwisermenu}}
+            
+            <!--{{# output.edw_search_box }}
+                {{{ output.edw_search_box }}}
+            {{/output.edw_search_box}}-->
+            {{#langmenu}}
+                {{> theme_remui/language_menu }}
+            {{/langmenu}}
+            {{{ output.navbar_plugin_output }}}
+
+            {{#usermenu}}
+            <div class="d-flex usermenu-wrapper">
+                {{! <div class="divider border-left h-75 align-self-center"></div> }}
+                <div class="d-flex align-items-stretch usermenu-container" data-region="usermenu">
+                    {{> core/user_menu }}
+                </div>
+                {{#isloggedin}}
+                {{! <div class="divider border-left h-75 align-self-center"></div> }}
+                {{/isloggedin}}
+            </div>
+            {{/usermenu}}
+
+            {{{ output.edit_switch }}}
+        </div>
+    </div>
+
+</nav>
+<!--{{#show_license_notice}}
+{{{show_license_notice}}}
+{{/show_license_notice}}-->
+
+{{> theme_remui/primary-drawer-mobile }}
+
+{{#js}}
+
+//modification smartch menu admin
+require(['jquery', 'core/ajax'], function($, Ajax) {
+    $(document).ready(function(){
+        
+        let service_name = 'theme_remui_get_smartch_role';
+        let rolecall = Ajax.call([
+            {
+                methodname: service_name,
+                args: {}
+            }
+        ]);
+        rolecall[0].done(function(response) {
+            let data = JSON.parse(response);
+            // When menu is ready display menu
+            $('#navmenuadmin').ready(function() {
+                {{! alert(data.rolename); }}
+                if(data.rolename == "super-admin"){
+                    let url = data.baseurl;
+                    let html1 = '<a href="'+url+'/theme/remui/views/adminmenu.php" class="nav-link">Panneau d\'Administration</a>'
+                    $('#navmenuadmin').append(html1)
+                    let html2 = '<a href="'+url+'/admin/search.php" class="nav-link">Configuration Avancée</a>'
+                    $('#navmenuadmin').append(html2)
+                    let html3 = '<a href="'+url+'/theme/remui/views/courses/index.php" class="nav-link">Parcours</a>'
+                    $('#navmenuadmin').append(html3)
+                    let html4 = '<a href="'+url+'/theme/remui/views/groups/index.php" class="nav-link">Groupes</a>'
+                    $('#navmenuadmin').append(html4)
+                    let html5 = '<a href="'+url+'/theme/remui/views/users/index.php" class="nav-link">Utilisateurs</a>'
+                    $('#navmenuadmin').append(html5)
+                    let html6 = '<a href="'+url+'/my" class="nav-link">Communication</a>'
+                    $('#navmenuadmin').append(html6)
+                    let html7 = '<a href="'+url+'/my" class="nav-link">Accueil</a>'
+                    $('#navmenuadmin').append(html7)
+                } else if(data.rolename == "manager" || data.rolename == "smalleditingteacher" || data.rolename == "editingteacher"){
+                    let url = data.baseurl;
+                    let html1 = '<a href="'+url+'/theme/remui/views/adminmenu.php" class="nav-link">Panneau d\'Administration</a>'
+                    $('#navmenuadmin').append(html1)
+                    {{! let html2 = '<a href="'+url+'/admin/search.php" class="nav-link">configuration avancée</a>'
+                    $('#navmenuadmin').append(html2) }}
+                } else if(data.rolename == "student"){
+                    //on affiche les stats
+                    let stats = document.querySelector("#smartch_stats")
+                    if(stats){stats.style.display = "block"}
+                }
+                
+                {{! alert(data.sso) }}
+                {{! if(data.sso){
+                    //on rajoute la possibilité de connecter son compte SSO
+                    let ssoel = document.querySelector('#connectSSO')
+                    let html3 = '<a href="/theme/remui/views/sso.php" class="dropdown-item" role="menuitem" tabindex="-1" title="Associer mon compte SSO">';
+                    html3 += '<span style="color:#00315a !important;" class="edw-icon edw-icon-Database_Activity"></span>';
+                    html3 += 'Associer mon compte SSO';
+                    html3 += '</a>';
+                    ssoel.innerHTML = html3;
+                } }}
+                
+            });
+        });
+    });
+});
+
+
+{{/js}}

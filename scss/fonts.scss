@@ -1,0 +1,71 @@
+// Import required fonts
+
+@font-face { /* where FontName and fontname represents the name of the font you want to add */
+    font-family: 'Inter';
+    src: url([[font:theme|Inter.ttf]]) format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face { /* where FontName and fontname represents the name of the font you want to add */
+    font-family: 'Remui';
+    src: url([[font:theme|Remui.eot]]);
+    src:
+        url([[font:theme|Remui.eot]]) format('embedded-opentype'),
+        url([[font:theme|Remui.woff]]) format('woff'),
+        url([[font:theme|Remui.ttf]]) format('truetype'),
+        url([[font:theme|Remui.svg]]) format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+}
+
+// modification smartch
+@font-face { /* where FontName and fontname represents the name of the font you want to add */
+    font-family: 'FFABlack';
+    src: url([[font:theme|ArquitectaBlack.ttf]]) format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face { /* where FontName and fontname represents the name of the font you want to add */
+    font-family: 'FFABold';
+    src: url([[font:theme|ArquitectaBold.ttf]]) format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face { /* where FontName and fontname represents the name of the font you want to add */
+    font-family: 'FFABook';
+    src: url([[font:theme|ArquitectaBook.ttf]]) format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face { /* where FontName and fontname represents the name of the font you want to add */
+    font-family: 'FFALight';
+    src: url([[font:theme|ArquitectaLight.ttf]]) format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face { /* where FontName and fontname represents the name of the font you want to add */
+    font-family: 'FFAHeavy';
+    src: url([[font:theme|ArquitectaHeavy.ttf]]) format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face { /* where FontName and fontname represents the name of the font you want to add */
+    font-family: 'FFAMedium';
+    src: url([[font:theme|ArquitectaMedium.ttf]]) format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face { /* where FontName and fontname represents the name of the font you want to add */
+    font-family: 'FFAThin';
+    src: url([[font:theme|ArquitectaThin.ttf]]) format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face { /* where FontName and fontname represents the name of the font you want to add */
+    font-family: 'FFARegular';
+    src: url([[font:theme|Arquitecta.ttf]]) format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}

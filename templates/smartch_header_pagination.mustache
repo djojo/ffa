@@ -1,0 +1,29 @@
+<div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <div class="smartch_pagination">
+            <h5 class="smartch_pagination_title">{{paginationtitle}}</h5>
+            <form method="post" action="{{formurl}}">
+                {{#previous}}
+                    <div onclick="window.location.href='{{prevurl}}'" class="smartch_submit">page précedente</div>
+                {{/previous}}
+                {{#next}}
+                    <div onclick="window.location.href='{{nexturl}}'" class="smartch_submit">page suivante</div>
+                {{/next}}
+                <select class="smartch_select" name="pageno" onchange="this.parentElement.submit()">
+                    {{#paginationarray}}
+                        <option class="page{{.}}">
+                            {{.}}
+                        </option>
+                    {{/paginationarray}}
+                </select>
+                {{#params}}
+                    <input type="hidden" name="{{paramname}}" value="{{paramvalue}}"/>
+                {{/params}}
+                <input type="hidden" name="search" value="{{search}}" />
+            </form>
+        </div>
+
+    </div>
+</div>
+
+

@@ -1,0 +1,80 @@
+Release
+=======
+
+Version 4.0.6
+=============
+
+Feature - Add block Modal UI improvements.
+Feature - Introducing new design for profile page.
+Feature - Visual personaliser backup link added in RemUI Settings page.
+Tweak - Customizer load time improvements.
+Tweak - Improved customizer settings save and reset functionality to optimize the execution time.
+Tweak - Added letter-spacing settings for body, paragraph and info text.
+Tweak - Added font weight setting for header menu item.
+Tweak - Added spacing in color settings for button styling.
+Tweak - Added some padding to login page logo.
+Tweak - Design improvements in customizer header and breadcrumbs.
+Tweak - Enrollment Page full language name visible on course information card.
+Fix - Footer icons default hover underline issue.
+Fix - Course archive setting icon click event issue.
+Fix - Fixed multiselect fields issue with customizer elements.
+Fix - Fixed footer content and links issue.
+Fix - Fixed customizer's checkbox reset issue.
+Fix - Mutli lang support added for footer.
+
+Version 4.0.5
+=============
+
+Feature - Edwiser RemUI Customizer and its features.
+    - UI / Ux Improvements
+    - A New Quick setup panel is added in the customizer to quickly choose among the colour schemes and font family.
+    - Global-level typography settings improved
+    - Buttons customizer settings improved
+    - Apply smart color feature introduced in customizer.
+Feature - Quick menu links added for quick navigation.
+Feature - UI Improvement for Site-wide Announcement.
+Feature - A new setting is added for the site name or icon color.
+Feature - A new setting is added to handle page width.
+Feature - New course stats added on dashboard.
+Feature - HomePage Builder section UI Improvement.
+Feature - New settings added for the login page header logo.
+Feature - Messaging panel UI/Ux improvement.
+Feature - Sidebar UI improvements.
+Feature - Pages UI/UX improvements
+    - Enrollment page
+    - Course page
+    - Course Archive page
+    - Login page
+    - Calendar page
+    - Messaging page
+Tweak - Activity navigation on course page, functionality improvements.
+Tweak - Enable recent courses setting is moved to the customizer.
+Tweak - Show categories dropdown settings are moved to the customizer.
+Tweak - Send feedback to the Edwiser menu now available in the floating button area.
+Tweak - Customizer optimization
+Fix - Minor bug fixes and improvements
+Deprecated - Menu orientation setting from footer deprecated.
+Deprecated - Deprecated default button settings.
+Deprecated - Icons settings deprecated from RemUI settings.
+Deprecated - Forms settings deprecated from RemUI settings.
+Deprecated - Social share icons are removed from the login page.
+Deprecated - The existing course card designs are deprecated and a new design is added for course cards.
+
+Version 4.0.4-Beta
+==================
+
+Feature - Header design improvements.
+Feature - Added a new option to choose a colour for the header logo.
+Feature - Footer design improvements.
+Feature - Messaging drawer improvements.
+Feature - New Designs for diffrent blocks of core moodle.
+    * Course Overview
+    * Recently Accessed courses
+    * Calendar Block
+Feature - Left Sidebar Elements design improved.
+Feature - My courses page design improved.
+Feature - New icons and fonts family added..
+Feature - Course page Left sidebar Improvements
+Feature - Course page Topics/ weekly format design improvements.
+Feature - Course page has a new option for the header, and its design improvements.
+Feature - Page layout width improvements.

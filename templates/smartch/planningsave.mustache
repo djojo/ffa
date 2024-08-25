@@ -1,0 +1,573 @@
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+    
+
+<div class="row" id="smartchplanning">
+
+<div class="col-sm-12 col-md-12 col-lg-12" style="margin:50px 0;">
+<div class="mynextactivities" >
+<h3 id="mynextsessiontitle" class="FFF-title1 smartch_flex">
+    <span class="FFABlack FFF-Blue" style="margin-right:10px;letter-spacing: 1px;text-wrap: nowrap;">Mes prochaines </span><br><span style="letter-spacing: 1px;text-wrap: nowrap;" class="FFABlack FFF-Gold">dates</span> 
+</h3>
+<div style="display:flex;justify-content: space-between;margin-bottom: 20px;align-items:center;" >
+  <h3 id="boxactivitiestitle">Sessions à venir</h3>
+  <button onclick="getSessions('now')" type="button" style="background:#2c3e50;color:#fff;border: 1px solid transparent; border-radius: 0.25em; display: inline-block; font-size: 1em; font-weight: 400; line-height: 1.5; padding: 0.4em 0.65em; text-align: center; user-select: none; vertical-align: middle;cursor:pointer;" class="mr-3">Prochaines sessions</button>
+  {{! <button type="button" class="smartch_btn">Aujourd'hui</button> }}
+</div>
+<div style="padding: 0 30px;height: 450px; overflow-y: scroll;" id="boxactivities"></div>
+</div> {{! mynextactivities }}
+</div> {{! md6 }}
+</div> {{! row }}
+
+
+
+<div class="smartch_modal_container" onclick="this.style.display='none';">
+    <div class="smartch_modal">
+
+        <h3 id="modal_coursename"></h3>
+        {{! <h3 id="modal_teamname"></h3> }}
+        <p id="modal_startdate"></p>
+        <p id="modal_enddate"></p>
+    </div>
+</div>
+
+<script>
+
+  //let allDays = document.getElementsByClassName("fc-day");
+
+  //var myFunction = function() {
+  //    var attribute = this.getAttribute("data-date");
+  //    alert(attribute);
+  //};
+
+  //for (var i = 0; i < allDays.length; i++) {
+  //    allDays[i].addEventListener('click', myFunction, false);
+  //    console.log(allDays[i])
+  //}
+
+  var events;
+
+  function addEvents(){
+    events.forEach(event=>{
+              //on ajoute au calendar
+              //console.log(JSON.stringify(event.start))
+              //calendar.addEvent(event)
+              console.log(event.start)
+
+
+              var dateObject = new Date(event.start);
+
+              // Obtenir le jour, le mois et l'année de la date
+              var day = dateObject.getDate();
+              //var day = String(dateObject.getDate()).padStart(2, "0");
+              var month = dateObject.toLocaleString('fr-FR', { month: 'long' }); // "juillet"
+              //const month = String(newDate.getMonth() + 1).padStart(2, "0");
+              var year = dateObject.getFullYear();
+
+              // Formater la date en "jour mois année"
+              var formattedDate = day + " " + month + " " + year;
+
+              //console.log(formattedDate)
+
+              //on selectionne l'element pour ajouter la classe si il y a un event dessus
+              dayelement = document.querySelector('[aria-label="'+formattedDate+'"]');
+              //console.log(formattedDate)
+              //alert(dayelement)
+              if(dayelement){
+                //si il a déjà la class
+                dayelement.classList.add('eventDay');
+              }
+            });
+  }
+  
+
+  function formatDate(date){
+
+    const newDate = new Date(date);
+    const year = newDate.getFullYear();
+    const month = String(newDate.getMonth() + 1).padStart(2, "0");
+    const day = String(newDate.getDate()).padStart(2, "0");
+    const hours = String(newDate.getHours()).padStart(2, "0");
+    const minutes = String(newDate.getMinutes()).padStart(2, "0");
+    const formattedStart = `${day}/${month}/${year}`;
+    const formattedStarthour = `${hours}:${minutes}`;
+    return formattedStart+' à '+formattedStarthour;
+
+  }
+  function formatDate2(date){
+
+    const newDate = new Date(date);
+    const year = newDate.getFullYear();
+    const month = String(newDate.getMonth() + 1).padStart(2, "0");
+    const day = String(newDate.getDate()).padStart(2, "0");
+    const formattedStart = `${day}/${month}/${year}`;
+    //return 'Le '+formattedStart;
+    return formattedStart;
+
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      //headerToolbar: { center: 'dayGridMonth,timeGridWeek' }, // buttons for switching between views
+      locale: 'fr',
+      firstDay: 1,
+      buttonText: {
+        prev: 'Précédent',
+        next: 'Suivant',
+        today: 'Aujourd\'hui',
+        year: 'Année',
+        month: 'Mois',
+        week: 'Semaine',
+        day: 'Jour',
+        list: 'Planning',
+      },
+      weekText: 'Sem.',
+      weekTextLong: 'Semaine',
+      allDayText: 'Toute la journée',
+      moreLinkText: 'en plus',
+      noEventsText: 'Aucun évènement à afficher',
+      
+      //headerToolbar: {
+        //center: 'title' // Utilise uniquement le titre au centre de l'en-tête
+      //},
+      titleFormat: {
+        //day: 'numeric',
+        month: 'long', // Utilise le nom complet du mois
+        //year: 'numeric' // Utilise l'année au format numérique
+      },
+      views: {
+        dayGridMonth: { // name of view
+          // other view-specific options here
+        },
+        dayGrid: {
+          // options apply to dayGridMonth, dayGridWeek, and dayGridDay views
+        },
+        timeGrid: {
+          // options apply to timeGridWeek and timeGridDay views
+        },
+        week: {
+          // options apply to dayGridWeek and timeGridWeek views
+        },
+        day: {
+          // options apply to dayGridDay and timeGridDay views
+        }
+      },
+      dateClick: function(info) {
+        //console.log(info); 
+        document.getElementById("boxactivities").innerHTML = "";
+        document.getElementById("boxactivitiestitle").innerHTML = formatDate2(info.dateStr);
+        //alert(info.dateStr)
+        getSessions(info.dateStr);
+
+        //on reset les elements
+        let elDays = document.getElementsByClassName('selectedDay');
+        for(let i = 0; i<elDays.length; i++){
+          elDays[i].classList.remove('selectedDay')
+          //elDays[i].style.backgroundColor = 'white';
+          //elDays[i].style.color = '#00315a';
+        }
+
+
+
+        
+        
+        //alert('Clicked on: ' + info.dateStr);
+
+        //alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
+        //alert('Current view: ' + info.view.type);
+        // change the day's background color just for fun
+        let daaaay = info.dayEl.childNodes[0].childNodes[0].childNodes[0];
+        daaaay.classList.add('selectedDay');
+        //daaaay.style.backgroundColor = '#00315a';
+        //daaaay.style.color = 'white';
+        //daaaay.style.borderRadius = '30px';
+
+
+        //on scroll vers l'affichage des dates
+        var myNextActivitiesElement = document.querySelector(".mynextactivities");
+
+        // Assurez-vous que l'élément existe
+        if (myNextActivitiesElement) {
+          // Faites défiler la page jusqu'à l'élément
+          let top = myNextActivitiesElement.getBoundingClientRect().top;
+          var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+          var topPositionRelativeToPage = top + scrollTop;
+          window.scrollTo({
+              top: topPositionRelativeToPage - 100, // La position de défilement vers le bas souhaitée
+              behavior: "smooth" // Utiliser une animation fluide
+          });
+          //myNextActivitiesElement.scrollBy(0, -200);
+        }
+      },
+      eventClick: function(info) {
+          document.querySelector(".smartch_modal_container").style.display = "flex";
+          document.querySelector("#modal_coursename").innerHTML = info.event.title;
+          //document.querySelector("#modal_teamname").innerHTML = info.event.groupname;
+          document.querySelector("#modal_startdate").innerHTML = "Début le " + formatDate(info.event.start);
+          document.querySelector("#modal_enddate").innerHTML = "Fin le " + formatDate(info.event.end);
+      },
+      eventSources: [
+
+    // your event source
+    {
+      
+      events: [
+        
+      ],
+      color: '#00315a',     // an option!
+      textColor: '#3CAFE3' // an option!
+    },
+   
+
+    // any other event sources...
+
+  ]
+    });
+    calendar.render();
+
+    document.getElementById('next').addEventListener('click', function() {
+      calendar.next();
+      //ajoute les points rouges sur les jours qui ont des events
+      addEvents();
+    });
+    document.getElementById('prev').addEventListener('click', function() {
+      calendar.prev();
+      //ajoute les points rouges sur les jours qui ont des events
+      addEvents();
+    });
+
+
+    //getSessions();
+
+      require(['jquery', 'core/ajax'], function($, Ajax) {
+
+        timestart = new Date()
+        var date = new Date(timestart);
+
+        // Obtenez le timestamp en millisecondes
+        var timestamp = Math.floor(date.getTime() / 1000);
+
+        
+		
+			let service_name = 'theme_remui_get_smartch_calendar';
+      //alert(timestamp)
+			let cusercourses = Ajax.call([
+			    {
+			        methodname: service_name,
+			        args: {timestart:null, timeend:null}
+			    }
+			]);
+			cusercourses[0].done(function(response) {
+          //alert(response);
+          events = JSON.parse(response);
+          //console.log(events[0].actual);
+          //on construit le tableau des activités
+          let html = '';
+          let dayelement;
+          
+          //On filtre les events en ne gardant que ceux à venir
+          const futureEvents = events.filter(e => {
+              let dateString = new Date(e.start);
+              // Obtenez le timestamp en millisecondes
+              let timestampEvent = Math.floor(dateString.getTime() / 1000);
+              //console.log(timestampEvent +' > '+timestamp)
+              return timestampEvent > timestamp
+          });
+
+          //const futureEvents = events;
+
+          //alert("events:"+events.length + ' futur:'+futureEvents.length)
+
+          
+          if(futureEvents.length == 0){
+
+                html += '<div style="display: flex; align-items: center; justify-content: center; height: 100%;">Aucune session à venir</div>';
+
+            } else {
+                  //on change la classe de tous les jours avec des events
+                  events.forEach(event=>{
+
+                    var dateObject = new Date(event.start);
+
+                    // Obtenir le jour, le mois et l'année de la date
+                    var day = dateObject.getDate();
+                    var month = dateObject.toLocaleString('fr-FR', { month: 'long' }); // "juillet"
+                    var year = dateObject.getFullYear();
+
+                    // Formater la date en "jour mois année"
+                    var formattedDate = day + " " + month + " " + year;
+
+                    //console.log(formattedDate)
+
+                    //on selectionne l'element pour ajouter la classe si il y a un event dessus
+                    dayelement = document.querySelector('[aria-label="'+formattedDate+'"]');
+                    //alert(dayelement)
+                    if(dayelement){
+                      //si il a déjà la class
+                      dayelement.classList.add('eventDay');
+                      //dayelement.style.backgroundColor = '';
+                    }
+                  })
+
+                  futureEvents.forEach(event=>{
+                    
+                  //on ajoute au calendar
+                  //console.log(JSON.stringify(event.start))
+                  //calendar.addEvent(event)
+
+                  
+                  
+
+                  if(event.start && event.end){
+
+                    //alert(event.url)
+
+                    html += '<div onclick="window.location.href = \''+event.url+'\'" style="cursor:pointer;border-bottom: 1px solid gainsboro;margin-bottom:20px; padding: 20px 0;color:#054686;">';
+
+                    html += '<div style="display: flex;">';
+                    html += '<div>';
+                    html += '<svg class="smartchactivityicon mr-4" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">';
+                    html += '<path fill-rule="evenodd" clip-rule="evenodd" d="M6 0C6.55228 0 7 0.447715 7 1V2H13V1C13 0.447715 13.4477 0 14 0C14.5523 0 15 0.447715 15 1V2H17C18.6569 2 20 3.34315 20 5V17C20 18.6569 18.6569 20 17 20H3C1.34315 20 0 18.6569 0 17V5C0 3.34315 1.34315 2 3 2H5V1C5 0.447715 5.44772 0 6 0ZM5 4H3C2.44772 4 2 4.44772 2 5V17C2 17.5523 2.44772 18 3 18H17C17.5523 18 18 17.5523 18 17V5C18 4.44772 17.5523 4 17 4H15V5C15 5.55228 14.5523 6 14 6C13.4477 6 13 5.55228 13 5V4H7V5C7 5.55228 6.55228 6 6 6C5.44772 6 5 5.55228 5 5V4ZM4 9C4 8.44772 4.44772 8 5 8H15C15.5523 8 16 8.44772 16 9C16 9.55229 15.5523 10 15 10H5C4.44772 10 4 9.55229 4 9Z" fill="#fff"/>';
+                    html += '</svg>';
+                    html += '</div>';
+                    html += '<div>';
+                    html += '<div class="FFABold">' + event.title + '</div>';
+                    html += '<div>'+event.groupname+'</div>';
+                    html += '<div >'+event.matiere+'</div>';
+                    html += '<div style="font-size:0.8rem;color:#3CAFE3;">'+event.coursename+'</div>';
+                    //html += '<div>'+event.info+'</div>';
+                    html += '</div>';
+                    html += '</div>'; //flex'
+                    //html += '<div style="margin-bottom:10px;display:flex;justify-content:start;align-items:center;">';
+                    //html += '<svg class="mr-4" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M6 0C6.55228 0 7 0.447715 7 1V2H13V1C13 0.447715 13.4477 0 14 0C14.5523 0 15 0.447715 15 1V2H17C18.6569 2 20 3.34315 20 5V17C20 18.6569 18.6569 20 17 20H3C1.34315 20 0 18.6569 0 17V5C0 3.34315 1.34315 2 3 2H5V1C5 0.447715 5.44772 0 6 0ZM5 4H3C2.44772 4 2 4.44772 2 5V17C2 17.5523 2.44772 18 3 18H17C17.5523 18 18 17.5523 18 17V5C18 4.44772 17.5523 4 17 4H15V5C15 5.55228 14.5523 6 14 6C13.4477 6 13 5.55228 13 5V4H7V5C7 5.55228 6.55228 6 6 6C5.44772 6 5 5.55228 5 5V4ZM4 9C4 8.44772 4.44772 8 5 8H15C15.5523 8 16 8.44772 16 9C16 9.55229 15.5523 10 15 10H5C4.44772 10 4 9.55229 4 9Z" fill="#00315a"/></svg>';
+                    //html += '<div>';
+                    //html += '<h4 style="color:#00315a;margin:0;">'+event.title+'</h4>';
+                    //html += '<h5 style="color:#3CAFE3;">'+event.groupname+'</h5>';
+                    //html += '</div>';
+                    //html += '</div>';
+
+                    //html += '<div style="margin-bottom:10px;display:flex;justify-content:start;align-items:center;">';
+                    //html += '<svg class="mr-3" width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M13.9497 4.05025C11.2161 1.31658 6.78392 1.31658 4.05025 4.05025C1.31658 6.78392 1.31658 11.2161 4.05025 13.9497L8.29374 18.1932C8.68398 18.5835 9.31589 18.5836 9.70669 18.1928L13.9497 13.9497C16.6834 11.2161 16.6834 6.78392 13.9497 4.05025ZM2.63604 2.63604C6.15076 -0.87868 11.8492 -0.87868 15.364 2.63604C18.8787 6.15076 18.8787 11.8492 15.364 15.364L11.8617 18.8662C11.8303 18.8976 11.8754 18.8525 11.844 18.8839L11.1209 19.607C9.94961 20.7783 8.05137 20.7793 6.87952 19.6074L2.63604 15.364C-0.87868 11.8492 -0.87868 6.15076 2.63604 2.63604ZM9 7C7.89543 7 7 7.89543 7 9C7 10.1046 7.89543 11 9 11C10.1046 11 11 10.1046 11 9C11 7.89543 10.1046 7 9 7ZM5 9C5 6.79086 6.79086 5 9 5C11.2091 5 13 6.79086 13 9C13 11.2091 11.2091 13 9 13C6.79086 13 5 11.2091 5 9Z" fill="#00315a"></path></svg>';
+                    //html += '<div style="color:#00315a;">'+event.info+' </div>';
+                    //html += '<div style="color:#00315a;">'+event.adress1+', '+event.adress2+', '+event.zip+', '+event.location+' </div>';
+                    //html += '</div>';
+
+                    //html += '<div style="display:flex;justify-content:start;align-items:center;">';
+                    //html += '<div>';
+                    //html += '<svg class="mr-3" width="24" height="24" stroke-width="1.8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#00315a"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>';
+                    //html += '<div style="color:#00315a;">Début le '+formatDate(event.start)+'</div>';
+                    //html += '<div style="color:#00315a;">Fin le '+formatDate(event.end)+'</div>';
+                    //html += '</div>'
+                    //html += '</div>';
+
+                    html += '</div>';
+                  }
+                  
+                  //console.log(JSON.stringify(event));
+                  
+              });
+            }
+          
+
+          document.querySelector('#boxactivities').innerHTML = html;
+
+			});
+
+	});
+
+
+  });
+
+  document.addEventListener('mousedown', function(event) {
+  if (event.detail > 1) {
+    event.preventDefault();
+    // of course, you still do not know what you prevent here...
+    // You could also check event.ctrlKey/event.shiftKey/event.altKey
+    // to not prevent something useful.
+  }
+}, false);
+
+
+
+function getSessions(timestart){
+
+
+        var nextsession = false;
+        if(timestart == "now"){
+          nextsession = true;
+          timestart = new Date()
+          document.getElementById("boxactivitiestitle").innerHTML = "Sessions à venir";
+          //on désectionne la date
+          //on reset les elements
+        let elDays = document.getElementsByClassName('selectedDay');
+        for(let i = 0; i<elDays.length; i++){
+          elDays[i].classList.remove('selectedDay')
+        }
+          //let next = true;
+        }
+        
+        //document.querySelector("#adminteams").style.display = "block";
+        //document.getElementById('mycourseteams').innerHTML = '<div class="loader_container"><div class="loader-06"></div></div>';
+        require(['jquery', 'core/ajax'], function($, Ajax) {
+            $(document).ready(function(){
+
+                let date = new Date(timestart);
+                // Obtenez le timestamp en millisecondes
+                let timestamp = Math.floor(date.getTime() / 1000);
+
+                let timestamps = getMidnightTimestamps(timestamp);
+
+                //alert(timestamp)
+
+                if(nextsession){
+                  timeend= null;
+                } else{
+                  timeend= timestamps.midnightAfter;
+                }
+                  
+                timestart = timestamps.midnightBefore;
+
+                //alert(timestart + '  ' + timeend)
+
+                let service_name = 'theme_remui_get_smartch_calendar';
+                //alert("timestart:"+timestart+' & timeend:'+timeend)
+                let cusercourses = Ajax.call([
+                    {
+                        methodname: service_name,
+                        args: {timestart:timestart, timeend:timeend}
+                    }
+                ]);
+                cusercourses[0].done(function(response) {
+                    //alert(response);
+                    let events = JSON.parse(response);
+                    //alert(events.length);
+                    //on construit le tableau des activités
+                    let html = '';
+                    if(events.length == 0){
+
+                        if(nextsession){
+                          html += '<div style="display: flex; align-items: center; justify-content: center; height: 100%;">Aucune session à venir</div>';
+                        } else {
+                          html += '<div style="display: flex; align-items: center; justify-content: center; height: 100%;">Aucune session prévue ce jour</div>';
+                        }
+                        
+
+                    } else {
+                        events.forEach(event=>{
+
+                          //On check si l'event est déjà passé venir
+                          let todayDate = new Date();
+                          // Obtenez le timestamp en millisecondes
+                          let timestamptoday = Math.floor(todayDate.getTime() / 1000);
+
+                          let dateString = new Date(event.start);
+                          // Obtenez le timestamp en millisecondes
+                          let timestampEvent = Math.floor(dateString.getTime() / 1000);
+
+                          //console.log(dateString + ' > ' + todayDate)
+                          //console.log(timestampEvent +' > '+timestamptoday)
+                          //return timestampEvent > timestamp
+                         
+
+                          if(event.start && event.end){
+
+                            if(timestampEvent>timestamptoday){
+                                html += '<div onclick="window.location.href = \''+event.url+'\'" style="border-bottom: 1px solid gainsboro;margin-bottom:20px; padding: 20px 0;color:#054686;cursor:pointer;">';
+                            } else {
+                                html += '<div style="border-bottom: 1px solid gainsboro;margin-bottom:20px; padding: 20px 0;color:#054686;">';
+                            }
+
+
+                            html += '<div style="display: flex;">';
+                            html += '<div>';
+                            html += '<svg class="smartchactivityicon mr-4" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">';
+                            html += '<path fill-rule="evenodd" clip-rule="evenodd" d="M6 0C6.55228 0 7 0.447715 7 1V2H13V1C13 0.447715 13.4477 0 14 0C14.5523 0 15 0.447715 15 1V2H17C18.6569 2 20 3.34315 20 5V17C20 18.6569 18.6569 20 17 20H3C1.34315 20 0 18.6569 0 17V5C0 3.34315 1.34315 2 3 2H5V1C5 0.447715 5.44772 0 6 0ZM5 4H3C2.44772 4 2 4.44772 2 5V17C2 17.5523 2.44772 18 3 18H17C17.5523 18 18 17.5523 18 17V5C18 4.44772 17.5523 4 17 4H15V5C15 5.55228 14.5523 6 14 6C13.4477 6 13 5.55228 13 5V4H7V5C7 5.55228 6.55228 6 6 6C5.44772 6 5 5.55228 5 5V4ZM4 9C4 8.44772 4.44772 8 5 8H15C15.5523 8 16 8.44772 16 9C16 9.55229 15.5523 10 15 10H5C4.44772 10 4 9.55229 4 9Z" fill="#fff"/>';
+                            html += '</svg>';
+                            html += '</div>';
+                            html += '<div>';
+                            html += '<div class="FFABold">' + event.title + '</div>';
+                            html += '<div>'+event.groupname+'</div>';
+                            html += '<div >'+event.matiere+'</div>';
+                            html += '<div style="font-size:0.8rem;color:#3CAFE3;">'+event.coursename+'</div>';
+                            //html += '<div>'+event.info+'</div>';
+                            html += '</div>';
+                            html += '</div>'; //flex'
+
+
+                            //html += '<div style="margin-bottom:10px;display:flex;justify-content:start;align-items:center;">';
+                            //html += '<svg class="mr-4" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M6 0C6.55228 0 7 0.447715 7 1V2H13V1C13 0.447715 13.4477 0 14 0C14.5523 0 15 0.447715 15 1V2H17C18.6569 2 20 3.34315 20 5V17C20 18.6569 18.6569 20 17 20H3C1.34315 20 0 18.6569 0 17V5C0 3.34315 1.34315 2 3 2H5V1C5 0.447715 5.44772 0 6 0ZM5 4H3C2.44772 4 2 4.44772 2 5V17C2 17.5523 2.44772 18 3 18H17C17.5523 18 18 17.5523 18 17V5C18 4.44772 17.5523 4 17 4H15V5C15 5.55228 14.5523 6 14 6C13.4477 6 13 5.55228 13 5V4H7V5C7 5.55228 6.55228 6 6 6C5.44772 6 5 5.55228 5 5V4ZM4 9C4 8.44772 4.44772 8 5 8H15C15.5523 8 16 8.44772 16 9C16 9.55229 15.5523 10 15 10H5C4.44772 10 4 9.55229 4 9Z" fill="#00315a"/></svg>';
+                            //html += '<div>';
+                            //html += '<h4 style="color:#00315a;margin:0;">'+event.title+'</h4>';
+                            //html += '<h5 style="color:#3CAFE3;">'+event.groupname+'</h5>';
+                            //html += '</div>';
+                            //html += '</div>';
+
+                            //html += '<div style="margin-bottom:10px;display:flex;justify-content:start;align-items:center;">';
+                            //html += '<svg class="mr-3" width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M13.9497 4.05025C11.2161 1.31658 6.78392 1.31658 4.05025 4.05025C1.31658 6.78392 1.31658 11.2161 4.05025 13.9497L8.29374 18.1932C8.68398 18.5835 9.31589 18.5836 9.70669 18.1928L13.9497 13.9497C16.6834 11.2161 16.6834 6.78392 13.9497 4.05025ZM2.63604 2.63604C6.15076 -0.87868 11.8492 -0.87868 15.364 2.63604C18.8787 6.15076 18.8787 11.8492 15.364 15.364L11.8617 18.8662C11.8303 18.8976 11.8754 18.8525 11.844 18.8839L11.1209 19.607C9.94961 20.7783 8.05137 20.7793 6.87952 19.6074L2.63604 15.364C-0.87868 11.8492 -0.87868 6.15076 2.63604 2.63604ZM9 7C7.89543 7 7 7.89543 7 9C7 10.1046 7.89543 11 9 11C10.1046 11 11 10.1046 11 9C11 7.89543 10.1046 7 9 7ZM5 9C5 6.79086 6.79086 5 9 5C11.2091 5 13 6.79086 13 9C13 11.2091 11.2091 13 9 13C6.79086 13 5 11.2091 5 9Z" fill="#00315a"></path></svg>';
+                            //html += '<div style="color:#00315a;">'+event.info+' </div>';
+                            //html += '<div style="color:#00315a;">'+event.adress1+', '+event.adress2+', '+event.zip+', '+event.location+' </div>';
+                            //html += '</div>';
+
+                            //html += '<div style="display:flex;justify-content:start;align-items:center;">';
+                            //html += '<svg class="mr-3" width="24" height="24" stroke-width="1.8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#00315a"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>';
+                            //html += '<div>';
+                            //html += '<div style="color:#00315a;">Début le '+formatDate(event.start)+'</div>';
+                            //html += '<div style="color:#00315a;">Fin le '+formatDate(event.end)+'</div>';
+                            //html += '</div>'
+                            //html += '</div>';
+
+                            html += '</div>';
+                          }
+                          
+                          //console.log(JSON.stringify(event));
+                          
+                      });
+                    }
+                    
+                    
+
+                    document.querySelector('#boxactivities').innerHTML = html;
+                });
+            });
+        }); 
+    }
+
+    function getMidnightTimestamps(inputTimestamp) {
+  // Convertir le timestamp en millisecondes
+  var timestampInMillis = inputTimestamp * 1000;
+
+  // Créer un objet Date à partir du timestamp
+  var date = new Date(timestampInMillis);
+
+  // Réinitialiser l'heure, les minutes, les secondes et les millisecondes à minuit
+  date.setHours(0, 0, 0, 0);
+
+  // Convertir la date à minuit en timestamp en secondes
+  var midnightBeforeTimestamp = Math.floor(date.getTime() / 1000);
+
+  // Ajouter un jour (en millisecondes) à la date pour obtenir minuit après
+  date.setDate(date.getDate() + 1);
+
+  // Convertir la date à minuit après en timestamp en secondes
+  var midnightAfterTimestamp = Math.floor(date.getTime() / 1000);
+
+  return {
+    midnightBefore: midnightBeforeTimestamp,
+    midnightAfter: midnightAfterTimestamp
+  };
+}
+
+
+</script>
+
+
+{{#js}}
+    //on eleve le bouton réinitialiser
+    window.onload = function(){
+      let elreinit = document.querySelector(".reset-pagebutton-wrapper");
+      if(elreinit){
+        elreinit.remove();
+      }
+    };
+    
+{{/js}}

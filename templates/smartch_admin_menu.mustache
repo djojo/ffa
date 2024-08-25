@@ -1,0 +1,161 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    Edwiser RemUI
+    @package theme_remui
+    @copyright (c) 2023 WisdmLabs (https://wisdmlabs.com/)
+    @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+
+}}
+{{!
+    @template theme_remui/smartch_info
+}}
+
+
+{{! modification smartch dashboard}}
+
+<style>
+
+.smartch-menu-box {
+    background: red !important;
+    color: white;
+}
+
+img.smartch_background_header{
+    height:100vh;
+    position: fixed !important;
+}
+
+
+#topofscroll{
+    background:transparent;
+}
+
+#page-footer{
+    display:none;
+}
+
+</style>
+
+
+
+
+<div class="row">
+    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-2">
+        <div onclick="location.href='{{url}}theme/remui/views/adminformations.php'" class="smartch_menu_box_item">
+            <div class="icon">
+                <span class="fa fa-graduation-cap"></span>
+            </div>
+            <div class="details">
+                <h4>Parcours</h4>
+                <p>Voir les parcours</p>
+            </div>
+        </div>
+	</div>
+
+    {{#adminfff}}
+    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-2">
+        <div onclick="location.href='{{url}}course/edit.php?action=newcourse'" class="smartch_menu_box_item">
+            <div class="icon">
+                <span class="fa fa-plus"></span>
+            </div>
+            <div class="details">
+                <h4>Créez</h4>
+                <p>Une formation gratuite</p>
+            </div>
+        </div>
+	</div>
+    {{/adminfff}}
+
+    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-2">
+        <div onclick="location.href='{{url}}theme/remui/views/adminteams.php'" class="smartch_menu_box_item">
+            <div class="icon">
+                <span class="fa fa-flag"></span>
+            </div>
+            <div class="details">
+                <h4>Groupes</h4>
+                <p>Voir les groupes</p>
+            </div>
+        </div>
+	</div>
+    
+    {{#adminfff}}
+    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-2">
+        <div onclick="location.href='{{url}}theme/remui/views/adminusers.php'" class="smartch_menu_box_item">
+            <div class="icon">
+                <span class="fa fa-user"></span>
+            </div>
+            <div class="details">
+                <h4>Utilisateurs</h4>
+                <p>Voir les utilisateurs</p>
+            </div>
+        </div>
+	</div>
+    {{/adminfff}}
+
+    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-2">
+        <div onclick="location.href='{{url}}theme/remui/views/calendar.php'" class="smartch_menu_box_item">
+            <div class="icon">
+                <span class="fa fa-calendar"></span>
+            </div>
+            <div class="details">
+                <h4>Calendrier</h4>
+                <p>Voir le calendrier</p>
+            </div>
+        </div>
+	</div>
+
+    {{#adminfff}}
+    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-2">
+        <div onclick="location.href='{{url}}theme/remui/views/viewstats.php'" class="smartch_menu_box_item">
+            <div class="icon">
+                <span class="fa fa-flag"></span>
+            </div>
+            <div class="details">
+                <h4>Statistiques</h4>
+                <p>Voir les statistiques</p>
+            </div>
+        </div>
+	</div>
+    {{/adminfff}}
+
+    {{#adminfff}}
+    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-2">
+        <div onclick="location.href='{{url}}theme/remui/views/editslider.php'" class="smartch_menu_box_item">
+            <div class="icon">
+                <span class="fa fa-gears"></span>
+            </div>
+            <div class="details">
+                <h4>Slider</h4>
+                <p>Modifier le slider</p>
+            </div>
+        </div>
+	</div>
+    {{/adminfff}}
+
+    {{! <div class="col-sm-12 col-md-4 col-lg-4 col-xl-3">
+        <div class="smartch_menu_box_item">
+            <div class="icon">
+                <span class="fa fa-bar-chart-o"></span>
+            </div>
+            <div class="details">
+                <h4>Statistiques</h4>
+                <p>Voir les stats</p>
+            </div>
+        </div>
+	</div> }}
+    
+</div>
+
+
+

@@ -1,0 +1,162 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+    Edwiser RemUI
+    @package theme_remui
+    @copyright (c) 2023 WisdmLabs (https://wisdmlabs.com/)
+    @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+}}
+{{!
+    Page navbar.
+}}
+{{#focusdata}}
+<nav class="fm-navbar fixed-top navbar navbar-light navbar-expand moodle-has-zindex greedy justify-content-between" aria-label="{{#str}}sitemenubar, admin{{/str}}">
+    {{! modification smartch }}
+    <a href="{{{ config.homeurl }}}" class="navbar-brand d-none d-md-flex align-items-center m-0 p-0 aabtn" aria-label="{{ sitename }} - {{#str}}brandname, theme_remui{{/str}}">
+        <svg width="41" height="52" viewBox="0 0 41 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0.585938 42.2202L20.5004 51.087L40.4179 42.2202V17.105L20.5004 8.23828L0.585938 17.105V42.2202V42.2202Z" fill="url(#paint0_radial_133_2)"/>
+            <path d="M11.3665 45.2303C12.9292 45.8454 14.4795 46.4947 16.0329 47.1285L20.4973 48.9988L24.9618 47.1285C26.5183 46.4947 28.0655 45.8485 29.6282 45.2303C31.1847 44.6027 32.7505 43.9938 34.3163 43.3849C35.8883 42.7884 37.4572 42.1888 39.0417 41.6264V17.9932L20.4942 9.73535L1.94678 17.9932V41.6264C3.53123 42.1888 5.10326 42.7884 6.67219 43.3849C8.238 43.9907 9.80382 44.6027 11.3603 45.2303H11.3665Z" fill="url(#paint1_linear_133_2)"/>
+            <path d="M18.2627 42.4034H19.4868V40.7071H22.8079V39.7378H19.4868V38.5479H23.3143V37.5537H18.2627V42.4034Z" fill="white"/>
+            <path d="M30.8389 38.5479V37.5537H25.7842V42.4034H27.0082V40.7071H30.3325V39.7378H27.0082V38.5479H30.8389Z" fill="white"/>
+            <path d="M15.793 38.5479V37.5537H10.7383V42.4034H11.9624V40.7071H15.2866V39.7378H11.9624V38.5479H15.793Z" fill="white"/>
+            <path d="M28.8137 18.9411C28.4347 18.8665 27.717 18.8261 27.6052 18.3353C27.2852 19.2984 27.8693 20.2987 28.7392 20.2987C29.23 20.2987 29.4755 19.9787 29.4755 19.5997C29.4755 19.2797 29.23 19.0156 28.8137 18.938V18.9411ZM26.9434 15.4832C26.2258 14.8774 25.1291 15.1415 24.7904 14.4238C24.4704 14.7842 24.3182 15.2161 24.545 15.5951C24.2809 15.7287 23.9392 15.7846 23.6565 15.651C23.3737 16.03 23.3924 16.5023 23.5633 16.785C23.3365 16.9559 22.9978 17.0677 22.6934 16.9931C22.7866 17.3318 23.1097 17.5772 23.4297 17.5772C23.3737 17.8226 23.2774 17.9376 23.0693 18.0122C23.3334 18.5217 24.2033 18.6553 24.7873 18.4471C24.7314 18.3912 24.6165 18.2017 24.6165 17.9003C24.6165 17.0863 25.3031 16.5489 26.2537 16.5489C26.6452 16.5489 26.8937 16.6048 27.0335 16.6265C27.0926 16.6359 27.1392 16.6452 27.1764 16.552C27.279 16.3034 27.3722 15.8436 26.9403 15.4863L26.9434 15.4832Z" fill="#E30613"/>
+            <path d="M19.7141 21.0599C21.0314 21.2432 22.156 21.7279 23.1409 22.3182C22.7836 19.6525 20.7362 17.4964 17.4927 17.4964C16.104 17.4964 14.6625 17.8289 13.457 18.6739C16.4178 17.7978 18.7852 18.9038 19.7141 21.0599V21.0599ZM18.4248 19.9788C16.3277 18.1644 12.5499 19.1679 11.0586 21.0754C9.01745 23.6634 10.0209 27.0063 11.1518 28.1962C10.3596 23.5298 13.2675 19.6774 18.4248 19.9788ZM26.6049 17.7512C26.7758 17.7512 26.9063 17.6176 26.9063 17.4498C26.9063 17.2976 26.7727 17.1671 26.6049 17.1671C26.4527 17.1671 26.3222 17.3007 26.3222 17.4498C26.3222 17.6207 26.4558 17.7512 26.6049 17.7512ZM28.7766 18.1489C27.5867 17.8848 27.3599 17.338 27.9843 16.2227C27.6457 16.6017 27.0771 17.223 27.3039 17.7543C27.5494 18.2824 28.6057 18.1706 28.7766 18.152V18.1489ZM28.3975 25.515C29.3327 25.3659 30.0503 24.5737 30.0503 23.6541C30.0503 23.0545 29.78 21.9982 29.0562 21.4141C29.5284 22.8121 29.2643 24.5115 28.3944 25.5119L28.3975 25.515ZM25.6014 20.0005C25.9836 20.8486 26.2973 22.1317 26.2973 23.0638C26.2973 26.8665 23.1595 28.1434 21.3731 30.9799C23.4329 29.4016 26.4682 28.0191 27.5804 25.4125C28.3167 23.6945 27.7482 21.1904 25.6014 20.0005ZM14.4947 27.2921C13.3234 29.501 14.3238 31.4676 16.4023 31.1818C15.0788 30.7282 14.1747 28.8579 14.4947 27.2921ZM28.1272 25.9034C28.0154 25.9034 27.9004 25.8909 27.7886 25.8661C27.3909 26.6614 26.8255 27.3449 26.1762 27.9538C26.4185 28.0098 26.6639 28.0408 26.9125 28.0408C28.7859 28.0408 29.9602 26.4688 30.0597 24.8378C29.5532 25.515 28.8977 25.9034 28.1272 25.9034ZM22.5319 26.3228C21.7211 25.748 20.8853 25.1888 19.9937 24.8657C19.6551 26.9721 18.8411 28.861 18.838 31.1259C18.838 32.6762 19.217 33.9748 20.3914 35.581C20.09 34.7453 19.9626 34.1301 19.9626 33.3721C19.9626 30.6567 21.5844 28.774 22.5319 26.3197V26.3228ZM25.7008 24.6576C23.9797 23.3123 21.8018 21.3613 18.5584 21.3613C14.6096 21.3613 12.3634 24.1946 12.3634 27.4816C12.3634 29.3892 13.2955 30.8866 13.7242 31.3154C12.6306 27.9228 14.9172 24.2009 18.4558 24.2009C20.7207 24.2009 22.504 25.9376 24.2779 27.0746C24.9086 26.3508 25.4243 25.5958 25.7039 24.6576H25.7008Z" fill="white"/>
+            <path d="M13.1808 4.19026L10.9937 2.64309H13.6841L14.5261 0.132812L15.368 2.64309H18.0554L15.8713 4.19026L16.7723 6.57627L14.5261 5.57589L12.2768 6.57627L13.1808 4.19026Z" fill="#CFB078"/>
+            <path d="M25.133 4.19026L22.9458 2.64309H25.6363L26.4782 0.132812L27.3201 2.64309H30.0075L27.8234 4.19026L28.7244 6.57627L26.4782 5.57589L24.2289 6.57627L25.133 4.19026Z" fill="#CFB078"/>
+            <defs>
+            <radialGradient id="paint0_radial_133_2" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(19.8014 52.6349) scale(24.9785 16.3609)">
+            <stop offset="0.27" stop-color="#E30613"/>
+            <stop offset="0.35" stop-color="#E30613" stop-opacity="0.98"/>
+            <stop offset="0.45" stop-color="#E30613" stop-opacity="0.92"/>
+            <stop offset="0.55" stop-color="#E30613" stop-opacity="0.82"/>
+            <stop offset="0.66" stop-color="#E30613" stop-opacity="0.67"/>
+            <stop offset="0.77" stop-color="#E30613" stop-opacity="0.49"/>
+            <stop offset="0.88" stop-color="#E30613" stop-opacity="0.26"/>
+            <stop offset="1" stop-color="#E30613" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="paint1_linear_133_2" x1="32.8965" y1="13.3579" x2="8.10441" y2="46.2617" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#0075BD"/>
+            <stop offset="0.09" stop-color="#046DB2"/>
+            <stop offset="0.24" stop-color="#0E5896"/>
+            <stop offset="0.44" stop-color="#203668"/>
+            <stop offset="0.45" stop-color="#213566"/>
+            <stop offset="0.64" stop-color="#203260"/>
+            <stop offset="0.89" stop-color="#1E2A50"/>
+            <stop offset="1" stop-color="#1E2647"/>
+            </linearGradient>
+            </defs>
+        </svg>
+    </a>
+    <div class="sub-nav courseheaderbar bg-white">
+    <ul class="navbar-nav h-100 m-0 p-0" id="wdm-courseheader">
+        <li class="nav-item w-100">
+            <div class="nav-link d-block m-0 p-0">
+                <h5 class="title m-0" aria-label="Course - {{coursename}}"><a href="{{#courseurl}}{{courseurl}}{{/courseurl}} {{^courseurl}}javascript:void(0){{/courseurl}}">{{{coursename}}}</a></h5>
+                {{#progress}}
+                <div class="d-flex align-items-center">
+                    <div class="progress mr-1" style="height: 10px;width: 200px;" >
+                        <div class="progress-bar" role="progressbar" style="width: {{progress}}%;" aria-valuenow="{{progress}}" tabindex="0" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>{{progress}}%
+                </div>
+                {{/progress}}
+
+                {{^progress}}
+                <div class="d-flex align-items-center">
+                    <div class="progress mr-1" style="height: 10px;width: 200px;">
+                        <div class="progress-bar" tabindex="0" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>0%
+                </div>
+                {{/progress}}
+            </div>
+        </li>
+    </ul>
+    <ul class="nav navbar-nav h-100 activity-navigation justify-content-between m-0 p-0" aria-label="Activity Navigation">
+        <li class="nav-item m-0 p-0" id="coursePrevious">
+            <a class="nav-link px-2 w-100 h-100 d-flex align-items-center justify-content-center {{^previous}}disabled{{/previous}}" href="{{#previous}}{{previous}}{{/previous}}{{^previous}}javascript:void(0){{/previous}}" {{^previous}}aria-disabled='true'{{/previous}}>
+            <i class="fa fa-angle-left mr-2"></i><span class="navigation-text d-md-none d-lg-block" aria-label="Previous Activity" >{{#str}}prev, theme_remui {{/str}}</span></a>
+        </li>
+        <li class="nav-item m-0 p-0 focus-dropdown" id="courseActivities">
+            <a class="nav-link px-2 w-100 justify-content-center dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)" data-animation="scale-up" aria-expanded="false" aria-haspopup="listbox" role="button" aria-labelledby="accordionEx1" aria-label="Activity List">
+            <span>{{#active}}{{{active}}}{{/active}}{{^active}}{{#str}}coursedata, theme_remui{{/str}}{{/active}}</span>
+            </a>
+            <div class="focus-dropdown-menu dropdown-menu-right" role="menu">
+                <div class="accordion md-accordion" id="accordionEx1" role="tablist" aria-label="Activity List" aria-multiselectable="true">
+                    {{#sections}}
+                    <!-- Accordion card -->
+                      <div class="card border-bottom">
+                        <!-- Card header -->
+                        <div class="card-header px-3 py-3" role="tab" id="heading{{sectionid}}">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordionEx1" href="#collapse{{sectionid}}"
+                            aria-expanded="false" aria-controls="collapse{{sectionid}}">
+                            <h5 class="mb-0 d-flex justify-content-between">
+                              {{{name}}} {{#hasactivites}}<i class="fa fa-angle-down rotate-icon"></i>{{/hasactivites}}
+                            </h5>
+                          </a>
+                        </div>
+                        {{#hasactivites}}
+                        <!-- Card body -->
+                        <div id="collapse{{sectionid}}" class="collapse {{active}}" role="tabpanel" aria-labelledby="heading{{sectionid}}"
+                          data-parent="#accordionEx1">
+                          <div class="card-body m-0 p-0">
+                            {{#activities}}
+                            <div class="card  ">
+                                <!-- Card header -->
+                                <div class="card-header activity-item" role="tab">
+                                  <a href="{{url}}" class="w-100 d-inline-flex justify-content-left align-items-center">
+                                    <img src="{{icon}}" class="iconlarge activityicon mr-2" alt="" role="presentation" aria-hidden="true">
+                                    <h5 class="mb-0">
+                                      {{name}}
+                                    </h5>
+                                  </a>
+                                </div>
+                            </div>
+                            {{/activities}}
+                          </div>
+                        </div>
+                        {{/hasactivites}}
+                      </div>
+                      <!-- Accordion card -->
+                    {{/sections}}
+                </div>
+            </div>
+        </li>
+        <li class="nav-item m-0 p-0" id="courseNext" {{^next}}aria-disabled="true"{{/next}}>
+            <a class="nav-link px-2 w-100 h-100 d-flex align-items-center justify-content-center {{^next}}disabled{{/next}}"
+            href="{{#next}}{{next}}{{/next}}{{^next}}javascript:void(0){{/next}}"
+            aria-label="Next Activity" role="button"
+            ><span class="navigation-text d-md-none d-lg-block" >{{#str}}next, theme_remui {{/str}}</span><i class="fa fa-angle-right ml-2"></i></a>
+        </li>
+    </ul>
+    </div>
+</nav>
+{{/focusdata}}
+
+{{#js}}
+require(['jquery'], function($) {
+    var scrolled = false;
+    $('#courseActivities .dropdown-toggle').click(function() {
+        var menu = $(this).parent().find('.focus-dropdown-menu');
+        menu.slideToggle(200, 'linear', function() {
+            if (!$(this).is(':hidden') && !scrolled) {
+                scrolled = true;
+                if (menu.find('.collapse.show').length != 0) {
+                    menu.scrollTop(menu.scrollTop() + menu.find('.collapse.show').parent().position().top);
+                }
+            }
+        });
+    });
+});
+{{/js}}

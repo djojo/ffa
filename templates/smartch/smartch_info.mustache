@@ -1,0 +1,55 @@
+
+{{! modification smartch dashboard}}
+
+<h3 style="top: 140px;position:absolute;" class="FFF-title1-bonjour userinfo FFF-White"><span class="FFALight" style="font-weight: 500;letter-spacing: 3px;">Bonjour, </span><span class="FFABold" style="letter-spacing: 1px;" id="userinfofff"></span> </h3>
+
+{{#js}}
+	require(['jquery', 'core/ajax'], function($, Ajax) {
+		$(document).ready(function(){
+			let service_name = 'theme_remui_get_smartch_info';
+			let cuserinfo = Ajax.call([
+			    {
+			        methodname: service_name,
+			        args: {}
+			    }
+			]);
+			cuserinfo[0].done(function(response) {
+				let user = JSON.parse(response);
+				//console.log(user)
+				let username = user.firstname + " " + user.lastname;
+			    // When userinfo block is ready then render the response value.
+			    $('.userinfo').ready(function() {
+					document.getElementById('userinfofff').innerHTML = username;
+			    });
+
+				
+
+				//quand le slider est ready
+				$('#encartpub').ready(function() {
+					let htmlslider = "";
+					$('#imagefixe').prop('src', user.urlimagefixe);
+					for(let i=0;i < user.otherimages.length;i++){
+						htmlslider += '<li class="splide__slide"><img src="'+user.otherimages[i]+'" style="width: 100%; height: 100%;max-height: 550px; object-fit: contain;" /></li>';
+					}
+					if(user.otherimages.length > 0 || user.urlimagefixe){
+						document.getElementById('encartpub').style.display = "flex";
+					}
+
+					//console.log(htmlslider);
+					$('.splide__list').html(htmlslider);
+
+					var splide = new Splide( '.splide' );
+					splide.mount();
+			    });
+				
+
+				
+
+				
+				
+			});
+		});
+	});
+{{/js}}
+
+

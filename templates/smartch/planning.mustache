@@ -1,0 +1,342 @@
+<script
+  src="https://code.jquery.com/jquery-3.7.1.min.js"
+  integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+  crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+
+<style>
+
+.select2-container {
+    width: auto !important;
+    margin-right: 20px;
+}
+
+.select2-container--default .select2-selection--single{
+    border:none !important;
+    
+}
+.select2-container--default .select2-selection--single .select2-selection__rendered{
+    font-size: 1.3rem;
+    color: #01315A !important;
+    line-height: normal !important;
+    min-width: 200px;
+    text-align: right;
+}
+
+.select2-container--default .select2-results__option--highlighted.select2-results__option--selectable{
+    background: #01315A !important;
+}
+
+.select2-container .select2-selection--single{
+    height: auto !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow{
+    top: -5px !important;
+    right: -10px !important;
+}
+
+</style>
+
+<div class="row" id="smartchplanning">
+
+<div class="col-sm-12 col-md-12 col-lg-12" style="margin:50px 0;">
+<div class="mynextactivities" >
+<h3 class="FFF-title1 smartch_flex">
+    <div style="text-wrap: nowrap;">
+      <span class="FFABlack FFF-Blue" style="margin-right:10px;text-wrap: nowrap;">Mes travaux /</span><span style="text-wrap: nowrap;" class="FFABlack FFF-Gold">Mes prochaines dates</span> 
+    </div>
+    <div class="smartch_flex"  style="align-items: center;">
+      <select class="select2" id="group-select" name="courseid" onchange="getSessions('all', this.value);">
+      </select>
+      <a onclick="toggleAllSessions()" class="smartch_btn" style="min-width: 120px; text-align: center;">Tout voir</a>
+    </div>
+</h3>
+<div style="display:none;justify-content: space-between;margin-bottom: 20px;align-items:center;" >
+  <h3 id="boxactivitiestitle">Sessions à venir</h3>
+  <button onclick="getSessions('now', 'all')" type="button" style="background:#2c3e50;color:#fff;border: 1px solid transparent; border-radius: 0.25em; display: inline-block; font-size: 1em; font-weight: 400; line-height: 1.5; padding: 0.4em 0.65em; text-align: center; user-select: none; vertical-align: middle;cursor:pointer;" class="mr-3">Prochaines sessions</button>
+  {{! <button type="button" class="smartch_btn">Aujourd'hui</button> }}
+</div>
+<div style="max-height: 400px; overflow-y: hidden;display:flex;align-items: start; justify-content: center;" id="boxevents"></div>
+</div> {{! mynextactivities }}
+</div> {{! md6 }}
+</div> {{! row }}
+
+
+
+<div class="smartch_modal_container" onclick="this.style.display='none';">
+    <div class="smartch_modal">
+
+        <h3 id="modal_coursename"></h3>
+        {{! <h3 id="modal_teamname"></h3> }}
+        <p id="modal_startdate"></p>
+        <p id="modal_enddate"></p>
+    </div>
+</div>
+
+<script>
+
+  var events;
+
+  function formatDate(date){
+
+    const newDate = new Date(date);
+    const year = newDate.getFullYear();
+    const month = String(newDate.getMonth() + 1).padStart(2, "0");
+    const day = String(newDate.getDate()).padStart(2, "0");
+    const hours = String(newDate.getHours()).padStart(2, "0");
+    const minutes = String(newDate.getMinutes()).padStart(2, "0");
+    const formattedStart = `${day}/${month}/${year}`;
+    const formattedStarthour = `${hours}:${minutes}`;
+    return formattedStart+' à '+formattedStarthour;
+
+  }
+  function formatDate2(date){
+
+    const newDate = new Date(date);
+    const year = newDate.getFullYear();
+    const month = String(newDate.getMonth() + 1).padStart(2, "0");
+    const day = String(newDate.getDate()).padStart(2, "0");
+    const formattedStart = `${day}/${month}/${year}`;
+    //return 'Le '+formattedStart;
+    return formattedStart;
+
+  }
+
+
+function toggleAllSessions() {
+  var boxEvents = document.getElementById("boxevents");
+  var smartchBtn = document.querySelector(".smartch_btn");
+  
+  if (boxEvents.style.maxHeight === "400px") {
+    boxEvents.style.maxHeight = "none";
+    smartchBtn.innerHTML = "Réduire";
+  } else {
+    boxEvents.style.maxHeight = "400px";
+    smartchBtn.innerHTML = "Tout voir";
+  }
+}
+
+function handleAjaxError(error) {
+  console.error("Une erreur s'est produite lors de l'appel AJAX :", error);
+  // Afficher un message d'erreur à l'utilisateur
+  let errorMessage = document.createElement('div');
+  errorMessage.className = 'alert alert-danger';
+  errorMessage.textContent = "Désolé, une erreur s'est produite lors du chargement des données. Veuillez réessayer plus tard.";
+  document.querySelector('#boxactivities').innerHTML = '';
+  document.querySelector('#boxactivities').appendChild(errorMessage);
+}
+
+
+
+
+function getSessions(timestart, groupid){
+
+        if(!groupid){
+          groupid = "all";
+        }
+
+        //alert(groupid);
+
+        var nextsession = false;
+        if(timestart == "now"){
+          nextsession = true;
+          timestart = new Date()
+          document.getElementById("boxactivitiestitle").innerHTML = "Sessions à venir";
+          //on désectionne la date
+          //on reset les elements
+          let elDays = document.getElementsByClassName('selectedDay');
+          for(let i = 0; i<elDays.length; i++){
+            elDays[i].classList.remove('selectedDay')
+          }
+          //let next = true;
+        }
+        
+        //document.querySelector("#adminteams").style.display = "block";
+        //document.getElementById('mycourseteams').innerHTML = '<div class="loader_container"><div class="loader-06"></div></div>';
+        require(['jquery', 'core/ajax'], function($, Ajax) {
+            $(document).ready(function(){
+
+                let date = new Date(timestart);
+                // Obtenez le timestamp en millisecondes
+                let timestamp = Math.floor(date.getTime() / 1000);
+
+                let timestamps = getMidnightTimestamps(timestamp);
+
+                //alert(timestamp)
+
+                if(nextsession){
+                  timeend= null;
+                } else{
+                  timeend= timestamps.midnightAfter;
+                }
+                  
+                timestart = timestamps.midnightBefore;
+
+                //alert(timestart + '  ' + timeend)
+
+                let service_name = 'theme_remui_get_smartch_calendar';
+                //alert("timestart:"+timestart+' & timeend:'+timeend)
+                let cusercourses = Ajax.call([
+                    {
+                        methodname: service_name,
+                        args: {timestart:timestart, timeend:timeend, groupid:groupid}
+                    }
+                ]);
+                cusercourses[0].done(function(response) {
+
+
+                    //alert(response);
+                    let data = JSON.parse(response);
+
+                    let events = data.events;
+
+                    //alert(data.events.length);
+
+                    let usergroups = data.usergroups;
+
+                    //console.log(events);
+
+                    //On construit le tableau des groupes avec les options du select
+                    // Construire le tableau des groupes avec les options du select
+                    let selectOptions = '<option value="">Tous les groupes</option>';
+                    usergroups.forEach(group => {
+                        selectOptions += `<option value="${group.id}">${group.name}</option>`;
+                    });
+                    
+                    // Insérer les options dans le select
+                    document.getElementById('group-select').innerHTML = selectOptions;
+
+                    // Sélectionner l'option correspondant au groupid s'il existe
+                    if (groupid && groupid !== 'all') {
+                        document.querySelector('#group-select').value = groupid;
+                    }
+
+                    // Initialiser Select2 sur l'élément select
+                    $(document).ready(function() {
+                        $('#group-select').select2({
+                            placeholder: "Sélectionnez un groupe",
+                            allowClear: true
+                        });
+                    });
+            
+                    //alert(events.length);
+                    //on construit le tableau des activités
+                    let html = '';
+                    html += '<div class="row" style="width:100%;">';
+                    if(events.length == 0){
+
+                        if(nextsession){
+                          html += '<div style="display: flex; align-items: center; justify-content: center; height: 400px;width:100%;">Aucune session à venir</div>';
+                        } else {
+                          html += '<div style="display: flex; align-items: center; justify-content: center; height: 400px;width:100%;">Aucune session prévue ce jour</div>';
+                        }
+                        
+
+                    } else {
+                        events.forEach(event=>{
+
+                          html += '<div class="col-6">';
+
+                          //On check si l'event est déjà passé venir
+                          let todayDate = new Date();
+                          // Obtenez le timestamp en millisecondes
+                          let timestamptoday = Math.floor(todayDate.getTime() / 1000);
+
+                          let dateString = new Date(event.start);
+                          // Obtenez le timestamp en millisecondes
+                          let timestampEvent = Math.floor(dateString.getTime() / 1000);
+
+                          //console.log(dateString + ' > ' + todayDate)
+                          //console.log(timestampEvent +' > '+timestamptoday)
+                          //return timestampEvent > timestamp
+                         
+
+                          if(event.start && event.end){
+
+                            if(timestampEvent>timestamptoday){
+                                html += '<div onclick="window.location.href = \''+event.url+'\'" style="border-bottom: 1px solid gainsboro;margin-bottom:20px; padding: 20px 0;color:#054686;cursor:pointer;">';
+                            } else {
+                                html += '<div style="border-bottom: 1px solid gainsboro;margin-bottom:20px; padding: 20px 0;color:#054686;">';
+                            }
+
+
+                            html += '<div style="display: flex;align-items:center;justify-content:space-between;">';
+                            
+                            html += '<div>';
+                            html += '<div style="font-size:1.5rem;font-weight:bold;" class="FFABold">'+event.coursename+' • '+event.groupname+' • '+event.matiere+' </div>';
+                            html += '<div>' + event.info + '</div>';
+                            //html += '<div style="font-size:0.8rem;color:#3CAFE3;">'+event.coursename+'</div>';
+                            //html += '<div>'+event.info+'</div>';
+                            html += '</div>';
+
+                            html += '<div>';
+                            html += '<div style="font-size:1rem;color:#000000;background: #f6f6f6; padding: 5px 15px; border-radius: 20px;">'+event.start+'</div>';
+                            html += '</div>';
+
+
+                            html += '</div>'; //flex'
+
+                            html += '</div>';
+                          }
+                          
+                          //console.log(JSON.stringify(event));
+
+                          html += '</div>'; //col-6
+                          
+                      });
+                    }
+                    html += '</div>'; //row
+                    document.querySelector('#boxevents').innerHTML = html;
+                });
+            });
+        }); 
+    }
+
+function getMidnightTimestamps(inputTimestamp) {
+  // Convertir le timestamp en millisecondes
+  var timestampInMillis = inputTimestamp * 1000;
+
+  // Créer un objet Date à partir du timestamp
+  var date = new Date(timestampInMillis);
+
+  // Réinitialiser l'heure, les minutes, les secondes et les millisecondes à minuit
+  date.setHours(0, 0, 0, 0);
+
+  // Convertir la date à minuit en timestamp en secondes
+  var midnightBeforeTimestamp = Math.floor(date.getTime() / 1000);
+
+  // Ajouter un jour (en millisecondes) à la date pour obtenir minuit après
+  date.setDate(date.getDate() + 1);
+
+  // Convertir la date à minuit après en timestamp en secondes
+  var midnightAfterTimestamp = Math.floor(date.getTime() / 1000);
+
+  return {
+    midnightBefore: midnightBeforeTimestamp,
+    midnightAfter: midnightAfterTimestamp
+  };
+}
+
+
+</script>
+
+
+{{#js}}
+    //on eleve le bouton réinitialiser
+    window.onload = function(){
+      getSessions("now", "all");
+    };
+    
+{{/js}}
+
+
+<script>
+
+$(document).ready(function() {
+        $(".select2").select2();
+    });
+
+</script>';

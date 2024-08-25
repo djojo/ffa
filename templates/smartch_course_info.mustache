@@ -1,0 +1,170 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    Edwiser RemUI
+    @package smartch
+    @copyright (c) 2023 WisdmLabs (https://wisdmlabs.com/)
+    @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+
+}}
+{{!
+    @template theme_remui/smartch_info
+}}
+
+
+{{! modification smartch dashboard}}
+
+<style>
+
+img.smartch_background_header {
+    height: 550px !important;
+}
+
+#page{
+    background:transparent !important;
+}
+
+#topofscroll {
+    background: transparent !important;
+    margin-top: 0px !important;
+}
+
+</style>
+
+
+
+
+<div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-8 col-xl-8" style="padding: 0;">
+        <div class="{{format}}">
+            {{#coach}}
+                <div class="fff-course-box-info-details">
+                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="24" cy="24" r="24" fill="#E2E8F0"/>
+                        <path d="M28 19C28 21.2091 26.2091 23 24 23C21.7909 23 20 21.2091 20 19C20 16.7909 21.7909 15 24 15C26.2091 15 28 16.7909 28 19Z" stroke="#00315a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M24 26C20.134 26 17 29.134 17 33H31C31 29.134 27.866 26 24 26Z" stroke="#00315a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <div style="margin-left: 25px;">
+                        <h3 class="FFABold FFF-Blue" style="font-size:16px;">
+                            {{coach}} 
+                            {{#urlmessageresponsable}}
+                                <a style="display:none;" href="{{urlmessageresponsable}}">
+                                    <svg class="ml-2" width="20" height="16" viewBox="0 0 20 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M1 4L8.8906 9.2604C9.5624 9.70827 10.4376 9.70827 11.1094 9.2604L19 4M3 15H17C18.1046 15 19 14.1046 19 13V3C19 1.89543 18.1046 1 17 1H3C1.89543 1 1 1.89543 1 3V13C1 14.1046 1.89543 15 3 15Z" stroke="#00315a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </a>
+                            {{/urlmessageresponsable}}
+                        </h3>
+                        {{#teamname}}
+                            <!--<h5 class="FFF-Blue">{{teamname}}</h5>-->
+                            <h5 class="FFF-Blue" style="font-size:12px;">Responsable pédagogique</h5>
+                        {{/teamname}}
+                        
+                    </div>
+                </div>
+            {{/coach}}
+
+
+            {{#category}}
+                <h5 class="FFABold FFF-Blue" style="font-size:12px;">
+                     {{coursetype}} • {{category}} 
+                </h5>
+            {{/category}}
+
+
+            
+            <!--{{#session}}-->
+                <div class="fff-course-box-info-details3">
+                    {{#courseduration}}
+                    <div>
+                        <svg style="right: 1px;position:relative;"  class="mr-2 smartch_svg" width="22" height="22" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2ZM0 10C0 4.47715 4.47715 0 10 0C15.5228 0 20 4.47715 20 10C20 15.5228 15.5228 20 10 20C4.47715 20 0 15.5228 0 10ZM10 5C10.5523 5 11 5.44772 11 6V9.58579L13.7071 12.2929C14.0976 12.6834 14.0976 13.3166 13.7071 13.7071C13.3166 14.0976 12.6834 14.0976 12.2929 13.7071L9.29289 10.7071C9.10536 10.5196 9 10.2652 9 10V6C9 5.44772 9.44771 5 10 5Z" fill="#00315a"/>
+                        </svg>
+                        <span class="mr-4 FFARegular" style="font-size:12px;">{{courseduration}}h</span>
+                    </div>
+                    {{/courseduration}}
+                    {{#session}}
+                        {{#sessiondate}}
+                            <div>   
+                                <svg class="mr-2 smartch_svg" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M6 0C6.55228 0 7 0.447715 7 1V2H13V1C13 0.447715 13.4477 0 14 0C14.5523 0 15 0.447715 15 1V2H17C18.6569 2 20 3.34315 20 5V17C20 18.6569 18.6569 20 17 20H3C1.34315 20 0 18.6569 0 17V5C0 3.34315 1.34315 2 3 2H5V1C5 0.447715 5.44772 0 6 0ZM5 4H3C2.44772 4 2 4.44772 2 5V17C2 17.5523 2.44772 18 3 18H17C17.5523 18 18 17.5523 18 17V5C18 4.44772 17.5523 4 17 4H15V5C15 5.55228 14.5523 6 14 6C13.4477 6 13 5.55228 13 5V4H7V5C7 5.55228 6.55228 6 6 6C5.44772 6 5 5.55228 5 5V4ZM4 9C4 8.44772 4.44772 8 5 8H15C15.5523 8 16 8.44772 16 9C16 9.55229 15.5523 10 15 10H5C4.44772 10 4 9.55229 4 9Z" fill="#00315a"/>
+                                </svg>
+                                <span class="mr-4 FFARegular" style="font-size:12px;">{{sessiondate}}</span>
+                            </div>
+                        {{/sessiondate}}
+                    {{/session}}
+                    {{#diplome}}
+                    <div>
+                        <svg style="right: 3px;position:relative;" class="mr-2 smartch_svg"xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5" />
+                        </svg>
+                        <span class="FFARegular" style="font-size:12px;">{{diplome}}</span>
+                    </div>
+                    {{/diplome}}
+                </div>
+
+                {{#ligue}}
+                <div class="fff-course-box-info-details">
+                    {{! <svg class="mr-2" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2ZM0 10C0 4.47715 4.47715 0 10 0C15.5228 0 20 4.47715 20 10C20 15.5228 15.5228 20 10 20C4.47715 20 0 15.5228 0 10ZM10 5C10.5523 5 11 5.44772 11 6V9.58579L13.7071 12.2929C14.0976 12.6834 14.0976 13.3166 13.7071 13.7071C13.3166 14.0976 12.6834 14.0976 12.2929 13.7071L9.29289 10.7071C9.10536 10.5196 9 10.2652 9 10V6C9 5.44772 9.44771 5 10 5Z" fill="#00315a"/>
+                    </svg> }}
+                    <svg class="mr-2 smartch_svg" width="24" height="24"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z" />
+                    </svg>
+
+                    <span class="mr-4 FFABold" style="font-size:12px;">{{ligue}}</span>
+                </div>
+                {{/ligue}}
+               
+                
+            <!--{{/session}}-->
+
+            
+            {{#coursesummary}} 
+                <h5 class="FFABold FFF-Blue" style="font-size:16px;padding:20px 0 10px 0px;">OBJECTIFS</h5>
+                <div id="smartch_summary" class="FFARegular FFF-Blue" style="font-size: 14px; !important;max-height: 180px; overflow: hidden;">{{{coursesummary}}}</div>
+                <div style="text-align:center;">
+                    <div id="smartch_summary_more" onclick="this.style.display='none';document.querySelector('#smartch_summary_less').style.display='block';document.querySelector('#smartch_summary').style.maxHeight='none';" style="cursor:pointer;">Voir plus</div>
+                    <div id="smartch_summary_less" onclick="this.style.display='none';document.querySelector('#smartch_summary_more').style.display='block';document.querySelector('#smartch_summary').style.maxHeight='180px';" style="cursor:pointer;display:none;">Voir moins</div>
+                </div>
+            {{/coursesummary}} 
+
+            {{#manager}}
+                {{! <div class="fff-course-box-info-details"> }}
+                    <a href="{{editurl}}">
+                        <svg style="width: auto;" data-toggle="tooltip" data-placement="top" title="Modifier le parcours" class="iconsvg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
+                        </svg>
+                    </a>
+                {{! </div> }}
+            {{/manager}}
+        </div>
+    </div>
+    {{! <div class="col-sm-12 col-md-6 col-lg-6">
+        <img class="fff-course-box-info-img" src="http://localhost:8888/smartch/site/pluginfile.php/16/course/overviewfiles/fff1.png" />
+    </div> }}
+
+</div>
+
+
+
+{{#js}}
+	require(['jquery', 'core/ajax'], function($, Ajax) {
+		$(document).ready(function(){
+            //a supprimer
+			//$('.edw-tabs-navigation').remove();
+			//$('#wdm_course-stats').remove();
+			//$('.main-inner').css({"margin-top":0});
+		});
+	});
+{{/js}}

@@ -1,0 +1,75 @@
+
+
+<div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <div class="smartch_flex_mobile" style="justify-content: space-between;align-items: center;">
+            <h2 style="letter-spacing:1px;max-width:70%;cursor:pointer;" onclick="location.href='{{formurl}}'" class="FFABold FFF-Blue">{{textcontent}}</h2> 
+            <div >
+                {{#category}}
+                    <form style="display: inline;margin-right:20px;" method="post" action="{{formurl}}">
+                        <select class="smartch_select" name="categoryid" onchange="this.parentElement.submit()">
+                                <option id="cat" value="all">
+                                    Toutes les catégories
+                                </option>
+                            {{#cat}}
+                                <option id="cat{{categoryid}}" value="{{categoryid}}">
+                                    {{categoryname}}
+                                </option>
+                            {{/cat}}
+                        </select>
+                        {{#paramsvisible}}
+                            <input type="hidden" name="{{paramname}}" value="{{paramvalue}}"/>
+                        {{/paramsvisible}}
+                        <input type="hidden" name="search" value="{{search}}" />
+                    </form>
+                {{/category}}
+                {{#select}}
+                    <form style="display: inline;margin-right:20px;" method="post" action="{{formurl}}">
+                        <select class="smartch_select" name="visible" onchange="this.parentElement.submit()">
+                                <option id="select1" value="1">
+                                    Publiés
+                                </option>
+                                <option id="select2" value="2">
+                                    Non publiés
+                                </option>
+                                <option id="select3"" value="3">
+                                    Toutes
+                                </option>
+                        </select>
+                        {{#paramscategory}}
+                            <input type="hidden" name="{{paramname}}" value="{{paramvalue}}"/>
+                        {{/paramscategory}}
+                        <input type="hidden" name="search" value="{{search}}" />
+                    </form>
+                {{/select}}
+                <form style="display: inline;" id="search-form" method="get" action="{{formurl}}">
+                    
+                    {{#params}}
+                        <input type="hidden" name="{{paramname}}" value="{{paramvalue}}"/>
+                    {{/params}}
+
+                    {{#paramscategory}}
+                        <input type="hidden" name="{{paramname}}" value="{{paramvalue}}"/>
+                    {{/paramscategory}}
+                    <input autocomplete="off" class="smartch_input_search" type="text" name="search" placeholder="{{lang_search}}" value="{{search}}" autocomplete="off"/>
+
+                    {{! <input /> }}
+                    <a style="display:none;" onmouseover="this.style.display='none'; document.getElementsByClassName('smartch_submit_hover')[0].style.display='inline-block'" class="smartch_submit"  onclick="document.getElementById('search-form').submit()" >
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19 19L13 13M15 8C15 11.866 11.866 15 8 15C4.13401 15 1 11.866 1 8C1 4.13401 4.13401 1 8 1C11.866 1 15 4.13401 15 8Z" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+                    <a style="display:none;" onmouseout="this.style.display='none'; document.getElementsByClassName('smartch_submit')[0].style.display='inline-block'" class="smartch_submit_hover" onclick="document.getElementById('search-form').submit()" >
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19 19L13 13M15 8C15 11.866 11.866 15 8 15C4.13401 15 1 11.866 1 8C1 4.13401 4.13401 1 8 1C11.866 1 15 4.13401 15 8Z" stroke="#00315a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+
+                    <input type="hidden" name="visible" value="{{visible}}" />
+
+                </form>
+                
+            </div>
+        </div>
+    </div>
+</div>

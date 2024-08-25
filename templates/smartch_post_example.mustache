@@ -1,0 +1,259 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    Edwiser RemUI
+    @package theme_remui
+    @copyright (c) 2023 WisdmLabs (https://wisdmlabs.com/)
+    @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+
+}}
+{{!
+    @template theme_remui/smartch_my_courses
+}}
+
+
+{{! modification smartch dashboard my courses}}
+
+
+{{! l'entete des modules }}
+<h3 class="FFF-title1" style="display: flex;align-items: center;">
+    <svg class="fff-icon" onclick="document.getElementById('fff-my-courses').scrollBy({top: 0, left: -30, behavior: 'smooth'});" width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M22.7071 11.2929C23.0976 11.6834 23.0976 12.3166 22.7071 12.7071L16.4142 19L22.7071 25.2929C23.0976 25.6834 23.0976 26.3166 22.7071 26.7071C22.3166 27.0976 21.6834 27.0976 21.2929 26.7071L14.2929 19.7071C13.9024 19.3166 13.9024 18.6834 14.2929 18.2929L21.2929 11.2929C21.6834 10.9024 22.3166 10.9024 22.7071 11.2929Z" fill="#00315a"/>
+        <rect x="1" y="1" width="36" height="36" rx="18" stroke="#00315a" stroke-width="2"/>
+    </svg>
+    <svg class="fff-icon" onclick="document.getElementById('fff-my-courses').scrollBy({top: 0, left: 30, behavior: 'smooth'});" width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M15.2929 26.7071C14.9024 26.3166 14.9024 25.6834 15.2929 25.2929L21.5858 19L15.2929 12.7071C14.9024 12.3166 14.9024 11.6834 15.2929 11.2929C15.6834 10.9024 16.3166 10.9024 16.7071 11.2929L23.7071 18.2929C24.0976 18.6834 24.0976 19.3166 23.7071 19.7071L16.7071 26.7071C16.3166 27.0976 15.6834 27.0976 15.2929 26.7071Z" fill="#00315a"/>
+        <rect x="1" y="1" width="36" height="36" rx="18" stroke="#00315a" stroke-width="2"/>
+    </svg>
+    <span class="FFABlack FFF-Blue" style="margin-right:10px;">Détails du </span><span class="FFABlack FFF-Gold">Parcours</span> 
+</h3>
+
+{{! tous les modules du cours }}
+<div class="fff-my-courses-caroussel">
+    <div class="fff-my-courses-caroussel-items" id="fff-my-courses">
+        {{#modules}}
+                <div onclick="alert('balance du js frerito')" class="fff-course-thumbnail-box" style="background:blue;"><h5 class="fff-course-thumbnail-title FFF-Blue">{{name}}</h5></div>
+        {{/modules}}
+    </div>
+
+</div>
+
+<div class="row mt-5">
+
+    <div class="col-sm-12 col-md-12 col-lg-12" style="background: white; padding: 20px 40px; border-radius: 20px 20px 0 0;">
+        <div class="fff-course-box-info">
+            <div style="display:flex;" id="course_module_info_titles">
+                <span onclick="changeinfomodule(this, 'presentiel')" class="course_module_info_title_highlight">contenu présentiel</span>
+                <span onclick="changeinfomodule(this, 'deliver')" class="course_module_info_title">à délivrer</span>
+                <span onclick="changeinfomodule(this, 'result')" class="course_module_info_title">résultats</span>
+            </div>
+
+            <div class="sub-box-module" id="presentiel">
+                <div>
+                    <div class="fff-course-box-info-details">
+                        <svg class="mr-2" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M6 0C6.55228 0 7 0.447715 7 1V2H13V1C13 0.447715 13.4477 0 14 0C14.5523 0 15 0.447715 15 1V2H17C18.6569 2 20 3.34315 20 5V17C20 18.6569 18.6569 20 17 20H3C1.34315 20 0 18.6569 0 17V5C0 3.34315 1.34315 2 3 2H5V1C5 0.447715 5.44772 0 6 0ZM5 4H3C2.44772 4 2 4.44772 2 5V17C2 17.5523 2.44772 18 3 18H17C17.5523 18 18 17.5523 18 17V5C18 4.44772 17.5523 4 17 4H15V5C15 5.55228 14.5523 6 14 6C13.4477 6 13 5.55228 13 5V4H7V5C7 5.55228 6.55228 6 6 6C5.44772 6 5 5.55228 5 5V4ZM4 9C4 8.44772 4.44772 8 5 8H15C15.5523 8 16 8.44772 16 9C16 9.55229 15.5523 10 15 10H5C4.44772 10 4 9.55229 4 9Z" fill="#00315a"/>
+                        </svg>
+                        <span class="FFABold">Session 1 - 14/11/2022 08h30 - 17h30</span>
+                    </div>
+                    <div class="fff-course-box-info-details">
+                        <svg class="mr-2" width="18" height="21" viewBox="0 0 18 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M13.9497 4.05025C11.2161 1.31658 6.78392 1.31658 4.05025 4.05025C1.31658 6.78392 1.31658 11.2161 4.05025 13.9497L8.29374 18.1932C8.68398 18.5835 9.31589 18.5836 9.70669 18.1928L13.9497 13.9497C16.6834 11.2161 16.6834 6.78392 13.9497 4.05025ZM2.63604 2.63604C6.15076 -0.87868 11.8492 -0.87868 15.364 2.63604C18.8787 6.15076 18.8787 11.8492 15.364 15.364L11.8617 18.8662C11.8303 18.8976 11.8754 18.8525 11.844 18.8839L11.1209 19.607C9.94961 20.7783 8.05137 20.7793 6.87952 19.6074L2.63604 15.364C-0.87868 11.8492 -0.87868 6.15076 2.63604 2.63604ZM9 7C7.89543 7 7 7.89543 7 9C7 10.1046 7.89543 11 9 11C10.1046 11 11 10.1046 11 9C11 7.89543 10.1046 7 9 7ZM5 9C5 6.79086 6.79086 5 9 5C11.2091 5 13 6.79086 13 9C13 11.2091 11.2091 13 9 13C6.79086 13 5 11.2091 5 9Z" fill="#00315a"/>
+                        </svg>
+                        <span>DISTRICT DORDOGNE PÉRIGORD. AVENUE DU PARC. 24430 MARSAC SUR L ISLE</span>
+                    </div>
+                    <div class="fff-course-box-info-details">
+                        <svg class="mr-2" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="16" cy="15.9995" r="15.6667" fill="#E2E8F0" stroke="white" stroke-width="0.666667"/>
+                            <path d="M18.6663 12.6662C18.6663 14.1389 17.4724 15.3328 15.9997 15.3328C14.5269 15.3328 13.333 14.1389 13.333 12.6662C13.333 11.1934 14.5269 9.99951 15.9997 9.99951C17.4724 9.99951 18.6663 11.1934 18.6663 12.6662Z" stroke="#00315a" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M15.9997 17.3328C13.4223 17.3328 11.333 19.4222 11.333 21.9995H20.6663C20.6663 19.4222 18.577 17.3328 15.9997 17.3328Z" stroke="#00315a" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+
+                        <span>Josselin CHUBILLEAU, Erick SENECHAL</span>
+                    </div>
+                </div>
+                <hr>
+                <div>
+                    <div class="fff-course-box-info-details">
+                        <svg class="mr-2" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M6 0C6.55228 0 7 0.447715 7 1V2H13V1C13 0.447715 13.4477 0 14 0C14.5523 0 15 0.447715 15 1V2H17C18.6569 2 20 3.34315 20 5V17C20 18.6569 18.6569 20 17 20H3C1.34315 20 0 18.6569 0 17V5C0 3.34315 1.34315 2 3 2H5V1C5 0.447715 5.44772 0 6 0ZM5 4H3C2.44772 4 2 4.44772 2 5V17C2 17.5523 2.44772 18 3 18H17C17.5523 18 18 17.5523 18 17V5C18 4.44772 17.5523 4 17 4H15V5C15 5.55228 14.5523 6 14 6C13.4477 6 13 5.55228 13 5V4H7V5C7 5.55228 6.55228 6 6 6C5.44772 6 5 5.55228 5 5V4ZM4 9C4 8.44772 4.44772 8 5 8H15C15.5523 8 16 8.44772 16 9C16 9.55229 15.5523 10 15 10H5C4.44772 10 4 9.55229 4 9Z" fill="#00315a"/>
+                        </svg>
+                        <span class="FFABold">Session 2 - 14/11/2022 08h30 - 17h30</span>
+                    </div>
+                    <div class="fff-course-box-info-details">
+                        <svg class="mr-2" width="18" height="21" viewBox="0 0 18 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M13.9497 4.05025C11.2161 1.31658 6.78392 1.31658 4.05025 4.05025C1.31658 6.78392 1.31658 11.2161 4.05025 13.9497L8.29374 18.1932C8.68398 18.5835 9.31589 18.5836 9.70669 18.1928L13.9497 13.9497C16.6834 11.2161 16.6834 6.78392 13.9497 4.05025ZM2.63604 2.63604C6.15076 -0.87868 11.8492 -0.87868 15.364 2.63604C18.8787 6.15076 18.8787 11.8492 15.364 15.364L11.8617 18.8662C11.8303 18.8976 11.8754 18.8525 11.844 18.8839L11.1209 19.607C9.94961 20.7783 8.05137 20.7793 6.87952 19.6074L2.63604 15.364C-0.87868 11.8492 -0.87868 6.15076 2.63604 2.63604ZM9 7C7.89543 7 7 7.89543 7 9C7 10.1046 7.89543 11 9 11C10.1046 11 11 10.1046 11 9C11 7.89543 10.1046 7 9 7ZM5 9C5 6.79086 6.79086 5 9 5C11.2091 5 13 6.79086 13 9C13 11.2091 11.2091 13 9 13C6.79086 13 5 11.2091 5 9Z" fill="#00315a"/>
+                        </svg>
+                        <span>DISTRICT DORDOGNE PÉRIGORD. AVENUE DU PARC. 24430 MARSAC SUR L ISLE</span>
+                    </div>
+                    <div class="fff-course-box-info-details">
+                        <svg class="mr-2" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="16" cy="15.9995" r="15.6667" fill="#E2E8F0" stroke="white" stroke-width="0.666667"/>
+                            <path d="M18.6663 12.6662C18.6663 14.1389 17.4724 15.3328 15.9997 15.3328C14.5269 15.3328 13.333 14.1389 13.333 12.6662C13.333 11.1934 14.5269 9.99951 15.9997 9.99951C17.4724 9.99951 18.6663 11.1934 18.6663 12.6662Z" stroke="#00315a" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M15.9997 17.3328C13.4223 17.3328 11.333 19.4222 11.333 21.9995H20.6663C20.6663 19.4222 18.577 17.3328 15.9997 17.3328Z" stroke="#00315a" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+
+                        <span>Josselin CHUBILLEAU, Erick SENECHAL</span>
+                    </div>
+                </div>
+            </div>
+            <div class="sub-box-module" id="deliver" style="display:none;">
+                <div>
+                    <div class="fff-course-box-info-details">
+                        <svg class="mr-2" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M6 0C6.55228 0 7 0.447715 7 1V2H13V1C13 0.447715 13.4477 0 14 0C14.5523 0 15 0.447715 15 1V2H17C18.6569 2 20 3.34315 20 5V17C20 18.6569 18.6569 20 17 20H3C1.34315 20 0 18.6569 0 17V5C0 3.34315 1.34315 2 3 2H5V1C5 0.447715 5.44772 0 6 0ZM5 4H3C2.44772 4 2 4.44772 2 5V17C2 17.5523 2.44772 18 3 18H17C17.5523 18 18 17.5523 18 17V5C18 4.44772 17.5523 4 17 4H15V5C15 5.55228 14.5523 6 14 6C13.4477 6 13 5.55228 13 5V4H7V5C7 5.55228 6.55228 6 6 6C5.44772 6 5 5.55228 5 5V4ZM4 9C4 8.44772 4.44772 8 5 8H15C15.5523 8 16 8.44772 16 9C16 9.55229 15.5523 10 15 10H5C4.44772 10 4 9.55229 4 9Z" fill="#00315a"/>
+                        </svg>
+                        <span class="FFABold">Deliver 1</span>
+                    </div>
+                    <div class="fff-course-box-info-details">
+                        <svg class="mr-2" width="18" height="21" viewBox="0 0 18 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M13.9497 4.05025C11.2161 1.31658 6.78392 1.31658 4.05025 4.05025C1.31658 6.78392 1.31658 11.2161 4.05025 13.9497L8.29374 18.1932C8.68398 18.5835 9.31589 18.5836 9.70669 18.1928L13.9497 13.9497C16.6834 11.2161 16.6834 6.78392 13.9497 4.05025ZM2.63604 2.63604C6.15076 -0.87868 11.8492 -0.87868 15.364 2.63604C18.8787 6.15076 18.8787 11.8492 15.364 15.364L11.8617 18.8662C11.8303 18.8976 11.8754 18.8525 11.844 18.8839L11.1209 19.607C9.94961 20.7783 8.05137 20.7793 6.87952 19.6074L2.63604 15.364C-0.87868 11.8492 -0.87868 6.15076 2.63604 2.63604ZM9 7C7.89543 7 7 7.89543 7 9C7 10.1046 7.89543 11 9 11C10.1046 11 11 10.1046 11 9C11 7.89543 10.1046 7 9 7ZM5 9C5 6.79086 6.79086 5 9 5C11.2091 5 13 6.79086 13 9C13 11.2091 11.2091 13 9 13C6.79086 13 5 11.2091 5 9Z" fill="#00315a"/>
+                        </svg>
+                        <span>DISTRICT DORDOGNE PÉRIGORD. AVENUE DU PARC. 24430 MARSAC SUR L ISLE</span>
+                    </div>
+                    <div class="fff-course-box-info-details">
+                        <svg class="mr-2" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="16" cy="15.9995" r="15.6667" fill="#E2E8F0" stroke="white" stroke-width="0.666667"/>
+                            <path d="M18.6663 12.6662C18.6663 14.1389 17.4724 15.3328 15.9997 15.3328C14.5269 15.3328 13.333 14.1389 13.333 12.6662C13.333 11.1934 14.5269 9.99951 15.9997 9.99951C17.4724 9.99951 18.6663 11.1934 18.6663 12.6662Z" stroke="#00315a" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M15.9997 17.3328C13.4223 17.3328 11.333 19.4222 11.333 21.9995H20.6663C20.6663 19.4222 18.577 17.3328 15.9997 17.3328Z" stroke="#00315a" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+
+                        <span>Josselin CHUBILLEAU, Erick SENECHAL</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sub-box-module" id="result" style="display:none;">
+                <div>
+                    <div class="fff-course-box-info-details">
+                        <svg class="mr-2" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M6 0C6.55228 0 7 0.447715 7 1V2H13V1C13 0.447715 13.4477 0 14 0C14.5523 0 15 0.447715 15 1V2H17C18.6569 2 20 3.34315 20 5V17C20 18.6569 18.6569 20 17 20H3C1.34315 20 0 18.6569 0 17V5C0 3.34315 1.34315 2 3 2H5V1C5 0.447715 5.44772 0 6 0ZM5 4H3C2.44772 4 2 4.44772 2 5V17C2 17.5523 2.44772 18 3 18H17C17.5523 18 18 17.5523 18 17V5C18 4.44772 17.5523 4 17 4H15V5C15 5.55228 14.5523 6 14 6C13.4477 6 13 5.55228 13 5V4H7V5C7 5.55228 6.55228 6 6 6C5.44772 6 5 5.55228 5 5V4ZM4 9C4 8.44772 4.44772 8 5 8H15C15.5523 8 16 8.44772 16 9C16 9.55229 15.5523 10 15 10H5C4.44772 10 4 9.55229 4 9Z" fill="#00315a"/>
+                        </svg>
+                        <span class="FFABold">Resultat 1</span>
+                    </div>
+                    <div class="fff-course-box-info-details">
+                        <svg class="mr-2" width="18" height="21" viewBox="0 0 18 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M13.9497 4.05025C11.2161 1.31658 6.78392 1.31658 4.05025 4.05025C1.31658 6.78392 1.31658 11.2161 4.05025 13.9497L8.29374 18.1932C8.68398 18.5835 9.31589 18.5836 9.70669 18.1928L13.9497 13.9497C16.6834 11.2161 16.6834 6.78392 13.9497 4.05025ZM2.63604 2.63604C6.15076 -0.87868 11.8492 -0.87868 15.364 2.63604C18.8787 6.15076 18.8787 11.8492 15.364 15.364L11.8617 18.8662C11.8303 18.8976 11.8754 18.8525 11.844 18.8839L11.1209 19.607C9.94961 20.7783 8.05137 20.7793 6.87952 19.6074L2.63604 15.364C-0.87868 11.8492 -0.87868 6.15076 2.63604 2.63604ZM9 7C7.89543 7 7 7.89543 7 9C7 10.1046 7.89543 11 9 11C10.1046 11 11 10.1046 11 9C11 7.89543 10.1046 7 9 7ZM5 9C5 6.79086 6.79086 5 9 5C11.2091 5 13 6.79086 13 9C13 11.2091 11.2091 13 9 13C6.79086 13 5 11.2091 5 9Z" fill="#00315a"/>
+                        </svg>
+                        <span>DISTRICT DORDOGNE PÉRIGORD. AVENUE DU PARC. 24430 MARSAC SUR L ISLE</span>
+                    </div>
+                    <div class="fff-course-box-info-details">
+                        <svg class="mr-2" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="16" cy="15.9995" r="15.6667" fill="#E2E8F0" stroke="white" stroke-width="0.666667"/>
+                            <path d="M18.6663 12.6662C18.6663 14.1389 17.4724 15.3328 15.9997 15.3328C14.5269 15.3328 13.333 14.1389 13.333 12.6662C13.333 11.1934 14.5269 9.99951 15.9997 9.99951C17.4724 9.99951 18.6663 11.1934 18.6663 12.6662Z" stroke="#00315a" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M15.9997 17.3328C13.4223 17.3328 11.333 19.4222 11.333 21.9995H20.6663C20.6663 19.4222 18.577 17.3328 15.9997 17.3328Z" stroke="#00315a" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+
+                        <span>Josselin CHUBILLEAU, Erick SENECHAL</span>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    {{! <div class="col-sm-12 col-md-6 col-lg-6">
+        <img class="fff-course-box-info-img" src="http://localhost:8888/smartch/site/pluginfile.php/16/course/overviewfiles/fff1.png" />
+    </div> }}
+
+</div>
+
+
+<script>
+    function changeinfomodule(me, boxid) {
+        let old = document.getElementsByClassName("course_module_info_title_highlight")[0];
+        old.classList.remove("course_module_info_title_highlight");
+        old.classList.add("course_module_info_title");
+        me.classList.add("course_module_info_title_highlight");
+        let boxes = document.getElementsByClassName("sub-box-module");
+        boxes.forEach(box=>{
+            box.style.display = "none";
+        })
+        document.getElementById(boxid).style.display = "block";
+    }
+</script>
+
+
+
+{{#js}}
+    
+
+	{{! require(['jquery', 'core/ajax'], function($, Ajax) {
+		$(document).ready(function(){
+
+
+            
+			let service_name = 'theme_remui_get_smartch_my_courses';
+			let cusercourses = Ajax.call([
+			    {
+			        methodname: service_name,
+			        args: {}
+			    }
+			]);
+			cusercourses[0].done(function(response) {
+				let courses = JSON.parse(response);
+                let html = "";
+                //wait for the block to be ready 
+                $('#fff-my-courses').ready(function() {
+                    courses.forEach(el=>{
+                        html += '<div onclick="location.href=`'+el.url+'`" class="fff-course-thumbnail-box" style="background-image:url('+el.img+');"><h5 class="fff-course-thumbnail-title">'+el.fullname+'</h5></div>';
+                    });
+                    document.getElementById('fff-my-courses').innerHTML = html;
+                });
+			    
+			});
+		});
+	}); }}
+{{/js}}
+
+{{#js}}
+	require(['jquery', 'core/ajax'], function($, Ajax) {
+		$(document).ready(function(){
+
+			function getUrlParameter(sParam) {
+			    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+			    sURLVariables = sPageURL.split('&'),
+			    sParameterName,
+			    i;
+
+			    for (i = 0; i < sURLVariables.length; i++) {
+			        sParameterName = sURLVariables[i].split('=');
+
+			        if (sParameterName[0] === sParam) {
+			            return sParameterName[1] === undefined ? true : sParameterName[1];
+			        }
+			    }
+			}
+
+			let courseid = getUrlParameter('id');
+            alert(courseid);
+			let service_name = 'theme_remui_get_course_stats';
+			let cstats = Ajax.call([
+			    {
+			        methodname: service_name,
+			        args: { courseid : courseid }
+			    }
+			]);
+			cstats[0].done(function(response) {
+                console.log(response)
+			    // When course stats block is ready then render the respose value
+			    {{! $('.course-stats').ready(function() {
+			        $.each(response, function(index, value) {
+			            var courseStatsDiv = '#wdm_course-stats .stats-' + index;
+			            $(courseStatsDiv).text(value);
+			        })
+			    }); }}
+			});
+		});
+	});
+{{/js}}

@@ -1,0 +1,258 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    Edwiser RemUI
+    @package theme_remui
+    @copyright (c) 2023 WisdmLabs (https://wisdmlabs.com/)
+    @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+
+}}
+{{!
+    @template theme_remui/smartch_my_courses
+}}
+
+
+{{! modification smartch dashboard my courses}}
+
+
+{{! l'entete des modules }}
+<h3 class="FFF-title1" style="display: flex;align-items: center;margin-top:50px;" id="modulesformation">
+    <svg class="fff-icon" onclick="document.getElementById('fff-my-courses').scrollBy({top: 0, left: -30, behavior: 'smooth'});" width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M22.7071 11.2929C23.0976 11.6834 23.0976 12.3166 22.7071 12.7071L16.4142 19L22.7071 25.2929C23.0976 25.6834 23.0976 26.3166 22.7071 26.7071C22.3166 27.0976 21.6834 27.0976 21.2929 26.7071L14.2929 19.7071C13.9024 19.3166 13.9024 18.6834 14.2929 18.2929L21.2929 11.2929C21.6834 10.9024 22.3166 10.9024 22.7071 11.2929Z" fill="#00315a"/>
+        <rect x="1" y="1" width="36" height="36" rx="18" stroke="#00315a" stroke-width="2"/>
+    </svg>
+    <svg class="fff-icon" onclick="document.getElementById('fff-my-courses').scrollBy({top: 0, left: 30, behavior: 'smooth'});" width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M15.2929 26.7071C14.9024 26.3166 14.9024 25.6834 15.2929 25.2929L21.5858 19L15.2929 12.7071C14.9024 12.3166 14.9024 11.6834 15.2929 11.2929C15.6834 10.9024 16.3166 10.9024 16.7071 11.2929L23.7071 18.2929C24.0976 18.6834 24.0976 19.3166 23.7071 19.7071L16.7071 26.7071C16.3166 27.0976 15.6834 27.0976 15.2929 26.7071Z" fill="#00315a"/>
+        <rect x="1" y="1" width="36" height="36" rx="18" stroke="#00315a" stroke-width="2"/>
+    </svg>
+    <span class="FFABlack FFF-Blue" style="margin-right:10px;">Détails du </span><span class="FFABlack FFF-Gold">Parcours</span> 
+</h3>
+
+{{! tous les modules du cours }}
+<div class="fff-my-courses-caroussel" >
+    <div class="fff-my-courses-caroussel-items"  id="fff-my-courses">
+        {{#modules}}
+            <div id="module-block-{{moduleid}}" onclick="changeModuleInfo({{moduleid}}, false)" class="fff-module-thumbnail-box">
+                <div style="margin:10px;width: 200px;display: flex; justify-content: space-around;">
+                    <h1 class="fff-my-courses-caroussel-item-title">{{index}}</h1>
+                    <svg width="79" height="71" viewBox="0 0 79 71" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M59.8338 60.5041C59.8338 62.3912 59.8307 64.2015 59.8338 66.0087C59.8369 67.4255 59.4294 68.6826 58.3891 69.6845C57.392 70.6404 56.182 71 54.8052 71C45.7605 70.9846 36.719 70.9939 27.6743 70.9939C26.4673 70.9939 25.2604 71.0061 24.0534 70.9939C21.1208 70.957 19.2038 69.0483 19.1668 66.1162C19.1452 64.2814 19.1637 62.4434 19.1637 60.5102H18.2808C13.9653 60.5102 9.64984 60.5102 5.33125 60.5102C1.8986 60.5102 0.0279318 58.66 0.0279318 55.2638C0.0279318 49.2521 0.126713 43.2403 0.00323648 37.2348C-0.141848 30.2365 4.60891 24.8118 10.6377 23.5824C10.7364 23.5609 10.8352 23.5332 11.0204 23.484C10.5821 22.9431 10.153 22.4483 9.76405 21.9258C8.18355 19.7959 7.28835 17.4108 7.11548 14.7646C7.04757 13.7472 7.43961 13.1756 8.19282 13.1356C8.89972 13.0957 9.35967 13.612 9.4461 14.5771C9.78566 18.3605 11.4927 21.3572 14.7371 23.3734C18.1512 25.4941 21.7629 25.74 25.4919 24.1909C26.0537 23.9573 26.2142 23.5394 26.2729 22.9923C26.6309 19.6391 28.017 16.7746 30.4402 14.4142C30.6964 14.1652 30.9526 13.8978 31.2551 13.7134C32.1565 13.1602 32.3047 12.4226 32.0948 11.4176C30.9248 5.82997 25.5351 1.85903 19.8336 2.47373C15.339 2.95934 12.1811 5.29211 10.332 9.39213C10.2178 9.64723 10.1067 9.90847 9.97705 10.1574C9.65293 10.7721 9.13741 10.9719 8.49225 10.7537C7.89339 10.5539 7.62174 9.91155 7.85326 9.23231C8.54781 7.18537 9.67453 5.38739 11.2612 3.92134C15.0952 0.368396 19.6237 -0.848701 24.6491 0.59276C29.7642 2.06188 32.9684 5.54106 34.2957 10.6922C34.5396 11.6388 34.5211 11.6388 35.4657 11.3161C38.4847 10.2865 41.5099 10.2865 44.532 11.3069C45.4858 11.6296 45.4827 11.6358 45.7328 10.6338C47.588 3.16219 54.7898 -1.27591 62.3527 0.405278C62.9516 0.537438 63.5381 0.740287 64.1092 0.964651C64.7605 1.21975 65.0414 1.79756 64.8654 2.36923C64.671 2.99007 64.1122 3.30664 63.4053 3.14375C62.7324 2.99007 62.078 2.75342 61.4019 2.61204C55.1046 1.28737 48.7795 5.68859 47.8442 12.0292C47.7609 12.5947 47.9152 13.0096 48.3721 13.3661C51.5053 15.8003 53.3019 18.9937 53.7433 22.9216C53.8236 23.65 54.1508 24.0434 54.8361 24.3139C61.7044 27.0277 69.2118 22.8847 70.4435 15.5975C71.0609 11.9523 70.0021 8.71904 67.4955 5.97442C67.3226 5.78387 67.1282 5.61482 66.9615 5.42119C66.449 4.82801 66.4274 4.17336 66.8997 3.70619C67.3597 3.24825 68.1283 3.22366 68.613 3.79533C69.5483 4.90485 70.5793 5.98979 71.2554 7.25299C74.1632 12.6746 73.3205 18.6986 69.1532 23.2228C69.0513 23.3334 68.9525 23.4502 68.8136 23.607C69.5853 23.8928 70.3385 24.1079 71.0362 24.443C76.1358 26.8925 78.8584 30.9495 78.9479 36.5863C79.0467 42.9023 78.9757 49.2213 78.9696 55.5373C78.9665 58.537 77.0248 60.4856 74.0027 60.4979C69.61 60.5164 65.2174 60.5041 60.8216 60.5041C60.5222 60.5041 60.2196 60.5041 59.8369 60.5041H59.8338ZM19.1637 58.1068C19.1637 57.7902 19.1637 57.5167 19.1637 57.2431C19.1637 53.9699 19.1267 50.6966 19.1822 47.4234C19.2038 46.2063 19.3613 44.9769 19.6051 43.7813C19.9663 42.0325 20.7936 40.4681 21.8802 39.0512C22.3463 38.4426 23.0285 38.3259 23.5687 38.7131C24.0935 39.0912 24.1892 39.6905 23.8219 40.3451C23.7354 40.5019 23.6397 40.6525 23.5348 40.7969C22.0994 42.7793 21.5252 45.023 21.5252 47.4326C21.519 53.6226 21.5159 59.8095 21.5252 65.9995C21.5252 67.8097 22.4111 68.658 24.2417 68.658C34.4161 68.658 44.5875 68.658 54.762 68.658C56.5771 68.658 57.4661 67.7944 57.4692 65.9841C57.4785 59.7695 57.497 53.5549 57.4661 47.3404C57.4383 42.0478 54.2773 37.8648 49.3352 36.5371C48.3103 36.2635 47.2886 35.9869 46.1958 36.5217C42.0871 38.5379 37.9568 38.4888 33.808 36.5555C33.1937 36.2697 32.4282 36.1867 31.7398 36.2052C30.1284 36.2482 28.6189 36.7399 27.1928 37.4991C26.4056 37.9171 25.6987 37.7388 25.3869 37.1211C25.0566 36.4695 25.3437 35.7964 26.1833 35.3999C26.9242 35.0495 27.6836 34.7391 28.4461 34.4471C29.5882 34.0107 29.7487 33.5589 29.014 32.5662C27.9984 31.1954 27.2298 29.7078 26.7544 28.0697C26.3346 26.6313 26.1401 26.5268 24.6738 26.9509C21.4635 27.8822 18.2839 27.7254 15.2896 26.284C13.7678 25.5525 12.3355 25.5771 10.826 25.9428C5.69859 27.1876 2.38942 31.4382 2.37399 36.8045C2.35546 42.9668 2.36781 49.1322 2.3709 55.2945C2.3709 57.3138 3.19202 58.1344 5.22012 58.1375C9.5881 58.1406 13.9561 58.1375 18.321 58.1375C18.571 58.1375 18.8241 58.116 19.1637 58.1006V58.1068ZM59.8338 58.0729C60.0221 58.1068 60.1178 58.1375 60.2166 58.1375C64.8901 58.1375 69.5637 58.159 74.2373 58.1313C75.7499 58.1221 76.6173 57.1693 76.6204 55.6111C76.6297 49.2705 76.6667 42.9299 76.6111 36.5924C76.5648 31.3706 73.1631 27.1415 68.1808 25.9459C67.1004 25.6877 66.091 25.5986 64.9951 26.161C62.7386 27.3228 60.2845 27.7562 57.7532 27.3966C56.395 27.2029 55.0614 26.8464 53.6383 26.5452C53.1413 29.4189 51.7924 31.9638 49.6531 34.1244C49.8322 34.2074 49.897 34.2504 49.968 34.2719C56.219 36.1867 59.8307 41.0551 59.8338 47.5832C59.8338 50.8042 59.8338 54.0252 59.8338 57.2462C59.8338 57.5197 59.8338 57.7933 59.8338 58.0729ZM40.0528 12.9051C33.6321 12.9574 28.517 18.0225 28.5695 24.2739C28.622 30.7344 33.7555 35.7349 40.2658 35.6673C46.3316 35.6058 51.5053 30.384 51.4559 24.3692C51.4034 17.9794 46.3038 12.8498 40.0528 12.902V12.9051Z" fill="white" fill-opacity="0.2"/>
+                    </svg>
+
+                    {{! <svg class="fff-icon" width="100" height="100" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M22.7071 11.2929C23.0976 11.6834 23.0976 12.3166 22.7071 12.7071L16.4142 19L22.7071 25.2929C23.0976 25.6834 23.0976 26.3166 22.7071 26.7071C22.3166 27.0976 21.6834 27.0976 21.2929 26.7071L14.2929 19.7071C13.9024 19.3166 13.9024 18.6834 14.2929 18.2929L21.2929 11.2929C21.6834 10.9024 22.3166 10.9024 22.7071 11.2929Z" fill="white"/>
+                        <rect x="1" y="1" width="36" height="36" rx="18" stroke="white" stroke-width="2"/>
+                    </svg> }}
+
+                </div>
+                <h5>{{modulename}}</h5>
+            </div>
+        {{/modules}}
+    </div>
+</div>
+
+{{! toutes les activités }}
+<div class="row mt-5">
+
+    <div class="col-sm-12 col-md-12 col-lg-12" style="background: white; padding: 20px 40px; border-radius: 20px 20px 0 0;">
+        <div class="fff-course-box-info">
+            <div style="display:flex;justify-content: space-between;margin-bottom:50px;" id="course_module_info_titles">
+                <span onclick="changeinfomodule(this, 'presentiel')" class="course_module_info_title_highlight">Contenu</span>
+                <span onclick="changeinfomodule(this, 'deliver')" class="course_module_info_title">Evaluation</span>
+                <span onclick="changeinfomodule(this, 'result')" class="course_module_info_title">Notes</span>
+            </div>
+
+            <div class="sub-box-module" id="presentiel">
+                {{#activities}}
+                    <div class="module-{{moduleid}} activity-element" id="activity-{{moduleid}}-{{id}}">
+                        <div class="fff-course-box-info-details">
+                            <svg class="mr-2" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M6 0C6.55228 0 7 0.447715 7 1V2H13V1C13 0.447715 13.4477 0 14 0C14.5523 0 15 0.447715 15 1V2H17C18.6569 2 20 3.34315 20 5V17C20 18.6569 18.6569 20 17 20H3C1.34315 20 0 18.6569 0 17V5C0 3.34315 1.34315 2 3 2H5V1C5 0.447715 5.44772 0 6 0ZM5 4H3C2.44772 4 2 4.44772 2 5V17C2 17.5523 2.44772 18 3 18H17C17.5523 18 18 17.5523 18 17V5C18 4.44772 17.5523 4 17 4H15V5C15 5.55228 14.5523 6 14 6C13.4477 6 13 5.55228 13 5V4H7V5C7 5.55228 6.55228 6 6 6C5.44772 6 5 5.55228 5 5V4ZM4 9C4 8.44772 4.44772 8 5 8H15C15.5523 8 16 8.44772 16 9C16 9.55229 15.5523 10 15 10H5C4.44772 10 4 9.55229 4 9Z" fill="#00315a"/>
+                            </svg>
+                            <span class="FFABold">{{name}}</span>
+                        </div>
+                        <div class="fff-course-box-info-details">
+                            <svg class="mr-2" width="18" height="21" viewBox="0 0 18 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M13.9497 4.05025C11.2161 1.31658 6.78392 1.31658 4.05025 4.05025C1.31658 6.78392 1.31658 11.2161 4.05025 13.9497L8.29374 18.1932C8.68398 18.5835 9.31589 18.5836 9.70669 18.1928L13.9497 13.9497C16.6834 11.2161 16.6834 6.78392 13.9497 4.05025ZM2.63604 2.63604C6.15076 -0.87868 11.8492 -0.87868 15.364 2.63604C18.8787 6.15076 18.8787 11.8492 15.364 15.364L11.8617 18.8662C11.8303 18.8976 11.8754 18.8525 11.844 18.8839L11.1209 19.607C9.94961 20.7783 8.05137 20.7793 6.87952 19.6074L2.63604 15.364C-0.87868 11.8492 -0.87868 6.15076 2.63604 2.63604ZM9 7C7.89543 7 7 7.89543 7 9C7 10.1046 7.89543 11 9 11C10.1046 11 11 10.1046 11 9C11 7.89543 10.1046 7 9 7ZM5 9C5 6.79086 6.79086 5 9 5C11.2091 5 13 6.79086 13 9C13 11.2091 11.2091 13 9 13C6.79086 13 5 11.2091 5 9Z" fill="#00315a"/>
+                            </svg>
+                            <span>DISTRICT DORDOGNE PÉRIGORD. AVENUE DU PARC. 24430 MARSAC SUR L ISLE</span>
+                        </div>
+                        <div class="fff-course-box-info-details">
+                            <svg class="mr-2" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="16" cy="15.9995" r="15.6667" fill="#E2E8F0" stroke="white" stroke-width="0.666667"/>
+                                <path d="M18.6663 12.6662C18.6663 14.1389 17.4724 15.3328 15.9997 15.3328C14.5269 15.3328 13.333 14.1389 13.333 12.6662C13.333 11.1934 14.5269 9.99951 15.9997 9.99951C17.4724 9.99951 18.6663 11.1934 18.6663 12.6662Z" stroke="#00315a" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M15.9997 17.3328C13.4223 17.3328 11.333 19.4222 11.333 21.9995H20.6663C20.6663 19.4222 18.577 17.3328 15.9997 17.3328Z" stroke="#00315a" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+
+                            <span>Josselin CHUBILLEAU, Erick SENECHAL</span>
+                        </div>
+                        <hr>
+                    </div>
+                {{/activities}}
+            </div>
+
+
+            <div class="sub-box-module" id="deliver" style="display:none;">
+                <div>
+                    {{! <div class="fff-course-box-info-details">
+                        <svg class="mr-2" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M6 0C6.55228 0 7 0.447715 7 1V2H13V1C13 0.447715 13.4477 0 14 0C14.5523 0 15 0.447715 15 1V2H17C18.6569 2 20 3.34315 20 5V17C20 18.6569 18.6569 20 17 20H3C1.34315 20 0 18.6569 0 17V5C0 3.34315 1.34315 2 3 2H5V1C5 0.447715 5.44772 0 6 0ZM5 4H3C2.44772 4 2 4.44772 2 5V17C2 17.5523 2.44772 18 3 18H17C17.5523 18 18 17.5523 18 17V5C18 4.44772 17.5523 4 17 4H15V5C15 5.55228 14.5523 6 14 6C13.4477 6 13 5.55228 13 5V4H7V5C7 5.55228 6.55228 6 6 6C5.44772 6 5 5.55228 5 5V4ZM4 9C4 8.44772 4.44772 8 5 8H15C15.5523 8 16 8.44772 16 9C16 9.55229 15.5523 10 15 10H5C4.44772 10 4 9.55229 4 9Z" fill="#00315a"/>
+                        </svg>
+                        <span class="FFABold">Deliver 1</span>
+                    </div>
+                    <div class="fff-course-box-info-details">
+                        <svg class="mr-2" width="18" height="21" viewBox="0 0 18 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M13.9497 4.05025C11.2161 1.31658 6.78392 1.31658 4.05025 4.05025C1.31658 6.78392 1.31658 11.2161 4.05025 13.9497L8.29374 18.1932C8.68398 18.5835 9.31589 18.5836 9.70669 18.1928L13.9497 13.9497C16.6834 11.2161 16.6834 6.78392 13.9497 4.05025ZM2.63604 2.63604C6.15076 -0.87868 11.8492 -0.87868 15.364 2.63604C18.8787 6.15076 18.8787 11.8492 15.364 15.364L11.8617 18.8662C11.8303 18.8976 11.8754 18.8525 11.844 18.8839L11.1209 19.607C9.94961 20.7783 8.05137 20.7793 6.87952 19.6074L2.63604 15.364C-0.87868 11.8492 -0.87868 6.15076 2.63604 2.63604ZM9 7C7.89543 7 7 7.89543 7 9C7 10.1046 7.89543 11 9 11C10.1046 11 11 10.1046 11 9C11 7.89543 10.1046 7 9 7ZM5 9C5 6.79086 6.79086 5 9 5C11.2091 5 13 6.79086 13 9C13 11.2091 11.2091 13 9 13C6.79086 13 5 11.2091 5 9Z" fill="#00315a"/>
+                        </svg>
+                        <span>DISTRICT DORDOGNE PÉRIGORD. AVENUE DU PARC. 24430 MARSAC SUR L ISLE</span>
+                    </div>
+                    <div class="fff-course-box-info-details">
+                        <svg class="mr-2" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="16" cy="15.9995" r="15.6667" fill="#E2E8F0" stroke="white" stroke-width="0.666667"/>
+                            <path d="M18.6663 12.6662C18.6663 14.1389 17.4724 15.3328 15.9997 15.3328C14.5269 15.3328 13.333 14.1389 13.333 12.6662C13.333 11.1934 14.5269 9.99951 15.9997 9.99951C17.4724 9.99951 18.6663 11.1934 18.6663 12.6662Z" stroke="#00315a" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M15.9997 17.3328C13.4223 17.3328 11.333 19.4222 11.333 21.9995H20.6663C20.6663 19.4222 18.577 17.3328 15.9997 17.3328Z" stroke="#00315a" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+
+                        <span>Josselin CHUBILLEAU, Erick SENECHAL</span>
+                    </div> }}
+                </div>
+            </div>
+
+            <div class="sub-box-module" id="result" style="display:none;">
+                <div>
+                    {{! <div class="fff-course-box-info-details">
+                        <svg class="mr-2" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M6 0C6.55228 0 7 0.447715 7 1V2H13V1C13 0.447715 13.4477 0 14 0C14.5523 0 15 0.447715 15 1V2H17C18.6569 2 20 3.34315 20 5V17C20 18.6569 18.6569 20 17 20H3C1.34315 20 0 18.6569 0 17V5C0 3.34315 1.34315 2 3 2H5V1C5 0.447715 5.44772 0 6 0ZM5 4H3C2.44772 4 2 4.44772 2 5V17C2 17.5523 2.44772 18 3 18H17C17.5523 18 18 17.5523 18 17V5C18 4.44772 17.5523 4 17 4H15V5C15 5.55228 14.5523 6 14 6C13.4477 6 13 5.55228 13 5V4H7V5C7 5.55228 6.55228 6 6 6C5.44772 6 5 5.55228 5 5V4ZM4 9C4 8.44772 4.44772 8 5 8H15C15.5523 8 16 8.44772 16 9C16 9.55229 15.5523 10 15 10H5C4.44772 10 4 9.55229 4 9Z" fill="#00315a"/>
+                        </svg>
+                        <span class="FFABold">Resultat 1</span>
+                    </div>
+                    <div class="fff-course-box-info-details">
+                        <svg class="mr-2" width="18" height="21" viewBox="0 0 18 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M13.9497 4.05025C11.2161 1.31658 6.78392 1.31658 4.05025 4.05025C1.31658 6.78392 1.31658 11.2161 4.05025 13.9497L8.29374 18.1932C8.68398 18.5835 9.31589 18.5836 9.70669 18.1928L13.9497 13.9497C16.6834 11.2161 16.6834 6.78392 13.9497 4.05025ZM2.63604 2.63604C6.15076 -0.87868 11.8492 -0.87868 15.364 2.63604C18.8787 6.15076 18.8787 11.8492 15.364 15.364L11.8617 18.8662C11.8303 18.8976 11.8754 18.8525 11.844 18.8839L11.1209 19.607C9.94961 20.7783 8.05137 20.7793 6.87952 19.6074L2.63604 15.364C-0.87868 11.8492 -0.87868 6.15076 2.63604 2.63604ZM9 7C7.89543 7 7 7.89543 7 9C7 10.1046 7.89543 11 9 11C10.1046 11 11 10.1046 11 9C11 7.89543 10.1046 7 9 7ZM5 9C5 6.79086 6.79086 5 9 5C11.2091 5 13 6.79086 13 9C13 11.2091 11.2091 13 9 13C6.79086 13 5 11.2091 5 9Z" fill="#00315a"/>
+                        </svg>
+                        <span>DISTRICT DORDOGNE PÉRIGORD. AVENUE DU PARC. 24430 MARSAC SUR L ISLE</span>
+                    </div>
+                    <div class="fff-course-box-info-details">
+                        <svg class="mr-2" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="16" cy="15.9995" r="15.6667" fill="#E2E8F0" stroke="white" stroke-width="0.666667"/>
+                            <path d="M18.6663 12.6662C18.6663 14.1389 17.4724 15.3328 15.9997 15.3328C14.5269 15.3328 13.333 14.1389 13.333 12.6662C13.333 11.1934 14.5269 9.99951 15.9997 9.99951C17.4724 9.99951 18.6663 11.1934 18.6663 12.6662Z" stroke="#00315a" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M15.9997 17.3328C13.4223 17.3328 11.333 19.4222 11.333 21.9995H20.6663C20.6663 19.4222 18.577 17.3328 15.9997 17.3328Z" stroke="#00315a" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+
+                        <span>Josselin CHUBILLEAU, Erick SENECHAL</span>
+                    </div> }}
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+</div>
+
+
+<script>
+    //change le module
+    function changeModuleInfo(moduleid, first){
+        //on change la couleur des blocks 
+        let oldblock = document.getElementsByClassName('fff-module-thumbnail-box-selected')[0]
+        if(oldblock) {
+            oldblock.classList.remove('fff-module-thumbnail-box-selected')
+        }
+        document.getElementById('module-block-'+moduleid).classList.add("fff-module-thumbnail-box-selected")
+
+        //on affiche les activités du module sélectionné
+        let allactivities = document.getElementsByClassName('activity-element')
+        allactivities.forEach(el=>el.style.display = 'none')
+        let activities = document.getElementsByClassName('module-'+moduleid)
+        activities.forEach(el=>el.style.display = 'block')
+
+        if(!first){
+            //on se deplace sur la page sur la section modules du cours
+            //const element_to_scroll_to = document.getElementById('modulesformation');
+            //element_to_scroll_to.scrollIntoView({ behavior: "smooth" });
+        }
+        
+    }
+    
+    //met a jour les onglets presentiel/a delivrer/resultats
+    function changeinfomodule(me, boxid) {
+        let old = document.getElementsByClassName("course_module_info_title_highlight")[0];
+        old.classList.remove("course_module_info_title_highlight");
+        old.classList.add("course_module_info_title");
+        me.classList.add("course_module_info_title_highlight");
+        let boxes = document.getElementsByClassName("sub-box-module");
+        boxes.forEach(box=>{
+            box.style.display = "none";
+        })
+        document.getElementById(boxid).style.display = "block";
+    }
+</script>
+
+{{#js}}
+
+    
+	require(['jquery', 'core/ajax'], function($, Ajax) {
+		$(document).ready(function(){
+
+            //on click sur le premier module
+            const firstel = document.getElementById('fff-my-courses').childNodes[1]
+            firstel.click()
+
+			function getUrlParameter(sParam) {
+			    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+			    sURLVariables = sPageURL.split('&'),
+			    sParameterName,
+			    i;
+
+			    for (i = 0; i < sURLVariables.length; i++) {
+			        sParameterName = sURLVariables[i].split('=');
+
+			        if (sParameterName[0] === sParam) {
+			            return sParameterName[1] === undefined ? true : sParameterName[1];
+			        }
+			    }
+			}
+
+			let courseid = getUrlParameter('id');
+
+            {{! alert(moduleid) }}
+            {{! let service_name = 'get_smartch_module_activities';
+            let moduleactivitiescall = Ajax.call([
+                {
+                    methodname: service_name,
+                    args: { moduleid : courseid }
+                }
+            ]);
+
+            let moduleid = 11;
+            //document.getElementById('module-block-'+moduleid).style.background = "#3CAFE3";
+
+            moduleactivitiescall[0].done(function(response) {
+                //on met la progression de l'utilisateur
+                
+                console.log(response)
+                alert("okkkk")
+                alert(JSON.stringify(response))
+                // When course stats block is ready then render the response value
+                $('.course-stats').ready(function() {
+                    $.each(response, function(index, value) {
+                        var courseStatsDiv = '#wdm_course-stats .stats-' + index;
+                        $(courseStatsDiv).text(value);
+                    })
+                });
+            }); }}
+			
+		});
+	});
+{{/js}}
