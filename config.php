@@ -177,6 +177,10 @@ $THEME->prescsscallback = 'theme_remui_get_pre_scss';
 $THEME->precompiledcsscallback = 'theme_remui_get_precompiled_css';
 $THEME->yuicssmodules = array();
 $THEME->rendererfactory = 'theme_overridden_renderer_factory';
+//modification smartch ffa renderer config custom
+$THEME->rendererfactoryoptions = array(
+    'core_course_renderer' => 'theme_remui\output\course_renderer',
+);
 $THEME->requiredblocks = '';
 $THEME->addblockposition = BLOCK_ADDBLOCK_POSITION_FLATNAV;
 $THEME->csspostprocess = 'theme_remui_process_css';

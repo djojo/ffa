@@ -28,6 +28,7 @@ global $CFG;
 
 user_preference_allow_ajax_update('enable_focus_mode', PARAM_BOOL);
 
+
 require_once($CFG->dirroot . '/theme/remui/layout/common.php');
 
 if (isset($templatecontext['focusdata']['enabled']) && $templatecontext['focusdata']['enabled']) {
@@ -61,4 +62,17 @@ if ($PAGE->pagetype == "enrol-index" & get_config('theme_remui', 'enrolment_page
 // This will ease us to add body classes directly to the array.
 require_once($CFG->dirroot . '/theme/remui/layout/common_end.php');
 
+
+
+//modification smartch ffa incourse.php
+$inmodule = true;
+$isadmin = true;
+$templatecontext['inmodule'] = $inmodule;
+$templatecontext['isadmin'] = $isadmin;
+$templatecontext['coursename'] = '' . $COURSE->fullname;
+$templatecontext['activityname'] = 'Module ' . $COURSE->fullname;
+$templatecontext['returnurl'] = new moodle_url('/theme/remui/views/courses/details.php?id=' . $COURSE->id);
+
+// var_dump($COURSE);
+// die();
 echo $OUTPUT->render_from_template($template, $templatecontext);

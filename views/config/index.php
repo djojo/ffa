@@ -2,8 +2,8 @@
 
 use OAuth2\Storage\Moodle;
 
-require_once(__DIR__ . '/../../../config.php');
-require_once('./utils.php');
+require_once(__DIR__ . '/../../../../config.php');
+require_once('../utils.php');
 
 require_login();
 
@@ -39,7 +39,7 @@ if($newconfigkey){
     $newconfig->config_key = $newconfigkey;
     $newconfig->config_value = $newconfigvalue;
     $DB->insert_record('smartch_config', $newconfig);
-    redirect( new moodle_url('/theme/remui/views/config.php'));
+    redirect( new moodle_url('/theme/remui/views/config/index.php'));
 }
 
 // $inputconfigkey = optional_param('inputconfigkey', null, PARAM_TEXT);
@@ -68,51 +68,48 @@ if($portailtype){
 }
 
 $context = context_system::instance();
-$PAGE->set_url(new moodle_url('/theme/remui/views/config.php'));
+$PAGE->set_url(new moodle_url('/theme/remui/views/config/index.php'));
 $PAGE->set_context(\context_system::instance());
 $PAGE->set_title("Configuration");
 
 
 echo  '<style>
-    .collapsible-actions{
-        display:none !important;
+    #page{
+        background:transparent !important;
     }
-    #page.drawers .main-inner {
-        margin-top: 150px;
-        margin-bottom: 3.5rem;
+
+    #topofscroll {
+        background: transparent !important;
+        margin-top: 0px !important;
     }
-    .fff-course-box-info-details{
-        top:-100px;
-        position:absolute;
-    }
-    div[role=main] {
-        margin-top: 0 !important;
+
+    @media screen and (max-width: 830px) {
+        #topofscroll{
+            margin-top:40px !important;
+        }
     }
 </style>';
 
 echo $OUTPUT->header();
 
-// //le header avec bouton de retour au panneau admin
-// $templatecontextheader = (object)[
-//     'url' => new moodle_url('/theme/remui/views/adminmenu.php'),
-//     'textcontent' => 'Retour au panneau d\'administration'
-// ];
-// $content .= $OUTPUT->render_from_template('theme_remui/smartch_header_back', $templatecontextheader);
+//le header avec bouton de retour au panneau admin
+$templatecontextheader = (object)[
+    'url' => new moodle_url('/my'),
+    'textcontent' => 'Retour'
+];
+$content .= $OUTPUT->render_from_template('theme_remui/smartch_header_back', $templatecontextheader);
 
+//le titre
+$content .= '<h3 class="FFF-title1" style="margin-top: 80px;">
+    <span class="FFABold FFF-White" style="letter-spacing:1px;">Configuration</span>
+</h3>';
 
-$content .= '<a href="' . new moodle_url('/theme/remui/views/adminmenu.php') . '" style="font-size:0.8rem;cursor: pointer; display: flex; align-items: center; position: absolute; top: 120px;">
-<svg width="8" height="15" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path fill-rule="evenodd" clip-rule="evenodd" d="M5.70711 0.292893C6.09763 0.683417 6.09763 1.31658 5.70711 1.70711L2.41421 5L5.70711 8.29289C6.09763 8.68342 6.09763 9.31658 5.70711 9.70711C5.31658 10.0976 4.68342 10.0976 4.29289 9.70711L0.292893 5.70711C-0.0976311 5.31658 -0.0976311 4.68342 0.292893 4.29289L4.29289 0.292893C4.68342 -0.0976311 5.31658 -0.0976311 5.70711 0.292893Z" fill="white"/>
-</svg>
-<div class="ml-4 FFF-White FFARegular">Retour</div>
-</a>';
 
 //on va chercher la config
 $configportail = getConfigPortail();
 
-$content .= '<div class="row">';
+$content .= '<div class="row" style="background:white;padding:50px 20px;border-radius:5px 5px 0 0;">';
 $content .= '<div class="col-md-12">';
-$content .= '<h1 style="margin-bottom:50px;letter-spacing:1px;" class="smartch_title FFABold FFF-Blue">Configuration</h1>';
 
 $content .= '<div>';
 
@@ -120,29 +117,29 @@ $content .= '<table class="smartch_table">';
 $content .= '<tbody>';
 
 
-$content .= '<form method="POST" action=""  style="text-align:center;">';
-$content .= '<tr style="margin:10px 0;">';
-$content .= '<td>
-    <div style="margin:10px 0;">Changer le portail</div>
-</td>';
-$content .= '<td>';
+// $content .= '<form method="POST" action=""  style="text-align:center;">';
+// $content .= '<tr style="margin:10px 0;">';
+// $content .= '<td>
+//     <div style="margin:10px 0;">Changer le portail</div>
+// </td>';
+// $content .= '<td>';
 
-$content .= '<select class="smartch_select" name="portailtype">';
-if($configportail == "portailformation"){
-    $content .= '<option selected value="portailformation">Portail Formation</option>';
-    $content .= '<option value="portailrh">Portail RH</option>';
-} else{
-    $content .= '<option value="portailformation">Portail Formation</option>';
-    $content .= '<option selected value="portailrh">Portail RH</option>';
-}
+// $content .= '<select class="smartch_select" name="portailtype">';
+// if($configportail == "portailformation"){
+//     $content .= '<option selected value="portailformation">Portail Formation</option>';
+//     $content .= '<option value="portailrh">Portail RH</option>';
+// } else{
+//     $content .= '<option value="portailformation">Portail Formation</option>';
+//     $content .= '<option selected value="portailrh">Portail RH</option>';
+// }
 
-$content .= '</select>';
+// $content .= '</select>';
 
-$content .= '</td>';
+// $content .= '</td>';
 
-$content .= '<td><input class="smartch_btn" type="submit" value="Mettre à jour"></td>';
-$content .= '</tr>';
-$content .= '</form>';
+// $content .= '<td><input class="smartch_btn" type="submit" value="Mettre à jour"></td>';
+// $content .= '</tr>';
+// $content .= '</form>';
 
 //on va chercher la liste des keys values
 $keyvalues = $DB->get_records_sql('SELECT * FROM mdl_smartch_config sc', null);
@@ -155,11 +152,11 @@ foreach($keyvalues as $keyvalue){
         $content .= '<td>
                 <input type="hidden" name="configid" value="'.$keyvalue->id.'"/>
                 <input type="hidden" name="action" value="update"/>
-                <textarea class="form-control" name="configvalue">'.$keyvalue->config_value.'</textarea>
+                <textarea rows="1" class="form-control" name="configvalue">'.$keyvalue->config_value.'</textarea>
             </td>';
         $content .= '<td>';
         $content .= '<input class="smartch_btn mr-2" type="submit" value="Mettre à jour">';
-        $content .= '<a href="'.new moodle_url('/theme/remui/views/config.php').'?action=delete&configid='.$keyvalue->id.'" class="smartch_btn">Supprimer</a>';
+        $content .= '<a href="'.new moodle_url('/theme/remui/views/config/index.php').'?action=delete&configid='.$keyvalue->id.'" class="smartch_btn">Supprimer</a>';
         $content .= '</td>';
         $content .= '</tr>';
         $content .= '</form>';
@@ -171,10 +168,12 @@ foreach($keyvalues as $keyvalue){
 $content .= '<form method="POST" action=""  style="text-align:center;">';
 $content .= '<tr style="margin:10px 0;">';
 $content .= '<td>
-    <div style="margin:10px 0;">Ajouter une nouvelle clé/valeur configuration</div>
+    <div style="margin:10px 0;">Ajouter une nouvelle clé de configuration : </div>
     <input class="form-control" type="text" name="newconfigkey" placeholder="clé" value=""/>
 </td>';
-$content .= '<td><textarea class="form-control" name="newconfigvalue" placeholder="valeur"></textarea></td>';
+$content .= '<td>
+<div style="margin:10px 0;">La valeur de la clé de configuration : </div>
+<textarea rows="1" style="width:100%;" class="form-control" name="newconfigvalue" placeholder="valeur"></textarea></td>';
 $content .= '<td><input class="smartch_btn" type="submit" value="Ajouter"></td>';
 $content .= '</tr>';
 $content .= '</form>';

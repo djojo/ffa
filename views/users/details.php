@@ -165,7 +165,6 @@ $content .= '<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="
                 <path d="M24 26C20.134 26 17 29.134 17 33H31C31 29.134 27.866 26 24 26Z" stroke="#00315a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
             <div class="ml-4">
-
                 <h3 class="FFABold FFF-Blue">
                     ' . $user->firstname . ' ' . $user->lastname . ' 
                 </h3>

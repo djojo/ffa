@@ -32,7 +32,15 @@ if ($mform->is_cancelled()) {
 
         //on va chercher l'utilisateur connecté
         $from = $DB->get_record('user', ['id' => $USER->id]);
-        email_to_user($user, $from, $fromform->subject, reset($fromform->content), reset($fromform->content));
+
+        //on format à partir du template
+        $contentmail = smartchFormatEmail(reset($fromform->content), $user);
+
+        echo $contentmail;
+
+        die();
+
+        email_to_user($user, $from, $fromform->subject, $contentmail, $contentmail);
         
         redirect($fromform->returnurl.'&messagesent=ok');
     } else {
@@ -76,12 +84,15 @@ $templatecontextheader = (object)[
 ];
 $content .= $OUTPUT->render_from_template('theme_remui/smartch_header_back', $templatecontextheader);
 
-$content .= '<div class="row" style="margin:50px 0;"></div>';
+//le titre
+$content .= '<h3 class="FFF-title1" style="margin-top: 80px;">
+    <span class="FFABold FFF-White" style="letter-spacing:1px;">Nouveau message</span>
+</h3>';
 
 $content .= '<div style="background:white;padding:20px;">';
 $content .= '<div class="row mb-5">
 <div class="col-md-12">
-<h4 style="letter-spacing:1px;max-width:70%;cursor:pointer;" class="FFABold FFF-Blue">Nouveau message pour '.$user->firstname.' '.$user->lastname.'</h4>
+<h2 style="letter-spacing:1px;max-width:70%;cursor:pointer;"  class="FFARegular FFF-Blue">Pour '.$user->firstname.' '.$user->lastname.'</h2>
 </div>
 </div>';
 

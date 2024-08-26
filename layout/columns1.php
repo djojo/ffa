@@ -37,4 +37,4 @@ if (empty($PAGE->layout_options['noactivityheader'])) {
     $templatecontext['headercontent'] = $header->export_for_template($renderer);
 }
 
-echo $OUTPUT->render_from_template('theme_remui/columns1', $templatecontext);
+// echo $OUTPUT->render_from_template('theme_remui/columns1', $templatecontext);

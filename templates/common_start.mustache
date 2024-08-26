@@ -96,13 +96,22 @@
                 {{> theme_remui/smartch_dashboard_stats }}
                 {{> theme_remui/smartch_pub }}
             {{/isdashboardstatsshow}}
+
+            <h1>{{inmodule}}</h1>
+            {{#inmodule}}
+                {{> theme_remui/smartch/incourse }}
+            {{/inmodule}}
+            {{^inmodule}}
+                {{#secondarymoremenu}}
+                    <div class="secondary-navigation edw-tabs-navigation d-print-none">
+                        {{> core/moremenu}}
+                    </div>
+                {{/secondarymoremenu}}
+            {{/inmodule}}
+            
             
 
-            {{#secondarymoremenu}}
-                <div class="secondary-navigation edw-tabs-navigation d-print-none">
-                    {{> core/moremenu}}
-                </div>
-            {{/secondarymoremenu}}
+            
             {{#canaddtopblocks}}
             <section id="region-top-blocks" class="has-blocks" aria-label="region top blocks">
                 <div role="main">

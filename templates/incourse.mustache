@@ -54,9 +54,35 @@
         "addblockbutton": ""
     }
 }}
+
+
+
+
+
 {{> theme_remui/common_start}}
+
+
+
+
+
+
+<div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <div class="smartch_flex_mobile" style="justify-content: space-between;align-items: center;">
+            <h2 style="letter-spacing:1px;max-width:70%;cursor:pointer;" onclick="location.href='{{formurl}}'" class="FFARegular FFF-Blue">{{activityname}}</h2> 
+        </div>
+  
+{{! 
 <div id="page-content" class="pb-4 d-print-block">
-    <div id="region-main-box">
+    <div id="region-main-box"> }}
+
+        {{#isadmin}}
+            {{#secondarymoremenu}}
+                <div class="secondary-navigation edw-tabs-navigation d-print-none">
+                    {{> core/moremenu}}
+                </div>
+            {{/secondarymoremenu}}
+        {{/isadmin}}
         {{#hasregionmainsettingsmenu}}
         <div id="region-main-settings-menu" class="d-print-none">
             <div> {{{ regionmainsettingsmenu }}} </div>
@@ -70,6 +96,9 @@
             {{#headercontent}}
                 {{> core/activity_header }}
             {{/headercontent}}
+
+            
+
             {{#overflow}}
                 <div class="container-fluid tertiary-navigation">
                     <div class="navitem">

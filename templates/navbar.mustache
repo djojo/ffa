@@ -202,17 +202,17 @@ require(['jquery', 'core/ajax'], function($, Ajax) {
                 {{! alert(data.rolename); }}
                 if(data.rolename == "super-admin"){
                     let url = data.baseurl;
-                    let html1 = '<a href="'+url+'/theme/remui/views/adminmenu.php" class="nav-link">Panneau d\'Administration</a>'
+                    let html1 = '<a href="'+url+'/theme/remui/views/config/index.php" class="nav-link">Configuration</a>'
                     $('#navmenuadmin').append(html1)
                     let html2 = '<a href="'+url+'/admin/search.php" class="nav-link">Configuration Avancée</a>'
                     $('#navmenuadmin').append(html2)
-                    let html3 = '<a href="'+url+'/theme/remui/views/courses/index.php" class="nav-link">Parcours</a>'
+                    let html3 = '<a href="'+url+'/theme/remui/views/courses/index.php" class="nav-link">Conception</a>'
                     $('#navmenuadmin').append(html3)
                     let html4 = '<a href="'+url+'/theme/remui/views/groups/index.php" class="nav-link">Groupes</a>'
                     $('#navmenuadmin').append(html4)
                     let html5 = '<a href="'+url+'/theme/remui/views/users/index.php" class="nav-link">Utilisateurs</a>'
                     $('#navmenuadmin').append(html5)
-                    let html6 = '<a href="'+url+'/my" class="nav-link">Communication</a>'
+                    let html6 = '<a href="'+url+'/theme/remui/views/config/slider.php" class="nav-link">Communication</a>'
                     $('#navmenuadmin').append(html6)
                     let html7 = '<a href="'+url+'/my" class="nav-link">Accueil</a>'
                     $('#navmenuadmin').append(html7)
