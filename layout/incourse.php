@@ -62,17 +62,21 @@ if ($PAGE->pagetype == "enrol-index" & get_config('theme_remui', 'enrolment_page
 // This will ease us to add body classes directly to the array.
 require_once($CFG->dirroot . '/theme/remui/layout/common_end.php');
 
-
-
 //modification smartch ffa incourse.php
 $inmodule = true;
 $isadmin = true;
 $templatecontext['inmodule'] = $inmodule;
 $templatecontext['isadmin'] = $isadmin;
 $templatecontext['coursename'] = '' . $COURSE->fullname;
-$templatecontext['activityname'] = 'Module ' . $COURSE->fullname;
+$templatecontext['activityname'] = $PAGE->cm->name;
 $templatecontext['returnurl'] = new moodle_url('/theme/remui/views/courses/details.php?id=' . $COURSE->id);
 
-// var_dump($COURSE);
-// die();
 echo $OUTPUT->render_from_template($template, $templatecontext);
+
+//modification smartch tracker time
+global $DB, $CFG;
+require_once($CFG->dirroot.'/local/smartch_tracker/api/tracker.php');
+
+if($PAGE->cm->id && $COURSE){
+    smartchTrackTime($PAGE->cm->id, $COURSE->id);    
+}

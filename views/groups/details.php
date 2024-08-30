@@ -346,7 +346,6 @@ array_push($params, $param1);
 //On va chercher le responsable pédagogique
 $coach = getResponsablePedagogique($group->id, $course->id);
 
-
 $sessiondate = '<div>Du ' . userdate($session->startdate, '%d/%m/%Y') . ' au ' . userdate($session->enddate, '%d/%m/%Y') . '</div>';
 
 $blocksessiondate = "";
@@ -360,7 +359,7 @@ if($sessiondate){
 }
 
 $blockcoach = "";
-if($coach[1] == 0){
+if($coach[1]){
     $blockcoach = '<div class="fff-course-box-info-details">
                     <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="24" cy="24" r="24" fill="#E2E8F0"/>
@@ -368,14 +367,14 @@ if($coach[1] == 0){
                         <path d="M24 26C20.134 26 17 29.134 17 33H31C31 29.134 27.866 26 24 26Z" stroke="#00315a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                     <div style="margin-left: 20px;">
-                        <h3 class="FFABold FFF-Blue" style="font-size:16px;display:flex;align-items:center;">
-                                '.$coach[1].'Paul
-                                <a href="' . new moodle_url('/theme/remui/views/groups/message.php') . '?groupid=' . $groupid . '&returnurl='.$PAGE->url.'">
+                        <div class="FFABold FFF-Blue" style="font-size:16px;display:flex;align-items:center;">
+                                '.$coach[1]->firstname.' '.$coach[1]->lastname.'
+                                <a href="' . new moodle_url('/theme/remui/views/users/message.php') . '?userid=' . $coach[1]->id . '&returnurl='.$PAGE->url.'">
                                     <svg class="ml-2" width="20" height="16" viewBox="0 0 20 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M1 4L8.8906 9.2604C9.5624 9.70827 10.4376 9.70827 11.1094 9.2604L19 4M3 15H17C18.1046 15 19 14.1046 19 13V3C19 1.89543 18.1046 1 17 1H3C1.89543 1 1 1.89543 1 3V13C1 14.1046 1.89543 15 3 15Z" stroke="#00315a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                     </svg>
                                 </a>
-                        </h3>
+                        </div>
                             <h5 class="FFF-Blue" style="font-size:12px;">Responsable pédagogique</h5>
                     </div>
                 </div>';
@@ -385,7 +384,14 @@ $content .= '<div class="row">
 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
     <div class="smartch_flex_mobile" style="margin-top:30px;">
         <div>
-            <div style="font-size:1.2rem;font-weight:bold;">'.count($teamates).' membres</div>
+            <div style="display:flex;align-items:center;">
+                <div style="font-size:1.2rem;font-weight:bold;">'.count($teamates).' membres</div>
+                <a href="' . new moodle_url('/theme/remui/views/groups/message.php') . '?groupid=' . $groupid . '&returnurl='.$PAGE->url.'">
+                    <svg class="ml-2" width="20" height="16" viewBox="0 0 20 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 4L8.8906 9.2604C9.5624 9.70827 10.4376 9.70827 11.1094 9.2604L19 4M3 15H17C18.1046 15 19 14.1046 19 13V3C19 1.89543 18.1046 1 17 1H3C1.89543 1 1 1.89543 1 3V13C1 14.1046 1.89543 15 3 15Z" stroke="#00315a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
+            </div>
             <div>'.$blocksessiondate.'</div>
         </div>
         '.$blockcoach.'
@@ -489,7 +495,8 @@ foreach ($teamates as $teamate) {
     $user = $DB->get_record('user', ['id' => $teamate->id]);
 
     // $userprofileurl = new moodle_url('/theme/remui/views/adminuser.php?return=group&groupid=' . $groupid . '&userid=' . $teamate->userid);
-    $userselectedurl = new moodle_url('/theme/remui/views/groups/details.php?return=' . $return . '&groupid=' . $groupid . '&userid=' . $teamate->id . $filtersearch . '#selected-' . $user->id);
+    // $userselectedurl = new moodle_url('/theme/remui/views/groups/details.php?return=' . $return . '&groupid=' . $groupid . '&userid=' . $teamate->id . $filtersearch . '#selected-' . $user->id);
+    $userselectedurl = new moodle_url('/theme/remui/views/users/details.php') . '?userid=' . $teamate->id . '&returnurl='.$PAGE->url;
     $reseturl = new moodle_url('/theme/remui/views/groups/details.php?return=' . $return . '&groupid=' . $groupid . $filtersearch . '#group');
     //on va chercher la prog si il y a des activités (cours non annulé)
     if (count($activities) > 0) {

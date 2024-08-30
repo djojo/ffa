@@ -168,6 +168,8 @@ require(['jquery', 'core/ajax'], function($, Ajax) {
                     $('#navmenuadminmobile').append(html6)
                     let html7 = '<a href="'+url+'/my" class="nav-link">Accueil</a>'
                     $('#navmenuadminmobile').append(html7)
+                    let html8 = '<a href="'+url+'/theme/remui/views/stats/index.php" class="nav-link">Stats</a>'
+                    $('#navmenuadminmobile').append(html8)
                 } else if(data.rolename == "manager" || data.rolename == "smalleditingteacher" || data.rolename == "editingteacher"){
                     let html1 = '<a href="'+url+'/theme/remui/views/adminmenu.php" class="nav-link">Panneau d\'administration</a>'
                     $('#navmenuadminmobile').append(html1)

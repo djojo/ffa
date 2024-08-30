@@ -4,9 +4,16 @@ if (!$content) {
     $content = "";
 }
 
-$return = optional_param('return', 'adminmenu', PARAM_TEXT);
+$return = optional_param('return', 'dashboard', PARAM_TEXT);
+$returnurl = optional_param('returnurl', null, PARAM_TEXT);
 
-if ($return == "teams") {
+if ($returnurl) {
+    $templatecontextheader = (object)[
+        'url' => $returnurl,
+        'textcontent' => 'Retour'
+    ];
+    $content .= $OUTPUT->render_from_template('theme_remui/smartch_header_back', $templatecontextheader);
+} else if ($return == "teams") {
     $templatecontextheader = (object)[
         'url' => new moodle_url('/theme/remui/views/adminteams.php'),
         'textcontent' => 'Retour aux groupes'
@@ -48,7 +55,7 @@ if ($return == "teams") {
 } else if ($return == "dashboard") {
     $templatecontextheader = (object)[
         'url' => new moodle_url('/my'),
-        'textcontent' => 'Retour au tableau de bord'
+        'textcontent' => 'Retour'
     ];
     $content .= $OUTPUT->render_from_template('theme_remui/smartch_header_back', $templatecontextheader);
 } else if ($return == "adminmenu") {

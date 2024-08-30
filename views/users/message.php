@@ -36,9 +36,9 @@ if ($mform->is_cancelled()) {
         //on format à partir du template
         $contentmail = smartchFormatEmail(reset($fromform->content), $user);
 
-        echo $contentmail;
-
-        die();
+        //pour visualiser le contenu du mail
+        // echo $contentmail;
+        // die();
 
         email_to_user($user, $from, $fromform->subject, $contentmail, $contentmail);
         
@@ -52,7 +52,7 @@ if ($mform->is_cancelled()) {
 
 
 $context = context_system::instance();
-$PAGE->set_url(new moodle_url('/theme/remui/views/cohortmessage.php'));
+$PAGE->set_url(new moodle_url('/theme/remui/views/users/message.php'));
 $PAGE->set_context(\context_system::instance());
 $PAGE->set_title("Nouveau message");
 

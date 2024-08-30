@@ -136,7 +136,7 @@ if ($rolename == "student") {
 
 
 if (!empty($user->lastaccess)) {
-    $lastconnect = 'Dernier accès le ' . userdate($user->lastaccess, get_string('strftimedate'));
+    $lastconnect = '' . userdate($user->lastaccess, '%d/%m/%y');
 } else {
     $lastconnect = 'Jamais connecté';
 }
@@ -158,6 +158,8 @@ $content .= '<div class="fff-course-box-info">';
 $content .= '<div class="row">';
 $content .= '<div class="col-6">';
 
+$url_page_licencie = getConfigValueByKey('url_page_licencie');
+
 $content .= '<div class="fff-course-box-info-details">';
 $content .= '<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="24" cy="24" r="24" fill="#E2E8F0"/>
@@ -177,12 +179,20 @@ $content .= '<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="
             </svg>
             <span>' . $user->email . '</span>
         </div>
-        <div class="fff-course-box-info-details">
-            <svg class="mr-2" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2ZM0 10C0 4.47715 4.47715 0 10 0C15.5228 0 20 4.47715 20 10C20 15.5228 15.5228 20 10 20C4.47715 20 0 15.5228 0 10ZM10 5C10.5523 5 11 5.44772 11 6V9.58579L13.7071 12.2929C14.0976 12.6834 14.0976 13.3166 13.7071 13.7071C13.3166 14.0976 12.6834 14.0976 12.2929 13.7071L9.29289 10.7071C9.10536 10.5196 9 10.2652 9 10V6C9 5.44772 9.44771 5 10 5Z" fill="#00315a"/>
-            </svg>
-            <span >Dernier accès : ' . $lastconnect . '</span>
-        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div class="fff-course-box-info-details">
+                <svg class="mr-2" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2ZM0 10C0 4.47715 4.47715 0 10 0C15.5228 0 20 4.47715 20 10C20 15.5228 15.5228 20 10 20C4.47715 20 0 15.5228 0 10ZM10 5C10.5523 5 11 5.44772 11 6V9.58579L13.7071 12.2929C14.0976 12.6834 14.0976 13.3166 13.7071 13.7071C13.3166 14.0976 12.6834 14.0976 12.2929 13.7071L9.29289 10.7071C9.10536 10.5196 9 10.2652 9 10V6C9 5.44772 9.44771 5 10 5Z" fill="#00315a"/>
+                </svg>
+                <span >Dernier accès : ' . $lastconnect . '</span>
+            </div>';
+            
+            if($userid == $USER->id){
+            $content .= '<a target="_blank" class="smartch_btn" href="'.$url_page_licencie.'">
+                Ma page licencié Athle.fr
+            </a>';
+            }
+            $content .= '</div>
         ' . $btnconnection . '';
 $content .= '</div>'; //col-6
 
