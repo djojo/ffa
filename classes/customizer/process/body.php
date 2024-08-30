@@ -52,14 +52,16 @@ trait body {
         $fontfamily = $this->get_config('global-typography-body-fontfamily');
         $fontselect = get_config('theme_remui', 'fontselect');
         $fontname = get_config('theme_remui', 'fontname');
-        if (strtolower($fontfamily) == 'inherit' || strtolower($fontfamily) == 'standard') {
-            if ($fontselect == 1) {
-                return 'Inter';
+        if($fontfamily){
+            if (strtolower($fontfamily) == 'inherit' || strtolower($fontfamily) == 'standard') {
+                if ($fontselect == 1) {
+                    return 'Inter';
+                }
+                if ($fontname == '') {
+                    return 'Inter';
+                }
+                return $fontname;
             }
-            if ($fontname == '') {
-                return 'Inter';
-            }
-            return $fontname;
         }
         return $fontfamily;
     }

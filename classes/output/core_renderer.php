@@ -497,27 +497,27 @@ class core_renderer extends \core_renderer
      * @param array $customattribs Array of custom attributes for the support email anchor tag.
      * @return string The html code for the support email link.
      */
-    public function supportemail(array $customattribs = []): string
-    {
-        global $CFG;
+    // public function supportemail(array $customattribs = []): string
+    // {
+    //     global $CFG;
 
-        $label = get_string('contactsitesupport', 'admin');
-        $icon = $this->pix_icon('t/email', '', 'moodle', ['class' => 'fa edw-icon-Email']);
-        $content = $label;
+    //     $label = get_string('contactsitesupport', 'admin');
+    //     $icon = $this->pix_icon('t/email', '', 'moodle', ['class' => 'fa edw-icon-Email']);
+    //     $content = $label;
 
-        if (!empty($CFG->supportpage)) {
-            $attributes = ['href' => $CFG->supportpage, 'target' => 'blank'];
-            $content .= $this->pix_icon('i/externallink', '', 'moodle', ['class' => 'ml-1']);
-        } else {
-            $attributes = ['href' => $CFG->wwwroot . '/user/contactsitesupport.php'];
-        }
+    //     if (!empty($CFG->supportpage)) {
+    //         $attributes = ['href' => $CFG->supportpage, 'target' => 'blank'];
+    //         $content .= $this->pix_icon('i/externallink', '', 'moodle', ['class' => 'ml-1']);
+    //     } else {
+    //         $attributes = ['href' => $CFG->wwwroot . '/user/contactsitesupport.php'];
+    //     }
 
-        $attributes += $customattribs;
-        $icon = '<span>' . $icon . '</span>';
-        $icon  = html_writer::div($icon, 'popover-icon-wrapper');
-        $supportemailhtml = $icon . html_writer::tag('a', $content, $attributes);
-        return $supportemailhtml;
-    }
+    //     $attributes += $customattribs;
+    //     $icon = '<span>' . $icon . '</span>';
+    //     $icon  = html_writer::div($icon, 'popover-icon-wrapper');
+    //     $supportemailhtml = $icon . html_writer::tag('a', $content, $attributes);
+    //     return $supportemailhtml;
+    // }
 
     /**
      * Wrapper for header elements.

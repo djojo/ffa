@@ -26,7 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 
 global $CFG, $COURSE;
 
-user_preference_allow_ajax_update('enable_focus_mode', PARAM_BOOL);
+// user_preference_allow_ajax_update('enable_focus_mode', PARAM_BOOL);
 
 require_once($CFG->dirroot . '/theme/remui/layout/common.php');
 

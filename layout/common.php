@@ -34,13 +34,13 @@ global $PAGE;
 // Add block button in editing mode.
 $addblockbutton = $OUTPUT->addblockbutton();
 
-user_preference_allow_ajax_update('drawer-open-nav', PARAM_ALPHA);
-user_preference_allow_ajax_update('drawer-open-index', PARAM_BOOL);
-user_preference_allow_ajax_update('drawer-open-block', PARAM_BOOL);
-user_preference_allow_ajax_update('course_view_state', PARAM_ALPHA);
-user_preference_allow_ajax_update('remui_dismised_announcement', PARAM_BOOL);
-user_preference_allow_ajax_update('edw-quick-menu', PARAM_BOOL);
-user_preference_allow_ajax_update('edwiser_inproduct_notification', PARAM_ALPHA);
+// user_preference_allow_ajax_update('drawer-open-nav', PARAM_ALPHA);
+// user_preference_allow_ajax_update('drawer-open-index', PARAM_BOOL);
+// user_preference_allow_ajax_update('drawer-open-block', PARAM_BOOL);
+// user_preference_allow_ajax_update('course_view_state', PARAM_ALPHA);
+// user_preference_allow_ajax_update('remui_dismised_announcement', PARAM_BOOL);
+// user_preference_allow_ajax_update('edw-quick-menu', PARAM_BOOL);
+// user_preference_allow_ajax_update('edwiser_inproduct_notification', PARAM_ALPHA);
 if (isloggedin()) {
     $courseindexopen = (get_user_preferences('drawer-open-index', true) == true);
     $blockdraweropen = (get_user_preferences('drawer-open-block') == true);
