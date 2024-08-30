@@ -109,7 +109,7 @@ foreach ($courses as $course) {
         }
     }
     if ($imgcourse == "") {
-        $imgcourse = $CFG->wwwroot . '/theme/remui/pix/background.jpeg';
+        $imgcourse = $CFG->wwwroot . '/theme/remui/pix/background.jpg';
     }
     $el['img'] = $imgcourse;
     

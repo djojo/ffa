@@ -295,7 +295,7 @@ foreach ($courses as $course) {
     <div onmouseover="document.getElementById(\'options-' . $course->id . '\').style.display=\'block\'" onmouseout="document.getElementById(\'options-' . $course->id . '\').style.display=\'none\'" class="fff-course-thumbnail-box-admin">';
     $content .= '<div class="smartch_layer_thumbnail"></div>';
     if ($imgcourse == "") {
-        $imgcourse = $CFG->wwwroot . '/theme/remui/pix/background.jpeg';
+        $imgcourse = $CFG->wwwroot . '/theme/remui/pix/background.jpg';
     }
     $content .= '<img src="' . $imgcourse . '" />';
 

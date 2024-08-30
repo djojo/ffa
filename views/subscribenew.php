@@ -246,7 +246,7 @@ $content .=  '
 // $content .= '<div style="text-align:center;">';
 
 // if ($imgcourse == "") {
-//     $imgcourse = $CFG->wwwroot . '/theme/remui/pix/background.jpeg';
+//     $imgcourse = $CFG->wwwroot . '/theme/remui/pix/background.jpg';
 // }
 // $content .= '<img style=" border-radius: 15px;width: 300px; height: 200px;margin:20px 0;" src="' . $imgcourse . '" />';
 

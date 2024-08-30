@@ -159,7 +159,7 @@ trait get_smartch_my_courses
                 }
             }
             if ($imgcourse == "") {
-                $imgcourse = $CFG->wwwroot . '/theme/remui/pix/background.jpeg';
+                $imgcourse = $CFG->wwwroot . '/theme/remui/pix/background.jpg';
             }
             $el['img'] = $imgcourse;
             
