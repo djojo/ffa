@@ -1662,10 +1662,42 @@ img.smartch_background_header {
     filter: brightness(0.5);
 }
 
+.notification-area{
+    background: white !important;
+    border-color: transparent !important;
+}
+.notification-area .content-area>.content{
+    padding: 35px !important;
+}
+.notification-area .content-area .header .subject-container{
+    font-size: 1.2rem !important;
+    color: $ffablue !important;
+    padding: 10px 20px !important;
+    height: auto !important;
+}
+
+.notification-area .content-area .header .image-container{
+    display: none !important;
+}
+.notification-image{
+    display: none !important;
+}
+
+h2{
+    font-family: "FFABold" !important;
+    color: #FFF !important;
+    letter-spacing: 1px !important;
+    font-size: 40px !important;
+    text-transform: uppercase !important;
+}
+
 //header menu items
 
 .navbar {
     box-shadow: none !important;
+}
+.navbar-brand {
+    padding: 10px 16px !important;
 }
 
 .navbar .primary-navigation .nav-link, .navbar .primary-navigation .more-nav>.dropdown>.dropdown-toggle, .navbar #usernavigation .nav-link, .navbar #usernavigation .more-nav>.dropdown>.dropdown-toggle {
@@ -2006,6 +2038,7 @@ img.smartch_background_header {
 
     .smartch_flex_mobile{
         display: block;
+        padding: 10px 20px;
     }
 
     .smartchactivityicon{

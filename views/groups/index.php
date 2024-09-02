@@ -29,6 +29,7 @@ echo '<style>
 
 .select2-container {
     width: auto !important;
+    margin-bottom: 10px !important;
 }
 
 .select2-container--default .select2-selection--single{

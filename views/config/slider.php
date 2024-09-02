@@ -47,6 +47,8 @@ if ($mform->is_cancelled()) {
     $file = $mform->get_new_filename('image');
     if ($file) {
 
+        $slider = new stdClass();
+
         $pathfoldersmartch = $CFG->dataroot . '/smartchimages';
 
         //on regarde si le dossier smartch exist pour les images
@@ -71,7 +73,7 @@ if ($mform->is_cancelled()) {
             echo "Oops! something went wrong!";
         }
         //set content for image
-        $slider->imagefixe   = $fullpath;
+        $slider->imagefixe = $fullpath;
 
         // $content .= "<h1>image " . $fullpath . " créé.</h1>";
     }

@@ -37,8 +37,8 @@ if ($mform->is_cancelled()) {
         $contentmail = smartchFormatEmail(reset($fromform->content), $user);
 
         //pour visualiser le contenu du mail
-        // echo $contentmail;
-        // die();
+        echo $contentmail;
+        die();
 
         email_to_user($user, $from, $fromform->subject, $contentmail, $contentmail);
         
