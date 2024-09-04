@@ -87,6 +87,15 @@ if (countCourseActivities($courseid) == 0) {
     $count = 1;
     foreach ($sections as $key => $section) {
 
+        //si la section est caché pour les étudiants
+        if($section->visible == 0){
+            //on ne la montre que pour les smalleditingteacher
+            if($rolename == "smalleditingteacher" || $rolename = "super-admin" || $rolename = "manager" || $rolename = "teacher"){
+            } else {
+                continue;
+            }
+        }
+
         //on affiche uniquement la section si elle contient des activités
         // $nbactivities = countSectionActivities($section->id, $course->id);
         // $nbactivities = $section->sequence;

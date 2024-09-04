@@ -2605,9 +2605,9 @@ function getPlanningFormateurs($planningid)
 function getCourseSections($courseid)
 {
     global $DB;
-    $sections = $DB->get_records_sql('SELECT cs.id, cs.sequence, cs.name
+    $sections = $DB->get_records_sql('SELECT cs.id, cs.sequence, cs.name, cs.visible
     FROM mdl_course_sections cs
-    WHERE cs.course = ' . $courseid . ' AND cs.visible = 1', null);
+    WHERE cs.course = ' . $courseid, null);
     return $sections;
 }
 
