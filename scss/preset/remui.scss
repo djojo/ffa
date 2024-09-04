@@ -708,6 +708,12 @@ div[aria-label="Forum"]{
     margin-top:100px;
 }
 
+.secondary-navigation {
+    background: white;
+    padding-bottom: 65px;
+    border: none !important;
+}
+
 .smartch_flex{
     display: flex;
     align-items: start;
@@ -719,7 +725,7 @@ div[aria-label="Forum"]{
     align-items: start;
     justify-content: space-between;
     background:white;
-    padding: 20px 50px;
+    padding: 20px 10px;
     border-radius: 5px 5px 0 0;
 }
 

@@ -139,7 +139,9 @@ if ($search != "") {
 }
 $courses = $DB->get_records_sql($querycourses, null);
 
-$allcourses = $DB->get_records('course', null);
+$allcourses = $DB->get_records_sql('SELECT * 
+FROM mdl_course
+WHERE format != "site"', null);
 
 $result = $DB->get_records_sql($total_pages_sql, null);
 $total_rows = reset($result)->count;

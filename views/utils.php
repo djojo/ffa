@@ -2391,7 +2391,11 @@ function getCompletionPourcent($courseid, $userid = null)
     }
 
     $modulesstatus = getModulesStatus($courseid, null, $userid);
-    $pourcent = $modulesstatus[0]/($modulesstatus[0]+$modulesstatus[1])*100;
+    $dividor = ($modulesstatus[0]+$modulesstatus[1])*100;
+    if($dividor == 0){
+        $dividor = 1;
+    }
+    $pourcent = $modulesstatus[0]/$dividor;
     return number_format($pourcent, 2);;
     
 
