@@ -54,7 +54,7 @@ class create extends moodleform
         $mform->addElement('date_time_selector', 'enddate', 'Fin de la session');
 
 
-        $this->add_action_buttons(true, "Ajouter le planning");
+        $this->add_action_buttons(true, "Ajouter la session");
     }
 
 

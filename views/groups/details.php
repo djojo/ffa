@@ -346,7 +346,9 @@ array_push($params, $param1);
 //On va chercher le responsable pédagogique
 $coach = getResponsablePedagogique($group->id, $course->id);
 
-$sessiondate = '<div>Du ' . userdate($session->startdate, '%d/%m/%Y') . ' au ' . userdate($session->enddate, '%d/%m/%Y') . '</div>';
+if($session){
+    $sessiondate = '<div>Du ' . userdate($session->startdate, '%d/%m/%Y') . ' au ' . userdate($session->enddate, '%d/%m/%Y') . '</div>';
+}
 
 $blocksessiondate = "";
 if($sessiondate){
@@ -383,7 +385,7 @@ if($coach[1]){
 $content .= '<div class="row">
 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
     <div class="smartch_flex_mobile" style="margin-top:30px;">
-        <div>
+        <div style="margin: 0 20px;">
             <div style="display:flex;align-items:center;">
                 <div style="font-size:1.2rem;font-weight:bold;">'.count($teamates).' membres</div>
                 <a href="' . new moodle_url('/theme/remui/views/groups/message.php') . '?groupid=' . $groupid . '&returnurl='.$PAGE->url.'">
