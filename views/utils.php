@@ -2608,7 +2608,8 @@ function getCourseSections($courseid)
     global $DB;
     $sections = $DB->get_records_sql('SELECT cs.id, cs.sequence, cs.name, cs.visible
     FROM mdl_course_sections cs
-    WHERE cs.course = ' . $courseid, null);
+    WHERE cs.course = ' . $courseid . '
+    ORDER BY section ASC', null);
     return $sections;
 }
 
