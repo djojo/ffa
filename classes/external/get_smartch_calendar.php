@@ -202,7 +202,6 @@ trait get_smartch_calendar
             // $event->end = userdate($planning->enddate, '%Y-%m-%dT%H:%M:%S');
             $event->end = date('Y-m-d\TH:i:s', $planning->enddate);
 
-
             //On va chercher le responsable pédagogique
             $queryresponsable = 'SELECT DISTINCT u.id, u.firstname, u.lastname 
             FROM mdl_groups g

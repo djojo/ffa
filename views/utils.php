@@ -1930,10 +1930,10 @@ function convert_to_string_time($time)
     if ($h != 0) {
         $stringtime .= $h . "h";
     }
-    if ($m != 0 && $h < 0) {
+    if ($m != 0 && $h <= 0) {
         $stringtime .= $m . "m";
     }
-    if ($s != 0 && $m < 0 && $h < 0) {
+    if ($s != 0 && $m <= 0 && $h <= 0) {
         if ($s != 0) {
             $stringtime .= $s . "s";
         }
@@ -2397,7 +2397,7 @@ function getCompletionPourcent($courseid, $userid = null)
         $dividor = 1;
     }
     $pourcent = $modulesstatus[0]/$dividor;
-    return number_format($pourcent, 2);;
+    return number_format($pourcent, 2);
     
 
 
@@ -2527,7 +2527,12 @@ function getTeamProgress($courseid, $groupid)
                 $allprog += $prog;
             }
         }
-        $all = floor($allprog / count($teamates)) . '%';
+        if(count($teamates) > 0){
+            $all = floor($allprog / count($teamates)) . '%';
+        } else {
+            $all = 0 .'%';
+        }
+        
         $max = $max . '%';
         $min = $min . '%';
     }

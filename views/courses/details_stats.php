@@ -1,27 +1,82 @@
 <?php
-$content .= '<div style="border:1px solid #3cafe3;border-radius:10px;padding:20px;margin-top:30px;">';
-$content .= '<h3 class="FFF-title1">
-    <span class="FFABlack FFF-Blue" style="letter-spacing:1px;">Mes </span><span class="FFABlack FFF-Gold" style="letter-spacing:1px;">Chiffres</span> 
-</h3>
 
-<div class="row" id="coursescore"  style="width: 100%;position: relative;">
 
-    <div class="col-sm-12 col-md-6 col-lg-6">
-        <div class="fff-box-stats" style="border-right: 1px solid #00315a;">
-            <h1>45</h1>
-            <h5>Nombre de participants</h5>
+
+if($rolename == "super-admin" || $rolename == "manager" || $rolename == "smalleditingteacher") {
+ 
+    $queryallusers = 'SELECT u.id, u.username, u.firstname, u.lastname, u.email
+        FROM mdl_user u
+        JOIN mdl_user_enrolments ue ON ue.userid = u.id
+        JOIN mdl_enrol e ON e.id = ue.enrolid
+        WHERE e.courseid = ' . $courseid . '';
+    $allusers = $DB->get_records_sql($queryallusers, null);
+
+
+    //on va chercher le groupe du formateur
+    $groupid = optional_param('groupid', null, PARAM_INT);
+    if(!$groupid){
+        $group = $DB->get_record_sql('SELECT g.id, g.name FROM mdl_groups g
+        JOIN mdl_groups_members gm ON gm.groupid = g.id
+        WHERE gm.userid = ' . $USER->id . ' AND g.courseid = ' . $courseid, null);
+        $groupid = $group->id;
+    }
+
+    $sessionprog = getTeamProgress($courseid, $groupid);
+
+    $content .= '<div style="border:1px solid #3cafe3;border-radius:10px;padding:20px;margin-top:30px;">';
+    $content .= '<h3 class="FFF-title1">
+        <span class="FFABlack FFF-Blue" style="letter-spacing:1px;">Mes </span><span class="FFABlack FFF-Gold" style="letter-spacing:1px;">Chiffres</span> 
+    </h3>
+
+    <div class="row" id="coursescore"  style="width: 100%;position: relative;">
+
+        <div class="col-sm-12 col-md-6 col-lg-6">
+            <div class="fff-box-stats" style="border-right: 1px solid #00315a;">
+                <h1>'.count($allusers).'</h1>
+                <h5>Nombre de participants</h5>
+            </div>
         </div>
-    </div>
-    <div class="col-sm-12 col-md-6 col-lg-6">
-        <div class="fff-box-stats">
-            <h1>34%</h1>
-            <h5>De progression générale</h5>
+        <div class="col-sm-12 col-md-6 col-lg-6">
+            <div class="fff-box-stats">
+                <h1>'.$sessionprog[0].'</h1>
+                <h5>De progression générale</h5>
+            </div>
         </div>
-    </div>
 
-</div>';
+    </div>';
 
-$content .= '</div>';
+    $content .= '</div>';
+
+} else if($rolename == "student"){
+
+    $modulesstatus = getModulesStatus($courseid, null, $userid);
+    $finished = $modulesstatus[0];
+    $timespent = getTimeSpentOnCourse($USER->id, $courseid);
+    $content .= '<div style="border:1px solid #3cafe3;border-radius:10px;padding:20px;margin-top:30px;">';
+    $content .= '<h3 class="FFF-title1">
+        <span class="FFABlack FFF-Blue" style="letter-spacing:1px;">Mes </span><span class="FFABlack FFF-Gold" style="letter-spacing:1px;">Chiffres</span> 
+    </h3>
+
+    <div class="row" id="coursescore"  style="width: 100%;position: relative;">
+
+        <div class="col-sm-12 col-md-6 col-lg-6">
+            <div class="fff-box-stats" style="border-right: 1px solid #00315a;">
+                <h1>'.$timespent.'</h1>
+                <h5>Temps passé</h5>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-6">
+            <div class="fff-box-stats">
+                <h1>'.$finished.'</h1>
+                <h5>Activités terminées</h5>
+            </div>
+        </div>
+
+    </div>';
+
+    $content .= '</div>';
+}
+
 
 // //on va chercher les stats
 // $sessionid;

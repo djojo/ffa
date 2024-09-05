@@ -138,6 +138,11 @@ trait get_smartch_my_courses
             $certification = false;
             $el['notavailable'] = false;
 
+            require_once($CFG->dirroot . '/theme/remui/views/utils.php');
+            //on va chercher la progression de l'apprenant
+            $el['prog'] = getCompletionPourcent($course->id, $USER->id);
+            
+
             $imgcourse = "";
             //On va chercher l'image du cours
             $course2 = new core_course_list_element($course);

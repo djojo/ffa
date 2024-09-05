@@ -19,6 +19,7 @@ $courseid = required_param('id', PARAM_INT);
 $userid = optional_param('userid', '', PARAM_INT);
 $sectionid = optional_param('sectionid', null, PARAM_INT);
 
+
 if (!$userid) {
     $userid = $USER->id;
 }
@@ -92,10 +93,6 @@ $content .= '<h3 class="FFF-title1" style="margin-top: 80px;">
 </h3>';
 
 require_once('./details_info.php');
-
-// require_once('./details_student.php');
-
-// require_once('./details_stats.php');
 
 require_once('./details_modules.php');
 

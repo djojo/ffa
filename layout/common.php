@@ -136,7 +136,20 @@ $regionmainsettingsmenu = $buildregionmainsettings ? $OUTPUT->region_main_settin
 $header = $PAGE->activityheader;
 $headercontent = $header->export_for_template($renderer);
 $lcontroller = new \theme_remui\controller\LicenseController();
+
+//modification smartch ffa
+global $USER;
+require_once($CFG->dirroot . '/theme/remui/views/utils.php');
+$rolename = getUserRole($USER->id)->shortname;
+// var_dump($rolename);
+// die();
+if($rolename == "super-admin" || $rolename == "manager"){
+    $isadminsmartch = false;
+} else {
+    $isadminsmartch = true;
+}
 $templatecontext = [
+    'isadminsmartch' => $isadminsmartch,  //modification smartch ffa isadminsmartch
     'sitename' => format_string($SITE->shortname, true, ['context' => context_course::instance(SITEID), "escape" => false]),
     'fonts' => $fonts,
     'output' => $OUTPUT,
