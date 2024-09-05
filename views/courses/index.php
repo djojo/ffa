@@ -327,7 +327,7 @@ foreach ($courses as $course) {
                 </svg>
             </a>';
 
-        if($configportail == "portailrh"){
+        // if($configportail == "portailrh"){
             $usersurl = $CFG->wwwroot . "/theme/remui/views/courses/users/index.php?courseid=" . $course->id;
             $content .= '
             <a data-toggle="tooltip" data-placement="top" title="Voir les apprenants" href="' . $usersurl . '">
@@ -365,22 +365,22 @@ foreach ($courses as $course) {
                         </svg>
                     </a>';
             }
-        } else {
-            //on check si c'est une formation gratuite
-            if($course->category == "Formation gratuite"){
-                //on regarde si l'utilisateur est admin
-                if ($rolename == "super-admin" || $rolename == "manager") {
-                    $content .= '
-                    <a data-toggle="tooltip" data-placement="top" title="Supprimer la formation" href="' . new moodle_url('/course/delete.php') . '?id=' . $course->id . '">
-                        <svg class="iconsvg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-                        </svg>
+        // } 
+        // else {
+        //     //on check si c'est une formation gratuite
+        //     if($course->category == "Formation gratuite"){
+        //         //on regarde si l'utilisateur est admin
+        //         if ($rolename == "super-admin" || $rolename == "manager") {
+        //             $content .= '
+        //             <a data-toggle="tooltip" data-placement="top" title="Supprimer la formation" href="' . new moodle_url('/course/delete.php') . '?id=' . $course->id . '">
+        //                 <svg class="iconsvg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        //                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+        //                 </svg>
     
-                    </a>';
-                }
-            }
-            
-        }
+        //             </a>';
+        //         }
+        //     }
+        // }
 
         //si le cours est visible
         $content .= '<a  href="' . $togglevisibleurl . '">';

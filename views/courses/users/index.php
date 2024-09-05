@@ -192,7 +192,7 @@ foreach ($users as $user) {
 
 //barre de recherche des parcours
 $templatecontext = (object)[
-    'formurl' => new moodle_url('/theme/remui/views/courseusers.php'),
+    'formurl' => new moodle_url('/theme/remui/views/courses/users/index.php'),
     'textcontent' => "Apprenants dans la formation " . $course->fullname,
     'lang_search' => "Rechercher",
     'params' => $params,
@@ -217,7 +217,7 @@ if ($pageno == 1) {
 } else {
     $previous = true;
     $newpage = $pageno - 1;
-    $prevurl = new moodle_url('/theme/remui/views/courseusers.php?pageno=' . $newpage) . $filter;
+    $prevurl = new moodle_url('/theme/remui/views/courses/users/index.php?pageno=' . $newpage) . $filter;
 }
 
 if ($pageno == $total_pages) {
@@ -225,7 +225,7 @@ if ($pageno == $total_pages) {
 } else {
     $next = true;
     $newpage = $pageno + 1;
-    $nexturl = new moodle_url('/theme/remui/views/courseusers.php?pageno=' . $newpage) . $filter;
+    $nexturl = new moodle_url('/theme/remui/views/courses/users/index.php?pageno=' . $newpage) . $filter;
 }
 
 //la pagination en haut
@@ -241,7 +241,7 @@ $templatecontextpagination = (object)[
     'prevurl' => $prevurl,
     'nexturl' => $nexturl,
     'paginationarray' => array_values($paginationarray),
-    'formurl' => new moodle_url('/theme/remui/views/courseusers.php')
+    'formurl' => new moodle_url('/theme/remui/views/courses/users/index.php.php')
 ];
 
 if (count($users) > 0) {

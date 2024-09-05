@@ -823,7 +823,7 @@ function smartchModalRole()
     //On va chercher les roles
     $rolesavailables = $DB->get_records_sql('SELECT *
               FROM mdl_role r 
-              WHERE r.shortname = "teacher" 
+              WHERE r.shortname = "smalleditingteacher" 
               OR r.shortname = "student"
               OR r.shortname = "editingteacher"', null);
     echo '<select name="newroleid" id="newroleid" class="form-control my-5">';
