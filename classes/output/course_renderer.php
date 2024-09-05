@@ -21,6 +21,7 @@ class course_renderer extends \core_course_renderer
      * @return string code HTML pour la page
      */
 
+    //modification smartch ffa incourse
     public function render_activity_information(\core_course\output\activity_information $page) {
         // $data = $page->export_for_template($this->output);
         // return $this->output->render_from_template('core_course/activity_info', $data);

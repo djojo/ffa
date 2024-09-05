@@ -254,7 +254,7 @@ if (!empty($date)) {
     // $DB->delete_records('smartch_stats_course', ['datecreated' => $timestamp]);
     // $DB->delete_records('smartch_stats_session', ['datecreated' => $timestamp]);
 
-    echo '<h1>' . $date . ' ' . $timestamp . '</h1>';
+    //echo '<h1>' . $date . ' ' . $timestamp . '</h1>';
     startDailyStats($timestamp);
 
 
