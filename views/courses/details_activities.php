@@ -1,5 +1,7 @@
 <?php
 
+
+
 foreach ($sections as $section) {
 
     $plannings = [];
@@ -125,28 +127,22 @@ foreach ($sections as $section) {
 
                         // var_dump($formateurs);
                         $content .= '<div class="module-' . $activity->moduleid . ' activity-element" id="activity-' . $activity->moduleid . '-' . $activity->activityid . '">';
-
-                        $content .= '<div style="display: flex;">';
-                        // $content .= '<div style="display:none;" class="course_activity_icon">
-                        //                 <svg class="smartchactivityicon mr-4" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        //                     <path fill-rule="evenodd" clip-rule="evenodd" d="M6 0C6.55228 0 7 0.447715 7 1V2H13V1C13 0.447715 13.4477 0 14 0C14.5523 0 15 0.447715 15 1V2H17C18.6569 2 20 3.34315 20 5V17C20 18.6569 18.6569 20 17 20H3C1.34315 20 0 18.6569 0 17V5C0 3.34315 1.34315 2 3 2H5V1C5 0.447715 5.44772 0 6 0ZM5 4H3C2.44772 4 2 4.44772 2 5V17C2 17.5523 2.44772 18 3 18H17C17.5523 18 18 17.5523 18 17V5C18 4.44772 17.5523 4 17 4H15V5C15 5.55228 14.5523 6 14 6C13.4477 6 13 5.55228 13 5V4H7V5C7 5.55228 6.55228 6 6 6C5.44772 6 5 5.55228 5 5V4ZM4 9C4 8.44772 4.44772 8 5 8H15C15.5523 8 16 8.44772 16 9C16 9.55229 15.5523 10 15 10H5C4.44772 10 4 9.55229 4 9Z" fill="#fff"/>
-                        //                 </svg>
-                        //             </div>';
-                        $content .= '<div>
-                                        <div style="font-family: \'FFABold\';font-size: 16px;">' . $planningdate . '</div>
-                                        <div>' . $completion . '</div>
-                                        <div>' . $type . '</div>
+                      
+                        $content .= '<div style="width:100%;display:flex;align-items:center;justify-content:space-between;">
+                                        <div>
+                                            <div class="FFABold fff-name-activity">' . $planningdate . '</div>
+                                            <div>' . $type . '</div>
                                         ';
                         if ($sessionadress != "") {
-                            $content .= '<div >
+                            $content .= '<div>
                                             <svg class="mr-2" width="18" height="21" viewBox="0 0 18 21" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M13.9497 4.05025C11.2161 1.31658 6.78392 1.31658 4.05025 4.05025C1.31658 6.78392 1.31658 11.2161 4.05025 13.9497L8.29374 18.1932C8.68398 18.5835 9.31589 18.5836 9.70669 18.1928L13.9497 13.9497C16.6834 11.2161 16.6834 6.78392 13.9497 4.05025ZM2.63604 2.63604C6.15076 -0.87868 11.8492 -0.87868 15.364 2.63604C18.8787 6.15076 18.8787 11.8492 15.364 15.364L11.8617 18.8662C11.8303 18.8976 11.8754 18.8525 11.844 18.8839L11.1209 19.607C9.94961 20.7783 8.05137 20.7793 6.87952 19.6074L2.63604 15.364C-0.87868 11.8492 -0.87868 6.15076 2.63604 2.63604ZM9 7C7.89543 7 7 7.89543 7 9C7 10.1046 7.89543 11 9 11C10.1046 11 11 10.1046 11 9C11 7.89543 10.1046 7 9 7ZM5 9C5 6.79086 6.79086 5 9 5C11.2091 5 13 6.79086 13 9C13 11.2091 11.2091 13 9 13C6.79086 13 5 11.2091 5 9Z" fill="#00315a"/>
                                             </svg>
                                             <span style="text-transform:uppercase;font-family: \'FFARegular\';font-size: 14px;">' . $sessionadress . '</span>
                                         </div>';
                         }
-                        $content .= '
-                                    </div>';
+                        $content .= '</div>';
+                        $content .= '<div>' . $completion . '</div>';
                         $content .= '</div>';
 
 

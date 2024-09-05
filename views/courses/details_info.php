@@ -42,7 +42,7 @@ if($rolename == "student"){
         //on parcours les groupes
         foreach ($groups as $group) {
             $teamid = $group->id;
-            //On va chercher le responsable pédagogique
+            //On va chercher l'intervenant
             $coach = getResponsablePedagogique($group->id, $course->id);
 
             //on va chercher la session 
@@ -52,11 +52,13 @@ if($rolename == "student"){
 
             if ($session && $session->startdate && $session->enddate) {
                 $sessiondate .= '<div>Session du ' . userdate($session->startdate, '%d/%m/%Y') . ' au ' . userdate($session->enddate, '%d/%m/%Y') . '</div>';
-                // $sessiondate .= '<div>Responsable pédagogique : ' . $coach[0] . '</div>';
+                // $sessiondate .= '<div>Intervenant : ' . $coach[0] . '</div>';
             }
 
         }
 
+        // var_dump($coach);
+        // die();
         //il y a un responsable pedagogique (coach)
         if($coach[1]){
         $content .= '<div class="fff-course-box-info-details">
@@ -67,14 +69,14 @@ if($rolename == "student"){
                         </svg>
                         <div style="margin-left: 25px;">
                             <h3 class="FFABold FFF-Blue" style="font-size:16px;display:flex;align-items:center;">
-                                    '.$coach[1].'
+                                    '.$coach[0].'
                                     <a href="{{urlmessageresponsable}}">
                                         <svg class="ml-2" width="20" height="16" viewBox="0 0 20 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M1 4L8.8906 9.2604C9.5624 9.70827 10.4376 9.70827 11.1094 9.2604L19 4M3 15H17C18.1046 15 19 14.1046 19 13V3C19 1.89543 18.1046 1 17 1H3C1.89543 1 1 1.89543 1 3V13C1 14.1046 1.89543 15 3 15Z" stroke="#00315a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                         </svg>
                                     </a>
                             </h3>
-                                <h5 class="FFF-Blue" style="font-size:12px;">Responsable pédagogique</h5>
+                                <h5 class="FFF-Blue" style="font-size:12px;">Intervenant(e)</h5>
                         </div>
                     </div>';
         }

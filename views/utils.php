@@ -580,9 +580,9 @@ function getResponsablePedagogique($groupid, $courseid)
 {
     global $DB;
 
-    if (isFreeCourse($courseid)) {
-        array('Formation Gratuite', null);
-    } else {
+    // if (isFreeCourse($courseid)) {
+    //     array('Formation Gratuite', null);
+    // } else {
         $queryresponsable = 'SELECT DISTINCT u.id, u.firstname, u.lastname 
         FROM mdl_groups g
         JOIN mdl_groups_members gm ON gm.groupid = g.id
@@ -595,14 +595,15 @@ function getResponsablePedagogique($groupid, $courseid)
         $findresponsable = $DB->get_records_sql($queryresponsable, null);
         // var_dump($findresponsable);
         $found = reset($findresponsable);
+        $coach = "";
         if ($found) {
             $coach = $found->firstname . ' ' . $found->lastname;
         } else {
-            $coach = "Aucun responsable pédagogique";
+            $coach = "Aucun intervenant";
         }
 
         return array($coach, $found);
-    }
+    // }
 }
 
 
