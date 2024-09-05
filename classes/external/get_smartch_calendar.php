@@ -157,9 +157,9 @@ trait get_smartch_calendar
 
             //on change l'url en fonction du rôle
             if ($rolename == "smalleditingteacher") {
-                $event->url = '/theme/remui/views/adminteam.php?teamid=' . $planning->groupid . '&sectionid=' . $planning->sectionid . '#modulesformation';
+                $event->url = new moodle_url('/theme/remui/views/courses/groupid.php?id=' . $planning->groupid);
             } else {
-                $event->url = '/theme/remui/views/formation.php?id=' . $planning->courseid . '&sectionid=' . $planning->sectionid . '#modulesformation';
+                $event->url = new moodle_url('/theme/remui/views/courses/details.php?id=' . $planning->courseid) . '&sectionid=' . $planning->sectionid . '#modulesformation';
             }
 
             $event->coursename = $planning->fullname;
@@ -181,8 +181,10 @@ trait get_smartch_calendar
                 $sessionlocation .= $planning->adress1;
             }
             if($planning->city){
-                $sessionlocation .=  ' ' . $planning->city;
+                $sessionlocation .=  ' - ' . $planning->city;
             }
+
+            
 
 
             //la matiere
@@ -193,8 +195,6 @@ trait get_smartch_calendar
             } else {
                 $matiere = "Généralités";
             }
-
-            
 
             $event->matiere = $matiere;
             $event->start = userdate($planning->startdate, '%d/%m');
@@ -216,7 +216,7 @@ trait get_smartch_calendar
             if ($found) {
                 $coach = $found->firstname . ' ' . $found->lastname;
             } else {
-                $coach = "Aucun responsable pédagogique";
+                $coach = "Aucun(e) intervenant(e)";
             }
 
             $event->info = '

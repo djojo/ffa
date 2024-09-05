@@ -141,6 +141,9 @@ trait get_smartch_my_courses
             require_once($CFG->dirroot . '/theme/remui/views/utils.php');
             //on va chercher la progression de l'apprenant
             $el['prog'] = getCompletionPourcent($course->id, $USER->id);
+
+           //on recupère le champs personnalisé diplome
+           $el['type'] = getCourseCustom($course->id, "type");
             
 
             $imgcourse = "";

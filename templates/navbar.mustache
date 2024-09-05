@@ -199,8 +199,41 @@ require(['jquery', 'core/ajax'], function($, Ajax) {
             let data = JSON.parse(response);
             // When menu is ready display menu
             $('#navmenuadmin').ready(function() {
-                {{! alert(data.rolename); }}
+
+                let url = data.baseurl;
+
+                //CONFIG + SATS -> super admin
                 if(data.rolename == "super-admin"){
+                    let html1 = '<a href="'+url+'/theme/remui/views/config/index.php" class="nav-link">Configuration</a>'
+                    $('#navmenuadmin').append(html1)
+                    let html2 = '<a href="'+url+'/admin/search.php" class="nav-link">Configuration Avancée</a>'
+                    $('#navmenuadmin').append(html2)
+                    {{! let html8 = '<a href="'+url+'/theme/remui/views/stats/index.php" class="nav-link">Stats</a>'
+                    $('#navmenuadminmobile').append(html8) }}
+                }
+                //CONCEPTION -> Concepteur + admin
+                if(data.rolename == "super-admin" || data.rolename == "manager" || data.rolename == "editingteacher"){
+                    let html3 = '<a href="'+url+'/theme/remui/views/courses/index.php" class="nav-link">Conception</a>'
+                    $('#navmenuadmin').append(html3)
+                }
+                {{! alert(data.rolename) }}
+                //GROUPES + UTILISATEURS -> Intervenant + admin
+                if(data.rolename == "super-admin" || data.rolename == "manager" || data.rolename == "smalleditingteacher"){
+                    let html4 = '<a href="'+url+'/theme/remui/views/groups/index.php" class="nav-link">Groupes</a>'
+                    $('#navmenuadmin').append(html4)
+                    let html5 = '<a href="'+url+'/theme/remui/views/users/index.php" class="nav-link">Utilisateurs</a>'
+                    $('#navmenuadmin').append(html5)
+                }
+                //COMMUNICATION -> admin
+                if(data.rolename == "super-admin" || data.rolename == "manager"){
+                    let html6 = '<a href="'+url+'/theme/remui/views/config/slider.php" class="nav-link">Communication</a>'
+                    $('#navmenuadmin').append(html6)
+                }
+                //HOME -> ALL
+                let html7 = '<a href="'+url+'/my" class="nav-link">Accueil</a>'
+                $('#navmenuadmin').append(html7)
+
+                {{! if(data.rolename == "super-admin"){
                     let url = data.baseurl;
                     let html1 = '<a href="'+url+'/theme/remui/views/config/index.php" class="nav-link">Configuration</a>'
                     $('#navmenuadmin').append(html1)
@@ -216,30 +249,14 @@ require(['jquery', 'core/ajax'], function($, Ajax) {
                     $('#navmenuadmin').append(html6)
                     let html7 = '<a href="'+url+'/my" class="nav-link">Accueil</a>'
                     $('#navmenuadmin').append(html7)
-                    {{! let html8 = '<a href="'+url+'/theme/remui/views/stats/index.php" class="nav-link">Stats</a>'
-                    $('#navmenuadmin').append(html8) }}
                 } else if(data.rolename == "manager" || data.rolename == "smalleditingteacher" || data.rolename == "editingteacher"){
                     let url = data.baseurl;
-                    let html1 = '<a href="'+url+'/theme/remui/views/adminmenu.php" class="nav-link">Panneau d\'Administration</a>'
-                    $('#navmenuadmin').append(html1)
-                    {{! let html2 = '<a href="'+url+'/admin/search.php" class="nav-link">configuration avancée</a>'
-                    $('#navmenuadmin').append(html2) }}
                 } else if(data.rolename == "student"){
                     //on affiche les stats
                     let stats = document.querySelector("#smartch_stats")
                     if(stats){stats.style.display = "block"}
-                }
-                
-                {{! alert(data.sso) }}
-                {{! if(data.sso){
-                    //on rajoute la possibilité de connecter son compte SSO
-                    let ssoel = document.querySelector('#connectSSO')
-                    let html3 = '<a href="/theme/remui/views/sso.php" class="dropdown-item" role="menuitem" tabindex="-1" title="Associer mon compte SSO">';
-                    html3 += '<span style="color:#00315a !important;" class="edw-icon edw-icon-Database_Activity"></span>';
-                    html3 += 'Associer mon compte SSO';
-                    html3 += '</a>';
-                    ssoel.innerHTML = html3;
                 } }}
+                
                 
             });
         });

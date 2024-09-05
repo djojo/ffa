@@ -62,10 +62,14 @@ if ($PAGE->pagetype == "enrol-index" & get_config('theme_remui', 'enrolment_page
 // This will ease us to add body classes directly to the array.
 require_once($CFG->dirroot . '/theme/remui/layout/common_end.php');
 
+//on va chercher la complétion du module 
+$completion = getActivityCompletionStatus($PAGE->cm->id);
+
 //modification smartch ffa incourse.php
 $inmodule = true;
 $isadmin = true;
 $templatecontext['inmodule'] = $inmodule;
+$templatecontext['completion'] = $completion;
 $templatecontext['isadmin'] = $isadmin;
 $templatecontext['coursename'] = '' . $COURSE->fullname;
 $templatecontext['activityname'] = $PAGE->cm->name;

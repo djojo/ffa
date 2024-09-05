@@ -257,16 +257,15 @@ function getSessions(timestart, groupid){
                           if(event.start && event.end){
 
                             if(timestampEvent>timestamptoday){
-                                html += '<div onclick="window.location.href = \''+event.url+'\'" style="border-bottom: 1px solid gainsboro;margin-bottom:20px; padding: 20px 0;color:#054686;cursor:pointer;">';
+                                html += '<div  onclick="window.location.href = \''+event.url+'\'" style="cursor:pointer;border-bottom: 1px solid gainsboro;margin-bottom:20px; padding: 20px 0;color:#054686;cursor:pointer;">';
                             } else {
-                                html += '<div style="border-bottom: 1px solid gainsboro;margin-bottom:20px; padding: 20px 0;color:#054686;">';
+                                html += '<div onclick="window.location.href = \''+event.url+'\'" style="cursor:pointer;border-bottom: 1px solid gainsboro;margin-bottom:20px; padding: 20px 0;color:#054686;">';
                             }
-
 
                             html += '<div style="display: flex;align-items:center;justify-content:space-between;">';
                             
                             html += '<div>';
-                            html += '<div style="font-size:1.5rem;font-weight:bold;" class="FFABold">'+event.coursename+' • '+event.groupname+' • '+event.matiere+' </div>';
+                            html += '<div style="font-size:1.5rem;font-weight:bold;cursor:pointer;" class="FFABold">'+event.coursename+' • '+event.groupname+' • '+event.matiere+' </div>';
                             html += '<div>' + event.info + '</div>';
                             //html += '<div style="font-size:0.8rem;color:#3CAFE3;">'+event.coursename+'</div>';
                             //html += '<div>'+event.info+'</div>';

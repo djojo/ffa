@@ -86,11 +86,17 @@ $total_pages = ceil($total_rows / $no_of_records_per_page);
 
 require_once('../returns.php');
 
-
 //le titre
-$content .= '<h3 class="FFF-title1" style="margin-top: 80px;">
+if($userid == $USER->id){
+    $content .= '<h3 class="FFF-title1" style="margin-top: 80px;">
+    <span class="FFABold FFF-White" style="letter-spacing:1px;">MON PROFIL</span>
+</h3>';
+} else {
+    $content .= '<h3 class="FFF-title1" style="margin-top: 80px;">
     <span class="FFABold FFF-White" style="letter-spacing:1px;">UTILISATEUR</span>
 </h3>';
+}
+
 
 
 //le css pour descendre l'image du header
@@ -121,13 +127,13 @@ img.smartch_background_header {
 $role = "";
 //on affiche le rolename correctement
 if ($rolename == "student") {
-    $role = "Apprenant";
+    $role = "Stagiaire";
 } else if ($rolename == "manager") {
     $role = "Administrateur Formation";
 } else if ($rolename == "smalleditingteacher") {
-    $role = "Responsable pédagogique";
-} else if ($rolename == "teacher" || $rolename == "noneditingteacher") {
-    $role = "Formateur";
+    $role = "Intervenant(e)";
+} else if ($rolename == "noneditingteacher") {
+    $role = "Concepteur";
 } else if ($rolename == "super-admin") {
     $role = "Super Admin";
 }

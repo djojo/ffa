@@ -21,7 +21,12 @@ if($rolename == "super-admin" || $rolename == "manager" || $rolename == "smalled
         $groupid = $group->id;
     }
 
-    $sessionprog = getTeamProgress($courseid, $groupid);
+    if($groupid){
+        $sessionprog = getTeamProgress($courseid, $groupid)[0];
+    } else {
+        $sessionprog = "0%";
+    }
+    
 
     $content .= '<div style="border:1px solid #3cafe3;border-radius:10px;padding:20px;margin-top:30px;">';
     $content .= '<h3 class="FFF-title1">
@@ -38,7 +43,7 @@ if($rolename == "super-admin" || $rolename == "manager" || $rolename == "smalled
         </div>
         <div class="col-sm-12 col-md-6 col-lg-6">
             <div class="fff-box-stats">
-                <h1>'.$sessionprog[0].'</h1>
+                <h1>'.$sessionprog.'</h1>
                 <h5>De progression générale</h5>
             </div>
         </div>

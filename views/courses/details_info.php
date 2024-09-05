@@ -162,7 +162,7 @@ $content .= '</div>';
 if($course->summary){
     // $content .= '<h5 class="FFABold FFF-Blue" style="font-size:16px;padding:20px 0 10px 0px;">OBJECTIFS</h5>';
     $content .= '<div id="smartch_summary" class="FFARegular FFF-Blue" style="font-size: 14px; !important;max-height: 180px; overflow: hidden;">'.html_entity_decode($course->summary).'</div>';
-    if(strlen($course->summary)> 300){
+    if(strlen(strip_tags($course->summary))> 800){
         $content .= '
         <div style="text-align:center;">
             <div id="smartch_summary_more" onclick="this.style.display=\'none\';document.querySelector(\'#smartch_summary_less\').style.display=\'block\';document.querySelector(\'#smartch_summary\').style.maxHeight=\'none\';" style="cursor:pointer;">Voir plus</div>

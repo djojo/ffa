@@ -141,12 +141,13 @@ $lcontroller = new \theme_remui\controller\LicenseController();
 global $USER;
 require_once($CFG->dirroot . '/theme/remui/views/utils.php');
 $rolename = getUserRole($USER->id)->shortname;
-// var_dump($rolename);
-// die();
-if($rolename == "super-admin" || $rolename == "manager"){
+
+if($rolename == "super-admin" || $rolename == "manager" || $rolename == "editingteacher"){
     $isadminsmartch = false;
-} else {
+} else if($rolename == "student" || $rolename == "smalleditingteacher") {
     $isadminsmartch = true;
+} else {
+    $isadminsmartch = false;
 }
 $templatecontext = [
     'isadminsmartch' => $isadminsmartch,  //modification smartch ffa isadminsmartch

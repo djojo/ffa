@@ -377,7 +377,7 @@ if($coach[1]){
                                     </svg>
                                 </a>
                         </div>
-                            <h5 class="FFF-Blue" style="font-size:12px;">Responsable pédagogique</h5>
+                            <h5 class="FFF-Blue" style="font-size:12px;">Intervenant(e)</h5>
                     </div>
                 </div>';
     }
@@ -485,7 +485,7 @@ $content .= '
 $content .= '</div>'; //col
 $content .= '</div>'; //row
 
-$content .= '<div class="row smartch_flex_mobile">';
+$content .= '<div class="row" style="padding: 20px 10px;">';
 
 if ($search) {
     $filtersearch = '&search=' . $search;

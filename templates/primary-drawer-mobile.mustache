@@ -151,31 +151,36 @@ require(['jquery', 'core/ajax'], function($, Ajax) {
                         window.location.href = url;
                     });
                 }
-
+                //CONFIG + SATS -> super admin
                 if(data.rolename == "super-admin"){
-                    
                     let html1 = '<a href="'+url+'/theme/remui/views/config/index.php" class="nav-link">Configuration</a>'
                     $('#navmenuadminmobile').append(html1)
                     let html2 = '<a href="'+url+'/admin/search.php" class="nav-link">Configuration Avancée</a>'
                     $('#navmenuadminmobile').append(html2)
+                    {{! let html8 = '<a href="'+url+'/theme/remui/views/stats/index.php" class="nav-link">Stats</a>'
+                    $('#navmenuadminmobile').append(html8) }}
+                }
+                //CONCEPTION -> Concepteur + admin
+                if(data.rolename == "super-admin" || data.rolename == "manager" || data.rolename == "editingteacher"){
                     let html3 = '<a href="'+url+'/theme/remui/views/courses/index.php" class="nav-link">Conception</a>'
                     $('#navmenuadminmobile').append(html3)
+                }
+                //GROUPES + UTILISATEURS -> Intervenant + admin
+                if(data.rolename == "super-admin" || data.rolename == "manager" || data.rolename == "smalleditingteacher"){
                     let html4 = '<a href="'+url+'/theme/remui/views/groups/index.php" class="nav-link">Groupes</a>'
                     $('#navmenuadminmobile').append(html4)
                     let html5 = '<a href="'+url+'/theme/remui/views/users/index.php" class="nav-link">Utilisateurs</a>'
                     $('#navmenuadminmobile').append(html5)
+                }
+                //COMMUNICATION -> admin
+                if(data.rolename == "super-admin" || data.rolename == "manager"){
                     let html6 = '<a href="'+url+'/theme/remui/views/config/slider.php" class="nav-link">Communication</a>'
                     $('#navmenuadminmobile').append(html6)
-                    let html7 = '<a href="'+url+'/my" class="nav-link">Accueil</a>'
-                    $('#navmenuadminmobile').append(html7)
-                    {{! let html8 = '<a href="'+url+'/theme/remui/views/stats/index.php" class="nav-link">Stats</a>'
-                    $('#navmenuadminmobile').append(html8) }}
-                } else if(data.rolename == "manager" || data.rolename == "smalleditingteacher" || data.rolename == "editingteacher"){
-                    let html1 = '<a href="'+url+'/theme/remui/views/adminmenu.php" class="nav-link">Panneau d\'administration</a>'
-                    $('#navmenuadminmobile').append(html1)
-                    {{! let html2 = '<a href="'+url+'/admin/search.php" class="nav-link">configuration avancée</a>'
-                    $('#navmenuadmin').append(html2) }}
                 }
+                //HOME -> ALL
+                let html7 = '<a href="'+url+'/my" class="nav-link">Accueil</a>'
+                $('#navmenuadminmobile').append(html7)
+                //PROFILE -> ALL
                 let html2 = '<a href="'+url+'/theme/remui/views/users/details.php" class="nav-link">Mon profil</a>'
                 $('#navmenuadminmobile').append(html2)
             });
