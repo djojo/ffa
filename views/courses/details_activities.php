@@ -11,7 +11,7 @@ foreach ($sections as $section) {
         $plannings = getSectionPlannings($courseid, $session->id, $section->id);
         // var_dump($plannings);
         // var_dump($plannings);
-        // $content .= "<div>Il y a " . count($plannings) . ' session plannings pour la section ' . $section->id . '</div> ';
+        $content .= "<div>Il y a " . count($plannings) . ' session plannings pour la section ' . $section->id . '</div> ';
 
 
         //les activitées planning déjà affiché

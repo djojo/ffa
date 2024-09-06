@@ -78,16 +78,16 @@ if (!empty($search)) {
 if ($rolename == "super-admin" || $rolename == "manager") {
     
     $queryusers = 'SELECT * 
-        FROM mdl_user 
-        WHERE email != "root@localhost"
-        AND deleted = 0
-        '.$filtersearch.'
+        FROM mdl_user u
+        WHERE u.email != "root@localhost"
+        AND u.deleted = 0
+        '.$filtersqlsearch.'
         LIMIT ' . $offset . ', ' . $no_of_records_per_page;
     $total_pages_sql = 'SELECT COUNT(*) count 
-        FROM mdl_user 
-        WHERE email != "root@localhost"
-        AND deleted = 0
-        '.$filtersearch;
+        FROM mdl_user u
+        WHERE u.email != "root@localhost"
+        AND u.deleted = 0
+        '.$filtersqlsearch;
 
     $totalusers = $DB->get_records_sql('SELECT * FROM mdl_user u
     WHERE u.email <> "root@localhost"', null);
@@ -105,7 +105,7 @@ if ($rolename == "super-admin" || $rolename == "manager") {
             FROM mdl_groups_members
             WHERE userid = ' . $USER->id . '
         )
-        '.$filtersearch.'
+        '.$filtersqlsearch.'
         LIMIT ' . $offset . ', ' . $no_of_records_per_page;
 
     $total_pages_sql = 'SELECT COUNT(*) count 
@@ -118,7 +118,7 @@ if ($rolename == "super-admin" || $rolename == "manager") {
             FROM mdl_groups_members
             WHERE userid = ' . $USER->id . '
         )
-        '.$filtersearch;
+        '.$filtersqlsearch;
 
     $totalusers = $DB->get_records_sql('SELECT DISTINCT u.*
         FROM mdl_user u

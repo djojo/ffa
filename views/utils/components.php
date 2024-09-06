@@ -44,7 +44,7 @@ function displayCourseEdit($course){
     </h3>';
 
     //on va chercher le role 
-    $rolename = getUserRole();
+    $rolename = getUserRole()->shortname;
     if($rolename == "super-admin" || $rolename == "manager"){
         $editurl = new moodle_url('/course/edit.php?id='.$course->id);
         $content .= '<a href="'.$editurl.'" class="smartch_btn" style="background:#00315a; color:white !important;">

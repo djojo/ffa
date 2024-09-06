@@ -112,6 +112,8 @@ $icon4 = '<svg style="margin:10px;" width="41" height="43" viewBox="0 0 41 43" f
     $count = 1;
     foreach ($sections as $key => $section) {
 
+        var_dump($section->sequence);
+
         $hiddensection = false;
         //si la section est caché pour les étudiants
         if($section->visible == 0){
@@ -144,15 +146,9 @@ $icon4 = '<svg style="margin:10px;" width="41" height="43" viewBox="0 0 41 43" f
 
         $tot = $nbactivities + $nbplannings;
 
-        // foreach ($tableact as $v) {
-        //     $content .= $v;
-        // }
-
         if ($tot == 0) {
             continue;
         }
-
-
 
         $countsvg++;
         if ($section->name) {
@@ -185,8 +181,6 @@ $icon4 = '<svg style="margin:10px;" width="41" height="43" viewBox="0 0 41 43" f
             }
         }
 
-        
-
         $content .= '<div id="module-block-' . $section->id . '" onclick="changeModuleInfo(' . $section->id . ', false)" class="fff-module-thumbnail-box">
         <div style="margin:0 10px;display: flex; justify-content: space-between;width: calc(100% - 40px);">
             <h1 class="fff-my-courses-caroussel-item-title">' . $count . '</h1>';
@@ -218,9 +212,6 @@ $content .= '<div class="col-xs-12 col-md-12 col-lg-8">
 
     //les activités
     require_once('./details_activities.php');
-
-
-    
 
     $content .= '
             </div>
