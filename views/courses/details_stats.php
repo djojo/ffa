@@ -27,6 +27,7 @@ if($rolename == "super-admin" || $rolename == "manager" || $rolename == "smalled
         $sessionprog = "0%";
     }
     
+   
 
     $content .= '<div style="border:1px solid #3cafe3;border-radius:10px;padding:20px;margin-top:30px;">';
     $content .= '<h3 class="FFF-title1">

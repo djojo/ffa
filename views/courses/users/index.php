@@ -38,7 +38,7 @@ if($newroleuserid && $newroleid){
 isStudent();
 
 $context = context_system::instance();
-$PAGE->set_url(new moodle_url('/theme/remui/views/courses/users/index.php'));
+$PAGE->set_url(new moodle_url('/theme/remui/views/courses/users/index.php'), ['courseid'=>$courseid]);
 $PAGE->set_context(\context_system::instance());
 $PAGE->set_title("Utilisateurs");
 
@@ -93,52 +93,56 @@ if ($search != '') {
 $no_of_records_per_page = 10;
 $offset = ($pageno - 1) * $no_of_records_per_page;
 
-//on divise les requetes en fonction des rôles
-if ($rolename == "super-admin" || $rolename == "manager") {
-    if ($search != "") {
-        $queryusers = 'SELECT u.id, u.username, u.firstname, u.lastname, u.email
-                FROM mdl_user u
-                JOIN mdl_user_enrolments ue ON ue.userid = u.id
-                JOIN mdl_enrol e ON e.id = ue.enrolid
-                WHERE e.courseid = ' . $courseid . '
-                AND (lower(u.firstname) LIKE "%' . $search . '%" 
-                OR lower(u.lastname) LIKE "%' . $search . '%"
-                OR lower(u.username) LIKE "%' . $search . '%"
-                OR concat(lower(u.firstname) , " " , lower(u.lastname)) LIKE "%' . $search . '%"
-                OR lower(u.email) LIKE "%' . $search . '%")
-                LIMIT ' . $offset . ', ' . $no_of_records_per_page;
-        $total_pages_sql = 'SELECT COUNT(DISTINCT u.id) count 
-                FROM mdl_user u
-                JOIN mdl_user_enrolments ue ON ue.userid = u.id
-                JOIN mdl_enrol e ON e.id = ue.enrolid
-                WHERE e.courseid = ' . $courseid . '
-                AND (lower(u.firstname) LIKE "%' . $search . '%" 
-                OR lower(u.lastname) LIKE "%' . $search . '%"
-                OR concat(lower(u.firstname) , " " , lower(u.lastname)) LIKE "%' . $search . '%"
-                OR lower(u.username) LIKE "%' . $search . '%"
-                OR lower(u.email) LIKE "%' . $search . '%")';
-    } else {
-        $queryusers = 'SELECT u.id, u.username, u.firstname, u.lastname, u.email
-                FROM mdl_user u
-                JOIN mdl_user_enrolments ue ON ue.userid = u.id
-                JOIN mdl_enrol e ON e.id = ue.enrolid
-                WHERE e.courseid = ' . $courseid . '
-                LIMIT ' . $offset . ', ' . $no_of_records_per_page . '
-                ';
-        $total_pages_sql = 'SELECT COUNT(DISTINCT u.id) count 
-                FROM mdl_user u
-                JOIN mdl_user_enrolments ue ON ue.userid = u.id
-                JOIN mdl_enrol e ON e.id = ue.enrolid
-                WHERE e.courseid = ' . $courseid;
-        
-    }
-    // } else if ($rolename == "smalleditingteacher" || $rolename == "editingteacher" || $rolename == "teacher") {
-        $queryallusers = 'SELECT u.id, u.username, u.firstname, u.lastname, u.email
+$filtersqlsearch = "";
+$filtersqlgroup = "";
+
+if (!empty($search)) {
+    $search = trim($search);
+    $filtersqlsearch .= ' AND (lower(u.firstname) LIKE "%' . $search . '%" 
+            OR lower(u.lastname) LIKE "%' . $search . '%"
+            OR lower(u.username) LIKE "%' . $search . '%"
+            OR concat(lower(u.firstname) , " " , lower(u.lastname)) LIKE "%' . $search . '%"
+            OR lower(u.email) LIKE "%' . $search . '%") ';
+}
+
+// //on divise les requetes en fonction des rôles
+// if ($rolename == "super-admin" || $rolename == "manager") {
+
+// }
+
+if($rolename == "smalleditingteacher" || $rolename == "editingteacher" || $rolename == "teacher"){
+    $filtersqlgroup .= ' AND gm.groupid IN (
+        SELECT groupid
+        FROM mdl_groups_members
+        WHERE userid = ' . $USER->id . '
+    ) ';
+}
+
+    
+$queryusers = 'SELECT u.id, u.username, u.firstname, u.lastname, u.email
         FROM mdl_user u
         JOIN mdl_user_enrolments ue ON ue.userid = u.id
         JOIN mdl_enrol e ON e.id = ue.enrolid
-        WHERE e.courseid = ' . $courseid . '';
-}
+        LEFT JOIN mdl_groups_members gm ON gm.userid = u.id
+        WHERE e.courseid = ' . $courseid . '
+        '.$filtersqlsearch.' '.$filtersqlgroup.'
+        LIMIT ' . $offset . ', ' . $no_of_records_per_page;
+$total_pages_sql = 'SELECT COUNT(DISTINCT u.id) count 
+        FROM mdl_user u
+        JOIN mdl_user_enrolments ue ON ue.userid = u.id
+        JOIN mdl_enrol e ON e.id = ue.enrolid
+        LEFT JOIN mdl_groups_members gm ON gm.userid = u.id
+        WHERE e.courseid = ' . $courseid . '
+            '.$filtersqlsearch.' '.$filtersqlgroup;
+    
+$queryallusers = 'SELECT u.id, u.username, u.firstname, u.lastname, u.email
+FROM mdl_user u
+JOIN mdl_user_enrolments ue ON ue.userid = u.id
+JOIN mdl_enrol e ON e.id = ue.enrolid
+LEFT JOIN mdl_groups_members gm ON gm.userid = u.id
+WHERE e.courseid = ' . $courseid . '
+'.$filtersqlgroup;
+    
 
 $users = $DB->get_records_sql($queryusers, null);
 // $users = $DB->get_recordset_sql($queryusers, null);
@@ -157,7 +161,10 @@ $templatecontextheader = (object)[
 ];
 $content .= $OUTPUT->render_from_template('theme_remui/smartch_header_back', $templatecontextheader);
 
-$content .= '<div class="row" style="margin:30px 0;"></div>';
+//le titre
+$content .= '<h3 class="FFF-title1" style="margin-top: 80px;">
+    <span class="FFABold FFF-White" style="letter-spacing:1px;">'.$course->fullname.'</span>
+</h3>';
 
 //tous les utilisateurs
 $allusers = array();
@@ -167,26 +174,6 @@ foreach ($users as $user) {
     $el['lastname'] = $user->lastname;
     $el['id'] = $user->id;
     $el['url'] = $CFG->wwwroot . "/user/view.php?id=" . $user->id;
-
-    // //On va chercher l'image du cours
-    // $course2 = new core_course_list_element($course);
-    // foreach ($course2->get_course_overviewfiles() as $file) {
-    //     if ($file->is_valid_image()) {
-    //         $imagepath = '/' . $file->get_contextid() .
-    //             '/' . $file->get_component() .
-    //             '/' . $file->get_filearea() .
-    //             $file->get_filepath() .
-    //             $file->get_filename();
-    //         $imageurl = file_encode_url(
-    //             $CFG->wwwroot . '/pluginfile.php',
-    //             $imagepath,
-    //             false
-    //         );
-    //         $el['img'] = $imageurl;
-    //         // Use the first image found.
-    //         break;
-    //     }
-    // }
     array_push($allusers, $el);
 }
 
@@ -269,7 +256,7 @@ foreach ($users as $user) {
                             <path d="M28 19C28 21.2091 26.2091 23 24 23C21.7909 23 20 21.2091 20 19C20 16.7909 21.7909 15 24 15C26.2091 15 28 16.7909 28 19Z" stroke="#00315a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             <path d="M24 26C20.134 26 17 29.134 17 33H31C31 29.134 27.866 26 24 26Z" stroke="#00315a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
-                        <span style="margin-left: 10px;"><a href="' . new moodle_url('/theme/remui/views/adminuser.php') . '?return=users&userid=' . $user->id . '">' . $user->firstname . ' ' . $user->lastname . '</a></span>
+                        <span style="margin-left: 10px;"><a href="' . new moodle_url('/theme/remui/views/users/details.php') . '?userid=' . $user->id . '&returnurl='.$PAGE->url.'">' . $user->firstname . ' ' . $user->lastname . '</a></span>
                     </td>
                     <td>' . $user->email . '</td>';
 
@@ -288,7 +275,7 @@ foreach ($users as $user) {
                         <a class="crea_pagination_btn" onclick="modifyRole('.$user->id.', '.$courseid.', '.$role->roleid.');" >' . $rolename . '</a>
                     </td>';
 
-                    $content .= '<td><a class="smartch_table_btn" href="' . new moodle_url('/theme/remui/views/adminuser.php') . '?return=users&userid=' . $user->id . '">Consulter</a></td>
+                    $content .= '<td><a class="smartch_table_btn" href="' . new moodle_url('/theme/remui/views/users/details.php') . '?userid=' . $user->id . '&returnurl='.$PAGE->url.'">Consulter</a></td>
                 </tr>';
 }
 

@@ -142,9 +142,15 @@
     $timetotal = $DB->get_records_sql('SELECT SUM(timespent) as totaltimespent FROM mdl_smartch_activity_log WHERE userid = ' . $USER->id, null);
     $timespent = convert_to_string_time($timetotal->totaltimespent);
 
+    if($userid == $USER->id){
+        $pronom = "Mes";
+    } else {
+        $pronom  = "Ses";
+    }
+
     $content .= '<div style="border:1px solid #3cafe3;border-radius:10px;padding:20px;margin-top:30px;">';
     $content .= '<h3 class="FFF-title1">
-        <span class="FFABlack FFF-Blue" style="letter-spacing:1px;">Mes </span><span class="FFABlack FFF-Gold" style="letter-spacing:1px;">Chiffres</span> 
+        <span class="FFABlack FFF-Blue" style="letter-spacing:1px;">'.$pronom.' </span><span class="FFABlack FFF-Gold" style="letter-spacing:1px;">Chiffres</span> 
     </h3>
 
     <div class="row" id="coursescore"  style="width: 100%;position: relative;">

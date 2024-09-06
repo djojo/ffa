@@ -64,6 +64,24 @@ require_once($CFG->dirroot . '/theme/remui/layout/common_end.php');
 
 //on va chercher la complétion du module 
 $completion = getActivityCompletionStatus($PAGE->cm->id);
+$sectionid = $PAGE->cm->section;
+
+//on va chercher la section 
+if($sectionid){
+    global $DB;
+    $section = $DB->get_record('course_sections', ['id' => $sectionid]);
+}
+
+$rolename = getUserRoleFromCourse($COURSE->id, $USER->id)->shortname;
+if($rolename == "student"){
+    // echo '<style>
+    // .edw-tabs-navigation.secondary-navigation{
+    //     display:none;
+    // }
+    // </style>';
+}
+
+
 
 //modification smartch ffa incourse.php
 $inmodule = true;
@@ -71,7 +89,8 @@ $isadmin = true;
 $templatecontext['inmodule'] = $inmodule;
 $templatecontext['completion'] = $completion;
 $templatecontext['isadmin'] = $isadmin;
-$templatecontext['coursename'] = '' . $COURSE->fullname;
+$templatecontext['coursename'] = $COURSE->fullname;
+$templatecontext['sectionname'] = $section->name;
 $templatecontext['activityname'] = $PAGE->cm->name;
 $templatecontext['returnurl'] = new moodle_url('/theme/remui/views/courses/details.php?id=' . $COURSE->id);
 

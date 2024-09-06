@@ -63,99 +63,84 @@ if ($search != '') {
 $no_of_records_per_page = 24;
 $offset = ($pageno - 1) * $no_of_records_per_page;
 
+$filtersqlsearch = "";
+
+if (!empty($search)) {
+    $search = trim($search);
+    $filtersqlsearch .= ' AND (lower(u.firstname) LIKE "%' . $search . '%" 
+            OR lower(u.lastname) LIKE "%' . $search . '%"
+            OR lower(u.username) LIKE "%' . $search . '%"
+            OR concat(lower(u.firstname) , " " , lower(u.lastname)) LIKE "%' . $search . '%"
+            OR lower(u.email) LIKE "%' . $search . '%") ';
+}
+
 //on divise les requetes en fonction des rôles
 if ($rolename == "super-admin" || $rolename == "manager") {
-    if ($search != "") {
-        $queryusers = 'SELECT * from mdl_user 
-                WHERE email != "root@localhost"
-                AND deleted = 0
-                AND (lower(firstname) LIKE "%' . $search . '%" 
-                OR lower(lastname) LIKE "%' . $search . '%"
-                OR lower(username) LIKE "%' . $search . '%"
-                OR concat(lower(firstname) , " " , lower(lastname)) LIKE "%' . $search . '%"
-                OR lower(email) LIKE "%' . $search . '%")
-                LIMIT ' . $offset . ', ' . $no_of_records_per_page;
-        $total_pages_sql = 'SELECT COUNT(*) count FROM mdl_user 
-                WHERE email != "root@localhost"
-                AND deleted = 0
-                AND (lower(firstname) LIKE "%' . $search . '%" 
-                OR lower(lastname) LIKE "%' . $search . '%"
-                OR concat(lower(firstname) , " " , lower(lastname)) LIKE "%' . $search . '%"
-                OR lower(username) LIKE "%' . $search . '%"
-                OR lower(email) LIKE "%' . $search . '%")';
-    } else {
-        $queryusers = 'SELECT * from mdl_user
-                WHERE email != "root@localhost"
-                AND deleted = 0
-                LIMIT ' . $offset . ', ' . $no_of_records_per_page . '
-                ';
-        $total_pages_sql = 'SELECT COUNT(*) count FROM mdl_user WHERE email != "root@localhost" AND deleted = 0';
-    }
-    // } else if ($rolename == "smalleditingteacher" || $rolename == "editingteacher" || $rolename == "teacher") {
-} else {
-    //on prend seulement les utilisateurs de son groupe
-    if ($search != "") {
-        $queryusers = 'SELECT DISTINCT u.*
-            FROM mdl_user u
-            JOIN mdl_groups_members gm ON gm.userid = u.id
-            WHERE gm.groupid IN (
-                SELECT groupid
-                FROM mdl_groups_members
-                WHERE userid = ' . $USER->id . '
-            )
-            AND u.email != "root@localhost"
-            AND u.deleted = 0
-            AND (lower(u.firstname) LIKE "%' . $search . '%" 
-            OR lower(u.lastname) LIKE "%' . $search . '%"
-            OR lower(u.username) LIKE "%' . $search . '%"
-            OR concat(lower(u.firstname) , " " , lower(u.lastname)) LIKE "%' . $search . '%"
-            OR lower(u.email) LIKE "%' . $search . '%")
-            LIMIT ' . $offset . ', ' . $no_of_records_per_page;
-        $total_pages_sql = 'SELECT DISTINCT u.*
-            FROM mdl_user u
-            JOIN mdl_groups_members gm ON gm.userid = u.id
-            WHERE gm.groupid IN (
-                SELECT groupid
-                FROM mdl_groups_members
-                WHERE userid = ' . $USER->id . '
-            )
-            AND u.email != "root@localhost"
-            AND u.deleted = 0
-            AND (lower(u.firstname) LIKE "%' . $search . '%" 
-            OR lower(u.lastname) LIKE "%' . $search . '%"
-            OR lower(u.username) LIKE "%' . $search . '%"
-            OR concat(lower(u.firstname) , " " , lower(u.lastname)) LIKE "%' . $search . '%"
-            OR lower(u.email) LIKE "%' . $search . '%")';
-    } else {
-        $queryusers = 'SELECT DISTINCT u.*
-            FROM mdl_user u
-            JOIN mdl_groups_members gm ON gm.userid = u.id
-            -- JOIN mdl_groups g ON g.id = gm.groupid
-            WHERE gm.groupid IN (
-                SELECT groupid
-                FROM mdl_groups_members
-                WHERE userid = ' . $USER->id . '
-            )
-            LIMIT ' . $offset . ', ' . $no_of_records_per_page;
+    
+    $queryusers = 'SELECT * 
+        FROM mdl_user 
+        WHERE email != "root@localhost"
+        AND deleted = 0
+        '.$filtersearch.'
+        LIMIT ' . $offset . ', ' . $no_of_records_per_page;
+    $total_pages_sql = 'SELECT COUNT(*) count 
+        FROM mdl_user 
+        WHERE email != "root@localhost"
+        AND deleted = 0
+        '.$filtersearch;
 
-        $total_pages_sql = 'SELECT DISTINCT COUNT(*) count FROM mdl_user u
-            JOIN mdl_groups_members gm ON gm.userid = u.id
-            WHERE gm.groupid IN (
-                SELECT groupid
-                FROM mdl_groups_members
-                WHERE userid = ' . $USER->id . '
-            )';
-    }
+    $totalusers = $DB->get_records_sql('SELECT * FROM mdl_user u
+    WHERE u.email <> "root@localhost"', null);
+  
+} else if ($rolename == "smalleditingteacher" || $rolename == "editingteacher" || $rolename == "teacher") {
+
+    //on prend seulement les utilisateurs de son groupe
+    $queryusers = 'SELECT DISTINCT u.*
+        FROM mdl_user u
+        JOIN mdl_groups_members gm ON gm.userid = u.id
+        WHERE email != "root@localhost"
+        AND deleted = 0
+        AND gm.groupid IN (
+            SELECT groupid
+            FROM mdl_groups_members
+            WHERE userid = ' . $USER->id . '
+        )
+        '.$filtersearch.'
+        LIMIT ' . $offset . ', ' . $no_of_records_per_page;
+
+    $total_pages_sql = 'SELECT COUNT(*) count 
+        FROM mdl_user u
+        JOIN mdl_groups_members gm ON gm.userid = u.id
+        WHERE email != "root@localhost"
+        AND deleted = 0
+        AND gm.groupid IN (
+            SELECT groupid
+            FROM mdl_groups_members
+            WHERE userid = ' . $USER->id . '
+        )
+        '.$filtersearch;
+
+    $totalusers = $DB->get_records_sql('SELECT DISTINCT u.*
+        FROM mdl_user u
+        JOIN mdl_groups_members gm ON gm.userid = u.id
+        WHERE email != "root@localhost"
+        AND deleted = 0
+        AND gm.groupid IN (
+            SELECT groupid
+            FROM mdl_groups_members
+            WHERE userid = ' . $USER->id . '
+        )', null);
 }
 
 $users = $DB->get_records_sql($queryusers, null);
 
-$totalusers = $DB->get_records_sql('SELECT * FROM mdl_user u
-WHERE u.email <> "root@localhost"', null);
+
 
 $result = $DB->get_records_sql($total_pages_sql, null);
 $total_rows = reset($result)->count;
 $total_pages = ceil($total_rows / $no_of_records_per_page);
+
+var_dump($total_rows);
 
 //le header avec bouton de retour au panneau admin
 $templatecontextheader = (object)[

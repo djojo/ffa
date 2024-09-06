@@ -244,8 +244,8 @@ div[role=main]{
 .fff-my-courses-caroussel-items{
     display: flex;
     overflow-x: scroll;
-    margin:0 -20px;
-    padding: 40px 20px;
+    margin: 20px -20px 0 0px;
+    padding: 0px 20px;
     scroll-snap-type: x mandatory;
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
@@ -739,7 +739,7 @@ div[aria-label="Forum"]{
     top: 100px;
     margin-top: 60px;
     background: white;
-    padding: 40px 30px;
+    padding: 20px 20px;
 }
 
 
@@ -831,7 +831,6 @@ object{
     color: white;
     padding: 0px 15px;
     border-radius: 14px;
-    margin:15px 0;
     font-size: 14px;
     font-family: "FFABold";
     height: fit-content;
@@ -987,12 +986,17 @@ object{
     padding: 15px 10px;
     overflow: hidden;
     font-size: 1.5rem;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    max-width: 330px;
 }
 .fff-module-thumbnail-box>div {
     display: flex;
     align-items: end;
-    padding: 10px;
+    padding: 0;
     position: absolute;
+    
 }
 
 

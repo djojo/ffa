@@ -27,7 +27,7 @@ $content .= '<div class="fff-course-box-info">';
 
 $content .= '<div class="row">';
 
-$content .= '<div class="col-6">';
+$content .= '<div class="col-xs-12 col-md-12 col-lg-6">';
 
 if($rolename == "student"){
     //on va chercher les groupes session de l'utilisateur
@@ -186,7 +186,7 @@ if($course->summary){
 $content .= '</div>';//col-6
 
 
-$content .= '<div class="col-6">';
+$content .= '<div class="col-xs-12 col-md-12 col-lg-6" style="margin-bottom:50px;">';
 require_once('./details_stats.php');
 $content .= '</div>';//col-6
 

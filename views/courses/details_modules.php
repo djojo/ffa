@@ -58,7 +58,7 @@ if ($group) {
 // </h3>';
 
 
-$content .= '<div class="row">';
+$content .= '<div class="row" style="padding: 0 40px;">';
 
 // var_dump(countCourseActivities($courseid));
 if (countCourseActivities($courseid) == 0) {
@@ -66,7 +66,7 @@ if (countCourseActivities($courseid) == 0) {
     $content .= nothingtodisplay("Le contenu de formation n'est pas encore disponible");
     $content .= '</div>';
 } else {
-    $content .= '<div class="col-4"  id="fff-my-courses">';
+    $content .= '<div class="col-xs-12 col-md-12 col-lg-4"  id="fff-my-courses" >';
     // $content .= '<div class="fff-my-courses-caroussel" >';
     // $content .= '<div class="fff-my-courses-caroussel-items"  id="fff-my-courses">';
 
@@ -205,9 +205,9 @@ $content .= '</div>'; //col-4
 
 
 
-$content .= '<div class="col-8">
+$content .= '<div class="col-xs-12 col-md-12 col-lg-8">
 
-    <div class="col-sm-12 col-md-12 col-lg-12" style="background: transparent;border-radius: 20px;">
+    <div style="background: transparent;border-radius: 20px;">
         <div id="activitiesall" style="padding:0 20px;">
             <div style="justify-content: center;display: flex;margin-bottom:20px;" id="course_module_info_titles">
                 <h2 class="course_module_info_title_highlight" >' . $titlecontenu . '</h2>';

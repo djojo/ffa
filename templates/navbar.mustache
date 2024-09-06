@@ -217,8 +217,8 @@ require(['jquery', 'core/ajax'], function($, Ajax) {
                     $('#navmenuadmin').append(html3)
                 }
                 {{! alert(data.rolename) }}
-                //GROUPES + UTILISATEURS -> Intervenant + admin
-                if(data.rolename == "super-admin" || data.rolename == "manager" || data.rolename == "smalleditingteacher"){
+                //GROUPES + UTILISATEURS -> Concepteur + Intervenant + admin
+                if(data.rolename == "super-admin" || data.rolename == "manager" || data.rolename == "editingteacher" || data.rolename == "smalleditingteacher"){
                     let html4 = '<a href="'+url+'/theme/remui/views/groups/index.php" class="nav-link">Groupes</a>'
                     $('#navmenuadmin').append(html4)
                     let html5 = '<a href="'+url+'/theme/remui/views/users/index.php" class="nav-link">Utilisateurs</a>'

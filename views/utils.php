@@ -639,6 +639,7 @@ function longTitlesModules($chaine)
     if (strlen($chaine) > 53) {
         $chaine = substr($chaine, 0, 50) . '...';
     }
+    $chaine = html_entity_decode($chaine);
     return $chaine;
 }
 

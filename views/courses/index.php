@@ -327,8 +327,7 @@ foreach ($courses as $course) {
                 </svg>
             </a>';
 
-            //on regarde si l'utilisateur est admin
-            if ($rolename == "super-admin" || $rolename == "manager") {
+            
 
                 $usersurl = $CFG->wwwroot . "/theme/remui/views/courses/users/index.php?courseid=" . $course->id;
                 $content .= '
@@ -345,6 +344,9 @@ foreach ($courses as $course) {
                     </svg>
                 </a>';
             
+
+            //on regarde si l'utilisateur est admin
+            if ($rolename == "super-admin" || $rolename == "manager") {
             
                 //on check si il y a des apprenants dans la formations
                 $countenroll = $DB->get_record_sql('SELECT COUNT(u.id) count 
