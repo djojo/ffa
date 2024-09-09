@@ -51,14 +51,9 @@ if ($group) {
 }
 
 
-// $content .= '
-
-// <h3 class="FFF-title1" style="display: flex;align-items: center;margin-top:50px;" id="modulesformation">
-//     <span class="FFABlack FFF-Blue" style="margin-right:10px;letter-spacing:1px;">Détails du </span><span class="FFABlack FFF-Gold" style="letter-spacing:1px;">Parcours</span> 
-// </h3>';
 
 
-$content .= '<div class="row" style="padding: 0 40px;">';
+$content .= '<div class="row" style="padding: 0 40px;" id="modulesformation">';
 
 // var_dump(countCourseActivities($courseid));
 if (countCourseActivities($courseid) == 0) {
@@ -112,7 +107,7 @@ $icon4 = '<svg style="margin:10px;" width="41" height="43" viewBox="0 0 41 43" f
     $count = 1;
     foreach ($sections as $key => $section) {
 
-        var_dump($section->sequence);
+        // var_dump($section->sequence);
 
         $hiddensection = false;
         //si la section est caché pour les étudiants
@@ -181,6 +176,23 @@ $icon4 = '<svg style="margin:10px;" width="41" height="43" viewBox="0 0 41 43" f
             }
         }
 
+        // $content .= "<div>Il y a " . count($section->sequence) . ' modules pour la section ' . $section->id . '</div> ';
+        // $content .= $section->sequence;
+
+        $sectionempty = true;
+        foreach ($activities as $activityy) {
+            if ($activityy->id == intval($section->sequence)) {
+                // $content .= "On garde la section";
+                $sectionempty = false;
+                break; //on quitte il n'y a rien dans la section
+            }
+        }
+
+        if($sectionempty){
+            continue;
+        }
+
+        
         $content .= '<div id="module-block-' . $section->id . '" onclick="changeModuleInfo(' . $section->id . ', false)" class="fff-module-thumbnail-box">
         <div style="margin:0 10px;display: flex; justify-content: space-between;width: calc(100% - 40px);">
             <h1 class="fff-my-courses-caroussel-item-title">' . $count . '</h1>';
@@ -310,6 +322,7 @@ if ($sectionid) {
     echo '<script>
 
     document.addEventListener("DOMContentLoaded", () => {
+        // alert("on va à la section '.$sectionid.'")
         changeModuleInfo(' . $sectionid . ', false)
     });
 
@@ -336,151 +349,151 @@ if ($sectionid) {
 //     <span>Josselin CHUBILLEAU, Erick SENECHAL</span>
 // </div>
 
-echo '<script>
+// echo '<script>
 
-var positionNextIcon = 0;
-var numbersections = ' . count($sections) . ';
+// var positionNextIcon = 0;
+// var numbersections = ' . count($sections) . ';
 
 
 
-function moveIconCourse(move){
+// function moveIconCourse(move){
 
-    //on regarde la largeur de l\'ecran
-    let largeur = window.innerWidth;
-    let largeurInterval = Math.floor((largeur - 180)/240);
-    let rest = numbersections-largeurInterval;
-    let nbencarts = largeurInterval - numbersections;
-    //on calcule le nombre delement max
-    maxelements = nbencarts;
-    rest--
+//     //on regarde la largeur de l\'ecran
+//     let largeur = window.innerWidth;
+//     let largeurInterval = Math.floor((largeur - 180)/240);
+//     let rest = numbersections-largeurInterval;
+//     let nbencarts = largeurInterval - numbersections;
+//     //on calcule le nombre delement max
+//     maxelements = nbencarts;
+//     rest--
     
-    if(maxelements < 0){
-        //console.log(positionNextIcon +" ok "+rest);
+//     if(maxelements < 0){
+//         //console.log(positionNextIcon +" ok "+rest);
 
-        if(move == "next" && positionNextIcon < rest){
-            //alert("next")
-            positionNextIcon++;
-            document.getElementById(\'fff-my-courses\').scrollBy({top: 0, left: 30, behavior: \'smooth\'});
-        } else if(move == "prev" && positionNextIcon > 0){
-            //alert("prev")
-            document.getElementById(\'fff-my-courses\').scrollBy({top: 0, left: -30, behavior: \'smooth\'});
-            positionNextIcon--;
-        }
+//         if(move == "next" && positionNextIcon < rest){
+//             //alert("next")
+//             positionNextIcon++;
+//             document.getElementById(\'fff-my-courses\').scrollBy({top: 0, left: 30, behavior: \'smooth\'});
+//         } else if(move == "prev" && positionNextIcon > 0){
+//             //alert("prev")
+//             document.getElementById(\'fff-my-courses\').scrollBy({top: 0, left: -30, behavior: \'smooth\'});
+//             positionNextIcon--;
+//         }
         
-        //si on est à la position 0
-        if(positionNextIcon == 0){
-            document.getElementById(\'leftcourseicon\').style.opacity=0.3; 
-        } else {
-            document.getElementById(\'leftcourseicon\').style.opacity=1; 
-        }
+//         //si on est à la position 0
+//         if(positionNextIcon == 0){
+//             document.getElementById(\'leftcourseicon\').style.opacity=0.3; 
+//         } else {
+//             document.getElementById(\'leftcourseicon\').style.opacity=1; 
+//         }
 
-        //si on est à la position max
-        if(positionNextIcon == rest){
-            document.getElementById(\'rightcourseicon\').style.opacity=0.3; 
-        } else {
-            document.getElementById(\'rightcourseicon\').style.opacity=1; 
-        }
-    }
-    else {
-        document.getElementById(\'rightcourseicon\').style.opacity=0.3; 
-    }
-}
+//         //si on est à la position max
+//         if(positionNextIcon == rest){
+//             document.getElementById(\'rightcourseicon\').style.opacity=0.3; 
+//         } else {
+//             document.getElementById(\'rightcourseicon\').style.opacity=1; 
+//         }
+//     }
+//     else {
+//         document.getElementById(\'rightcourseicon\').style.opacity=0.3; 
+//     }
+// }
 
-</script>';
+// </script>';
 
-echo '<script>
-var firstDigit = "";
-window.onload = function(){
+// echo '<script>
+// var firstDigit = "";
+// window.onload = function(){
 
 
-    //on regarde la largeur de l\'ecran
-    let largeur = window.innerWidth;
-    let largeurInterval = Math.floor((largeur - 180)/220);
-    let rest = numbersections-largeurInterval;
-    //on désactive la fleche de droite
-    //console.log(rest)
-    if(rest == 0){
-        document.getElementById(\'rightcourseicon\').style.opacity=0.3; 
-    }
-';
+//     //on regarde la largeur de l\'ecran
+//     let largeur = window.innerWidth;
+//     let largeurInterval = Math.floor((largeur - 180)/220);
+//     let rest = numbersections-largeurInterval;
+//     //on désactive la fleche de droite
+//     //console.log(rest)
+//     if(rest == 0){
+//         document.getElementById(\'rightcourseicon\').style.opacity=0.3; 
+//     }
+// ';
 
-if ($group) {
+// if ($group) {
 
-    //on affiche seulement le dossier de la région
-    echo '
+//     //on affiche seulement le dossier de la région
+//     echo '
     
     
-    var inputString = "' . $group->name . '";
+//     var inputString = "' . $group->name . '";
 
-    //console.log("' . $group->name . '");
+//     //console.log("' . $group->name . '");
 
-    // Utiliser une expression régulière pour extraire le premier nombre
-    var match2 = inputString.match(/\d+/);
+//     // Utiliser une expression régulière pour extraire le premier nombre
+//     var match2 = inputString.match(/\d+/);
 
-    if (match2) {
-        firstDigit = match2[0];
-        console.log("Premier chiffre :", firstDigit);
-    } else {
-        console.log("Aucun chiffre trouvé.");
-    }
+//     if (match2) {
+//         firstDigit = match2[0];
+//         console.log("Premier chiffre :", firstDigit);
+//     } else {
+//         console.log("Aucun chiffre trouvé.");
+//     }
 
-    // Sélectionnez tous les éléments avec la classe "fff-name-activity"
-    //var elements = document.querySelectorAll(".fff-name-activity");
+//     // Sélectionnez tous les éléments avec la classe "fff-name-activity"
+//     //var elements = document.querySelectorAll(".fff-name-activity");
 
-    // Parcourir les éléments sélectionnés
-    //elements.forEach(function(element) {
-        //if (element.textContent.includes(firstDigit)) {
-            //console.log("Élément contenant le texte :" + element);
-            //element.parentNode.parentNode.parentNode.parentNode.style.display = "block";
-        //}
-    //});
-    ';
-}
+//     // Parcourir les éléments sélectionnés
+//     //elements.forEach(function(element) {
+//         //if (element.textContent.includes(firstDigit)) {
+//             //console.log("Élément contenant le texte :" + element);
+//             //element.parentNode.parentNode.parentNode.parentNode.style.display = "block";
+//         //}
+//     //});
+//     ';
+// }
 
-echo '
+// echo '
     
 
 
 
     
 
-    //On cache tout les dossiers
-    var elements = document.querySelectorAll(".fff-name-activity");
-    // Expression régulière pour repérer du texte entre crochets
-    var regex = /\[([^\]]+)\]/g;
+//     //On cache tout les dossiers
+//     var elements = document.querySelectorAll(".fff-name-activity");
+//     // Expression régulière pour repérer du texte entre crochets
+//     var regex = /\[([^\]]+)\]/g;
     
-    // Parcourir tous les éléments
-    elements.forEach(function(element) {
+//     // Parcourir tous les éléments
+//     elements.forEach(function(element) {
         
-        // Vérifier si l\'élément contient du texte
-        if (element.textContent) {
-            //console.log(element.textContent)
-            var matches = element.textContent.match(regex);
-            if (matches) {
-                // Si des correspondances sont trouvées, on check 
-                matches.forEach(function(match) {
+//         // Vérifier si l\'élément contient du texte
+//         if (element.textContent) {
+//             //console.log(element.textContent)
+//             var matches = element.textContent.match(regex);
+//             if (matches) {
+//                 // Si des correspondances sont trouvées, on check 
+//                 matches.forEach(function(match) {
 
-                    //dossier de ligue new
-                    element.parentNode.parentNode.parentNode.parentNode.remove();
+//                     //dossier de ligue new
+//                     element.parentNode.parentNode.parentNode.parentNode.remove();
 
-                    if(firstDigit){
-                        if (!element.textContent.includes(firstDigit)){
-                            //on supprime
-                            element.parentNode.parentNode.parentNode.parentNode.remove();
-                            //console.log("Élément supprimé:", element.parentNode.parentNode.parentNode.parentNode);
-                            // console.log("Texte entre crochets :", match);
-                        }
-                    }  else {
-                        //on supprime pas
-                        //element.parentNode.parentNode.parentNode.parentNode.remove();
-                    }
+//                     if(firstDigit){
+//                         if (!element.textContent.includes(firstDigit)){
+//                             //on supprime
+//                             element.parentNode.parentNode.parentNode.parentNode.remove();
+//                             //console.log("Élément supprimé:", element.parentNode.parentNode.parentNode.parentNode);
+//                             // console.log("Texte entre crochets :", match);
+//                         }
+//                     }  else {
+//                         //on supprime pas
+//                         //element.parentNode.parentNode.parentNode.parentNode.remove();
+//                     }
                     
-                });
-            }
-        }
-    });
+//                 });
+//             }
+//         }
+//     });
 
-    ';
+//     ';
 
 
 echo '
@@ -489,13 +502,3 @@ echo '
     
     </script>';
 
-if ($group) {
-    //on affiche seulement le dossier de la région
-    echo '<script>
-    
-// window.onload = function(){
-    
-
-// };
-</script>';
-}

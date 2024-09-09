@@ -1002,6 +1002,67 @@ function getCourseActivitiesRapport($courseid)
 }
 
 
+function getModule($activityid)
+{
+    global $DB;
+    $module = $DB->get_record_sql("SELECT cm.id as id,
+    activity.activityname, c.id AS courseid, c.fullname AS coursename,
+    cm.instance AS activityid, m.id as activitytypeid, m.name AS activitytype, cm.section as sectionid
+    FROM mdl_course_modules cm
+    JOIN mdl_course c ON c.id = cm.course
+    JOIN mdl_modules m ON m.id = cm.module
+    LEFT JOIN (
+        SELECT a.id, a.name AS activityname, 'scorm' AS activitytype
+        FROM mdl_scorm a
+        UNION
+        SELECT a.id, a.name AS activityname, 'forum' AS activitytype
+        FROM mdl_forum a
+        UNION
+        SELECT a.id, a.name AS activityname, 'label' AS activitytype
+        FROM mdl_label a
+        UNION
+        SELECT a.id, a.name AS activityname, 'url' AS activitytype
+        FROM mdl_url a
+        UNION
+        SELECT a.id, a.name AS activityname, 'page' AS activitytype
+        FROM mdl_page a
+        UNION
+        SELECT a.id, a.name AS activityname, 'quiz' AS activitytype
+        FROM mdl_quiz a
+        UNION
+        SELECT a.id, a.name AS activityname, 'data' AS activitytype
+        FROM mdl_data a
+        UNION
+        SELECT a.id, a.name AS activityname, 'assign' AS activitytype
+        FROM mdl_assign a
+        UNION
+        SELECT a.id, a.name AS activityname, 'folder' AS activitytype
+        FROM mdl_folder a
+        UNION
+        SELECT a.id, a.name AS activityname, 'resource' AS activitytype
+        FROM mdl_resource a
+        UNION
+        SELECT a.id, a.name AS activityname, 'lesson' AS activitytype
+        FROM mdl_lesson a
+        UNION
+        SELECT a.id, a.name AS activityname, 'feedback' AS activitytype
+        FROM mdl_feedback a
+        UNION
+        SELECT a.id, a.name AS activityname, 'bigbluebuttonbn' AS activitytype
+        FROM mdl_bigbluebuttonbn a
+        UNION
+        SELECT a.id, a.name AS activityname, 'glossary' AS activitytype
+        FROM mdl_glossary a
+        UNION
+        SELECT a.id, a.name AS activityname, 'book' AS activitytype
+        FROM mdl_book a
+    ) activity ON activity.id = cm.instance AND activity.activitytype = m.name
+    WHERE cm.deletioninprogress = 0 AND cm.id = " . $activityid, null);
+
+    return $module;
+}
+
+
 //compte le nombre d'activité d'une section
 function countSectionActivities($sectionid, $courseid)
 {

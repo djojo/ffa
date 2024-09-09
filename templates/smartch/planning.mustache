@@ -216,10 +216,10 @@ function getSessions(timestart, groupid){
 
                     // Initialiser Select2 sur l'élément select
                     $(document).ready(function() {
-                        $('#group-select').select2({
-                            placeholder: "Sélectionnez un groupe",
-                            allowClear: true
-                        });
+                        //$('#group-select').select2({
+                        //    placeholder: "Sélectionnez un groupe",
+                        //    allowClear: true
+                        //});
                     });
             
                     //alert(events.length);
@@ -229,14 +229,16 @@ function getSessions(timestart, groupid){
                     if(events.length == 0){
 
                         if(nextsession){
-                          html += '<div style="display: flex; align-items: center; justify-content: center; height: 400px;width:100%;">Aucune session à venir</div>';
+                          html += '<div style="display: flex; align-items: center; justify-content: center; height: 400px;width:100%;">Aucun évenement à venir</div>';
                         } else {
-                          html += '<div style="display: flex; align-items: center; justify-content: center; height: 400px;width:100%;">Aucune session prévue ce jour</div>';
+                          html += '<div style="display: flex; align-items: center; justify-content: center; height: 400px;width:100%;">Aucun évenement prévue ce jour</div>';
                         }
                         
 
                     } else {
                         events.forEach(event=>{
+
+                          console.log(event);
 
                           html += '<div class="col-6">';
 
@@ -265,7 +267,11 @@ function getSessions(timestart, groupid){
                             html += '<div style="display: flex;align-items:center;justify-content:space-between;">';
                             
                             html += '<div>';
-                            html += '<div style="font-size:1.5rem;font-weight:bold;cursor:pointer;" class="FFABold">'+event.coursename+' • '+event.groupname+' • '+event.matiere+' </div>';
+                            if(event.groupname){
+                              html += '<div style="font-size:1.5rem;font-weight:bold;cursor:pointer;" class="FFABold">'+event.coursename+' • '+event.groupname+' • '+event.matiere+' </div>';
+                            } else {
+                              html += '<div style="font-size:1.5rem;font-weight:bold;cursor:pointer;" class="FFABold">'+event.title+'</div>';
+                            }
                             html += '<div>' + event.info + '</div>';
                             //html += '<div style="font-size:0.8rem;color:#3CAFE3;">'+event.coursename+'</div>';
                             //html += '<div>'+event.info+'</div>';
@@ -334,8 +340,8 @@ function getMidnightTimestamps(inputTimestamp) {
 
 <script>
 
-$(document).ready(function() {
+  $(document).ready(function() {
         $(".select2").select2();
     });
 
-</script>';
+</script>

@@ -11,7 +11,8 @@ foreach ($sections as $section) {
         $plannings = getSectionPlannings($courseid, $session->id, $section->id);
         // var_dump($plannings);
         // var_dump($plannings);
-        $content .= "<div>Il y a " . count($plannings) . ' session plannings pour la section ' . $section->id . '</div> ';
+        
+        // $content .= "<div>Il y a " . count($plannings) . ' session plannings pour la section ' . $section->id . '</div> ';
 
 
         //les activitées planning déjà affiché
@@ -54,7 +55,6 @@ foreach ($sections as $section) {
         //si il y a une session donc peut etre des plannings
         if ($activity) {
             if ($activity->activitytype == "face2face") {
-
 
                 if ($plannings) {
 

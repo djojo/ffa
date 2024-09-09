@@ -33,7 +33,8 @@ use moodle_url;
 use stdClass;
 
 require_once(__DIR__ . '/../../../../calendar/externallib.php');
-// require_once('/../../views/utils.php');
+require_once($CFG->dirroot . '/calendar/lib.php');
+require_once($CFG->dirroot . '/theme/remui/views/utils.php');
 // require_once($CFG->dirroot . '/course/lib.php');
 // require_once('./smartch_functions.php');
 
@@ -110,6 +111,97 @@ trait get_smartch_calendar
 
         $events = array();
 
+
+        // Obtenir les cours de l'utilisateur pour les passer dans calendar_get_events
+        // $user_courses = enrol_get_users_courses($USER->id);
+        // // Extraire les IDs des cours
+        // $courseids = array();
+        // foreach ($user_courses as $course) {
+        //     $courseids[] = $course->id;
+        // }
+
+
+        //On va chercher les events de la plateforme
+        $modulesevents = calendar_get_events(time(), intval(time() + 60*60*24*30*2), $USER->id, true, true);
+        // Vérifier et traiter les événements récupérés
+        if (!empty($modulesevents)) {
+            // Traiter les événements...
+            foreach ($modulesevents as $eventmodule) {
+
+                $eventformated = new stdClass();
+
+                $sql = "
+                    SELECT cs.id AS sectionid
+                    FROM {course_modules} cm
+                    JOIN {course_sections} cs ON cm.section = cs.id
+                    WHERE cm.course = :courseid
+                    AND cm.instance = :instance
+                    AND cm.module = (
+                        SELECT id FROM {modules} WHERE name = :modulename
+                    )
+                ";
+
+                // Exécution de la requête
+                $params = [
+                    'courseid' => $eventmodule->courseid,
+                    'instance' => $eventmodule->instance,
+                    'modulename' => $eventmodule->modulename,
+                ];
+
+                $section = $DB->get_record_sql($sql, $params);
+
+                //on change l'url en fonction du rôle
+                $eventformated->url = new moodle_url('/theme/remui/views/courses/details.php?id=' . $eventmodule->courseid) . '&sectionid=' . reset($section) . '#modulesformation';
+                // $eventformated->url = new moodle_url('/').'mod/'.$eventmodule->modulename. '/view.php?id='.$module->id;
+
+                //on va cherche le cours
+                $courseevent = $DB->get_record('course', ['id'=>$eventmodule->courseid]);
+
+                $eventformated->coursename = "";
+                $eventformated->title = $eventmodule->name;
+                $eventformated->groupname = "";
+                $eventformated->adress1 = "";
+                $eventformated->adress2 = "";
+                $eventformated->zip = "";
+                $eventformated->city = "";
+                $eventformated->actual = $rolename;
+                
+                $eventformated->matiere = "";
+                $eventformated->start = userdate($eventmodule->timestart, '%d/%m');
+                $eventformated->end = date('Y-m-d\TH:i:s', $eventmodule->timeend);
+                
+                $eventformated->info = '
+                    <div style="display:flex;align-items:center;">
+
+                    <div style="display:flex;align-items:center;">
+                        <svg style="width:20px;" class="mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5" />
+                        </svg>
+
+                        <span class="mr-4 FFARegular"><div>'.$courseevent->fullname.'</div></span>
+                    </div>
+
+                    <div style="display:flex;align-items:center;">
+                        <svg style="width:20px;" class="mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z"></path>
+                        </svg>
+                        <span class="mr-4 FFARegular"><div>'.userdate($eventmodule->timestart, '%Hh%M').'</div></span>
+                    </div>
+
+                    </div>
+                    
+                    ';
+
+                array_push($events, $eventformated);
+
+            }
+        } else {
+            // echo "Aucun événement trouvé pour les 3 prochains mois.";
+        }
+
+
+
+
         $filter = '';
 
 
@@ -171,7 +263,6 @@ trait get_smartch_calendar
             $event->adress2 = $planning->adress2;
             $event->zip = $planning->zip;
             $event->city = $planning->city;
-            $event->info = $planning->location;
             $event->actual = $rolename;
 
             
