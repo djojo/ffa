@@ -923,26 +923,18 @@ object{
 
 //PARAM COURSE
 
-#id_courseformathdr{
-    display: none !important;
-}
-#id_appearancehdr{
-    display: none !important;
-}
-#id_filehdr{
-    display: none !important;
-}
-#id_completionhdr{
-    display: none !important;
-}
-#id_groups{
-    display: none !important;
-}
-#id_rolerenaming{
-    display: none !important;
-}
+#id_courseformathdr,
+#id_appearancehdr,
+#id_filehdr,
+#id_rolerenaming,
+#id_groups, 
+#id_completionhdr,
 #id_tagshdr{
     display: none !important;
+}
+
+.mediaplugin>div {
+    max-width: 100% !important;
 }
 
 

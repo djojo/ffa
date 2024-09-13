@@ -143,7 +143,7 @@ trait get_smartch_my_courses
             $el['prog'] = getCompletionPourcent($course->id, $USER->id);
 
            //on recupère le champs personnalisé diplome
-           $el['type'] = getCourseCustom($course->id, "type");
+           $el['type'] = getCourseCustomSelect($course->id, "type");
            //on recupère le champs personnalisé duration
            $el['duration'] = getCourseCustom($course->id, "duration");
             

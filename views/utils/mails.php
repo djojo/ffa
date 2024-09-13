@@ -9,17 +9,17 @@ isAdmin();
 
 global $CFG;
 
-$userid = optional_param('userid', 3, PARAM_INT);
-$courseid = optional_param('userid', 2, PARAM_INT);
-$groupid = optional_param('groupid', 1, PARAM_INT);
-$planningid = optional_param('planningid', 2, PARAM_INT);
+// $userid = optional_param('userid', 3, PARAM_INT);
+// $courseid = optional_param('userid', 2, PARAM_INT);
+// $groupid = optional_param('groupid', 1, PARAM_INT);
+// $planningid = optional_param('planningid', 2, PARAM_INT);
 
-smartchSendSubscriptionEmail($userid,$courseid);
-smartchSendGroupProgressionEmail($userid,$groupid,$planningid);
-smartchSendCompleteBlendedEmail($userid,$groupid,$planningid);
-smartchSendCompleteElearningEmail($userid,$groupid);
-smartchSendQCMEndModuleEmail($userid,$courseid);
-smartchSendQCMEndModuleReminderEmail($userid,$courseid);
+// smartchSendSubscriptionEmail($userid,$courseid);
+// smartchSendGroupProgressionEmail($userid,$groupid,$planningid);
+// smartchSendCompleteBlendedEmail($userid,$groupid,$planningid);
+// smartchSendCompleteElearningEmail($userid,$groupid);
+// smartchSendQCMEndModuleEmail($userid,$courseid);
+// smartchSendQCMEndModuleReminderEmail($userid,$courseid);
 
 
 //Email d'inscription à une formation
@@ -92,6 +92,7 @@ function smartchSendSubscriptionEmail($userid, $courseid) {
 
 //Email de progression des inscrits de sa session
 // quand ? à J-5 d'une séance en face à face pédagogique
+// qui ? le formateur
 function smartchSendGroupProgressionEmail($userid, $groupid, $planningid) {
 
     global $DB;

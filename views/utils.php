@@ -451,6 +451,29 @@ function getCourseCustom($courseid, $shortname){
     return "";
 }
 
+function getCourseCustomSelect($courseid, $shortname){
+    global $DB;
+
+    if(!$shortname || !$courseid){
+        return "";
+    }
+    //on recupère les champs personnalisés
+    $result = $DB->get_record_sql('
+    SELECT cd.value, cf.configdata 
+    FROM mdl_customfield_data cd
+    JOIN mdl_customfield_field cf ON cf.id = cd.fieldid
+    WHERE cd.instanceid = ' . $courseid . ' AND cf.shortname = "'.$shortname.'"', null);
+    if ($result) {
+        $data = json_decode($result->configdata, true);
+        // Extraire la chaîne 'options' et la diviser en un tableau
+        $options = explode("\r\n", $data['options']);
+        // var_dump($options[$result->value]);
+        // die();
+        return $options[$result->value - 1];
+    }
+    return "";
+}
+
 // function displayHeaderActivity2($backurl, $coursetitle, $activityname, $isactivity)
 // {
 //     $content = "";
@@ -1060,6 +1083,29 @@ function getModule($activityid)
     WHERE cm.deletioninprogress = 0 AND cm.id = " . $activityid, null);
 
     return $module;
+}
+
+function getUserRoleSystem($userid = null)
+{
+    global $DB, $USER;
+    if (!$userid) {
+        $userid = $USER->id;
+    }
+    $role = null;
+    // $assignments = $DB->get_records('role_assignments', ['userid' => $userid]);
+    // Récupérer les affectations de rôles de l'utilisateur avec le contexte de niveau système
+    $assignments = $DB->get_records_sql("
+        SELECT ra.*
+        FROM {role_assignments} ra
+        JOIN {context} c ON ra.contextid = c.id
+        WHERE ra.userid = :userid
+        AND c.contextlevel = :contextlevel
+        ", ['userid' => $userid, 'contextlevel' => CONTEXT_SYSTEM]);
+    foreach ($assignments as $assignment) {
+        $role = $DB->get_record('role', ['id' => $assignment->roleid]);
+        break;
+    }
+    return $role;
 }
 
 
@@ -3700,4 +3746,28 @@ function checkIfUsernameIsINNO($chaine) {
     } else {
         return false; // La chaîne est un email
     }
+}
+
+function getCourseModulesWithType($type, $courseid)
+{
+    global $DB;
+    $modules = [];
+
+    //on va chercher les cours
+    $sections = getCourseSections($courseid);
+    foreach ($sections as $section) {
+        $tableau = explode(',', $section->sequence);
+        $tableau = array_map('intval', $tableau);
+        foreach ($tableau as $val) {
+            $module = getModule($val);
+            if($module){
+                //on choisit uniquement les modules spécifiques
+                if($module->activitytype == $type){
+                    array_push($modules, $module);
+                }
+            }
+        }
+    }
+    
+    return $modules;
 }
