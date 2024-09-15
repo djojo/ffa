@@ -497,8 +497,8 @@ foreach ($teamates as $teamate) {
     $user = $DB->get_record('user', ['id' => $teamate->id]);
 
     // $userprofileurl = new moodle_url('/theme/remui/views/adminuser.php?return=group&groupid=' . $groupid . '&userid=' . $teamate->userid);
-    // $userselectedurl = new moodle_url('/theme/remui/views/groups/details.php?return=' . $return . '&groupid=' . $groupid . '&userid=' . $teamate->id . $filtersearch . '#selected-' . $user->id);
-    $userselectedurl = new moodle_url('/theme/remui/views/users/details.php') . '?userid=' . $teamate->id . '&returnurl='.$PAGE->url;
+    $userselectedurl = new moodle_url('/theme/remui/views/groups/details.php?return=' . $return . '&groupid=' . $groupid . '&userid=' . $teamate->id . $filtersearch . '#selected-' . $user->id);
+    // $userselectedurl = new moodle_url('/theme/remui/views/users/details.php') . '?userid=' . $teamate->id . '&returnurl='.$PAGE->url;
     $reseturl = new moodle_url('/theme/remui/views/groups/details.php?return=' . $return . '&groupid=' . $groupid . $filtersearch . '#group');
     //on va chercher la prog si il y a des activités (cours non annulé)
     if (count($activities) > 0) {
@@ -558,66 +558,69 @@ $content .= '
     ';
 
 
-// if (!$userid) {
-//     //on va chercher les logs du groupe
-//     $logs = $DB->get_records_sql('SELECT sa.id, sa.timespent FROM mdl_smartch_activity_log sa
-//     JOIN mdl_groups_members gm ON gm.userid = sa.userid
-//     WHERE sa.course = ' . $courseid . ' AND gm.groupid =  ' . $group->id, null);
+if (!$userid) {
+    //on va chercher les logs du groupe
+    $logs = $DB->get_records_sql('SELECT sa.id, sa.timespent FROM mdl_smartch_activity_log sa
+    JOIN mdl_groups_members gm ON gm.userid = sa.userid
+    WHERE sa.course = ' . $courseid . ' AND gm.groupid =  ' . $group->id, null);
 
-//     $timetotal = 0;
-//     foreach ($logs as $log) {
-//         $timetotal += $log->timespent;
-//     }
+    $timetotal = 0;
+    foreach ($logs as $log) {
+        $timetotal += $log->timespent;
+    }
 
-//     $timespent = convert_to_string_time($timetotal);
-//     if ($session) {
-//         $sessionid = $session->id;
-//     } else {
-//         $sessionid = null;
-//     }
-//     //on va chercher les stats du groupe
-//     $progress = getTeamProgress($courseid, $group->id, $sessionid);
+    $timespent = convert_to_string_time($timetotal);
+    if ($session) {
+        $sessionid = $session->id;
+    } else {
+        $sessionid = null;
+    }
+    //on va chercher les stats du groupe
+    $progress = getTeamProgress($courseid, $group->id, $sessionid);
 
-//     $templatecontextstats = (object)[
-//         'timespent' => $timespent,
-//         'progress' => $progress[0],
-//         'progressmax' => $progress[1],
-//         'progressmin' => $progress[2]
-//     ];
+    $templatecontextstats = (object)[
+        'timespent' => $timespent,
+        'progress' => $progress[0],
+        'progressmax' => $progress[1],
+        'progressmin' => $progress[2]
+    ];
 
-//     //les stats sur ce groupe
-//     $content .= $OUTPUT->render_from_template('theme_remui/smartch_team_score', $templatecontextstats);
-// } else {
+    //les stats sur ce groupe
+    $content .= $OUTPUT->render_from_template('theme_remui/smartch_team_score', $templatecontextstats);
+} else {
 
-//     //on va chercher si il y a un log
-//     $logs = $DB->get_records_sql('SELECT * FROM mdl_smartch_activity_log WHERE course = ' . $courseid . ' AND userid = ' . $userid, null);
+    //un apprennant est sélectionné
 
-//     $timetotal = 0;
-//     foreach ($logs as $log) {
-//         $timetotal += $log->timespent;
-//     }
+    //on va chercher si il y a un log
+    $logs = $DB->get_records_sql('SELECT * FROM mdl_smartch_activity_log WHERE course = ' . $courseid . ' AND userid = ' . $userid, null);
 
-//     $timespent = convert_to_string_time($timetotal);
+    $timetotal = 0;
+    foreach ($logs as $log) {
+        $timetotal += $log->timespent;
+    }
 
-//     //on va chercher les stats de l'utilisateur
-//     $modulesstatus = getModulesStatus($courseid, $session->id, $userid);
+    $timespent = convert_to_string_time($timetotal);
 
-//     // $actsccc = getCourseActivitiesStats($courseid);
-//     $selecteduser = $DB->get_record('user', ['id' => $userid]);
-//     // $pourcent = $modulesstatus[0]/($modulesstatus[0]+$modulesstatus[1])*100;
+    //on va chercher les stats de l'utilisateur
+    $modulesstatus = getModulesStatus($courseid, $session->id, $userid);
 
-//     $templatecontextstats = (object)[
-//         'title1' => 'Score de ',
-//         'title2' => $selecteduser->firstname . ' ' . $selecteduser->lastname,
-//         'timespent' => $timespent,
-//         // 'progress' => $pourcent,
-//         'progress' => getCompletionPourcent($courseid, $selecteduser->id),
-//         'modulesfinished' => $modulesstatus[0],
-//         'modulestocome' => $modulesstatus[1]
-//     ];
-//     //le score de l'étudiant sur ce cours
-//     $content .= $OUTPUT->render_from_template('theme_remui/smartch_course_your_score', $templatecontextstats);
-// }
+    // $actsccc = getCourseActivitiesStats($courseid);
+    $selecteduser = $DB->get_record('user', ['id' => $userid]);
+    // $pourcent = $modulesstatus[0]/($modulesstatus[0]+$modulesstatus[1])*100;
+    // var_dump($modulesstatus);
+    // die();
+    $templatecontextstats = (object)[
+        'title1' => 'Score de ',
+        'title2' => $selecteduser->firstname . ' ' . $selecteduser->lastname,
+        'timespent' => $timespent,
+        // 'progress' => $pourcent,
+        'progress' => getCompletionPourcent($courseid, $selecteduser->id),
+        'modulesfinished' => $modulesstatus[0],
+        'modulestocome' => $modulesstatus[1]
+    ];
+    //le score de l'étudiant sur ce cours
+    $content .= $OUTPUT->render_from_template('theme_remui/smartch_course_your_score', $templatecontextstats);
+}
 
 
 

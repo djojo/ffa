@@ -15,10 +15,10 @@ foreach ($user_courses as $course) {
 
 // var_dump($courseids);
 
-$events = calendar_get_events(time(), intval(time() + 60*60*24*30*2), $USER->id, true, true);
+$events = calendar_get_events(time(), intval(time() + 60*60*24*30*2), $USER->id, false, $courseids);
 
 $event = reset($events);
-// var_dump(reset($events));
+var_dump($events);
 
 $sql = "
     SELECT cs.id AS sectionid

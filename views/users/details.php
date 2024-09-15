@@ -26,7 +26,8 @@ if(!$userid){
 }
 
 //On va chercher le rôle le plus haut de l'utilisateur
-$rolename = getMainRole($userid);
+$role = getUserRole($userid);
+$rolename = $role->shortname;
 
 //le profil utilisateur
 $user = $DB->get_record('user', ['id' => $userid]);
@@ -124,19 +125,19 @@ img.smartch_background_header {
 </style>
 ';
 
-$role = "";
-//on affiche le rolename correctement
-if ($rolename == "student") {
-    $role = "Stagiaire";
-} else if ($rolename == "manager") {
-    $role = "Administrateur Formation";
-} else if ($rolename == "smalleditingteacher") {
-    $role = "Intervenant(e)";
-} else if ($rolename == "noneditingteacher") {
-    $role = "Concepteur";
-} else if ($rolename == "super-admin") {
-    $role = "Super Admin";
-}
+// $role = "";
+// //on affiche le rolename correctement
+// if ($rolename == "student") {
+//     $role = "Stagiaire";
+// } else if ($rolename == "manager") {
+//     $role = "Administrateur Formation";
+// } else if ($rolename == "smalleditingteacher") {
+//     $role = "Intervenant(e)";
+// } else if ($rolename == "noneditingteacher") {
+//     $role = "Concepteur";
+// } else if ($rolename == "super-admin") {
+//     $role = "Super Admin";
+// }
 
 
 
@@ -176,7 +177,6 @@ $content .= '<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="
                 <h3 class="FFABold FFF-Blue">
                     ' . $user->firstname . ' ' . $user->lastname . ' 
                 </h3>
-                <h5 class="FFF-Blue">' . $role . '</h5>
             </div>
         </div>
         <div style="cursor:pointer;" onclick="window.location.href=\'' . new moodle_url('/theme/remui/views/users/message.php') . '?userid=' . $user->id . '&returnurl='.$PAGE->url . '\'" class="fff-course-box-info-details">
@@ -298,16 +298,39 @@ foreach ($allcourses as $onecourse) {
 
     $content .= '<div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">';
 
-    if ($group) {
-        $content .= '<a href="' . new moodle_url('/theme/remui/views/adminteam.php') . '?teamid=' . $group->id . '&userid=' . $userid . '#selected-' . $userid . '">';
-    } else {
-        $content .= '<a href="' . new moodle_url('/theme/remui/views/courses/details.php') . '?id=' . $onecourse->id . '">';
-    }
+    
 
     //on va chercher la session du cours
     $groups = $DB->get_records_sql('SELECT g.id, g.name FROM mdl_groups g
     JOIN mdl_groups_members gm ON gm.groupid = g.id
     WHERE gm.userid = ' . $user->id . ' AND g.courseid = ' . $onecourse->id, null);
+
+    // var_dump($role->shortname);
+    // die();
+    //si on est dans une session et small editing
+    if (count($groups)>0) {
+        //il est manager ou admin
+        if($rolename == "super-admin" || $rolename == "manager"){
+            $content .= '<a href="' . new moodle_url('/theme/remui/views/groups/details.php') . '?groupid=' . reset($groups)->id . '&userid=' . $userid . '#selected-' . $userid . '">';
+        } else if($rolename == "smalleditingteacher"){
+            //il est formateur
+            //on va chercher son role dans le cours
+            $rolecourse = getUserRoleFromCourse($onecourse->id);
+            // var_dump($rolecourse);
+            // die();
+            //il est formateur dans ce cours
+            if($rolecourse->shortname == "teacher" || $rolecourse->shortname == "noneditingteacher" || $rolecourse->shortname == "editingteacher"){
+                $content .= '<a href="' . new moodle_url('/theme/remui/views/groups/details.php') . '?groupid=' . reset($groups)->id . '&userid=' . $userid . '#selected-' . $userid . '">';
+            } else {
+                $content .= '<a href="' . new moodle_url('/theme/remui/views/courses/details.php') . '?id=' . $onecourse->id . '">';
+            }
+        } else {
+            $content .= '<a href="' . new moodle_url('/theme/remui/views/courses/details.php') . '?id=' . $onecourse->id . '">';
+        }
+    } else {
+        //il est etudiant
+        $content .= '<a href="' . new moodle_url('/theme/remui/views/courses/details.php') . '?id=' . $onecourse->id . '">';
+    }
 
     //si l'utilisateur à un groupe
     if (count($groups) > 0) {

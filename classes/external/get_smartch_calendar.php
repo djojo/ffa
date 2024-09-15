@@ -113,16 +113,17 @@ trait get_smartch_calendar
 
 
         // Obtenir les cours de l'utilisateur pour les passer dans calendar_get_events
-        // $user_courses = enrol_get_users_courses($USER->id);
-        // // Extraire les IDs des cours
-        // $courseids = array();
-        // foreach ($user_courses as $course) {
-        //     $courseids[] = $course->id;
-        // }
+        $user_courses = enrol_get_users_courses($USER->id);
+        // Extraire les IDs des cours
+        $courseids = array();
+        foreach ($user_courses as $course) {
+            $courseids[] = $course->id;
+        }
 
 
         //On va chercher les events de la plateforme
-        $modulesevents = calendar_get_events(time(), intval(time() + 60*60*24*30*2), $USER->id, true, true);
+        // a 60 jours prêt
+        $modulesevents = calendar_get_events(time(), intval(time() + 60*60*24*30*2), $USER->id, false, $courseids);
         // Vérifier et traiter les événements récupérés
         if (!empty($modulesevents)) {
             // Traiter les événements...

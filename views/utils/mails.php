@@ -77,7 +77,7 @@ function smartchSendSubscriptionEmail($userid, $courseid) {
 
     $contentmail .= displayFooterMail();
 
-    echo $contentmail;
+    // echo $contentmail;
 
     //on format à partir du template
     $contentmail = smartchFormatEmail($contentmail, $user);
@@ -143,7 +143,7 @@ function smartchSendGroupProgressionEmail($userid, $groupid, $planningid) {
 
     $contentmail .= displayFooterMail();
 
-    echo $contentmail;
+    // echo $contentmail;
 
     //on format à partir du template
     $contentmail = smartchFormatEmail($contentmail, $user);
@@ -208,7 +208,7 @@ function smartchSendCompleteBlendedEmail($userid, $groupid, $planningid) {
 
     $contentmail .= displayFooterMail();
 
-    echo $contentmail;
+    // echo $contentmail;
 
     //on format à partir du template
     $contentmail = smartchFormatEmail($contentmail, $user);
@@ -279,7 +279,7 @@ function smartchSendCompleteElearningEmail($userid, $groupid) {
 
     $contentmail .= displayFooterMail();
 
-    echo $contentmail;
+    // echo $contentmail;
 
     //on format à partir du template
     $contentmail = smartchFormatEmail($contentmail, $user);
@@ -340,7 +340,7 @@ function smartchSendQCMEndModuleEmail($userid, $courseid) {
 
     $contentmail .= displayFooterMail();
 
-    echo $contentmail;
+    // echo $contentmail;
 
     //on format à partir du template
     $contentmail = smartchFormatEmail($contentmail, $user);
@@ -403,7 +403,7 @@ function smartchSendQCMEndModuleReminderEmail($userid, $courseid) {
 
     $contentmail .= displayFooterMail();
 
-    echo $contentmail;
+    // echo $contentmail;
 
     //on format à partir du template
     $contentmail = smartchFormatEmail($contentmail, $user);

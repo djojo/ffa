@@ -61,6 +61,9 @@ if($rolename == "student"){
         // die();
         //il y a un responsable pedagogique (coach)
         if($coach[1]){
+
+        $urlmessageresponsable = new moodle_url('/theme/remui/views/users/message.php') . '?userid=' . $coach[1]->id . '&returnurl='.$PAGE->url;
+
         $content .= '<div class="fff-course-box-info-details">
                         <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="24" cy="24" r="24" fill="#E2E8F0"/>
@@ -70,7 +73,7 @@ if($rolename == "student"){
                         <div style="margin-left: 25px;">
                             <h3 class="FFABold FFF-Blue" style="font-size:16px;display:flex;align-items:center;">
                                     '.$coach[0].'
-                                    <a href="{{urlmessageresponsable}}">
+                                    <a href="'.$urlmessageresponsable.'">
                                         <svg class="ml-2" width="20" height="16" viewBox="0 0 20 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M1 4L8.8906 9.2604C9.5624 9.70827 10.4376 9.70827 11.1094 9.2604L19 4M3 15H17C18.1046 15 19 14.1046 19 13V3C19 1.89543 18.1046 1 17 1H3C1.89543 1 1 1.89543 1 3V13C1 14.1046 1.89543 15 3 15Z" stroke="#00315a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                         </svg>
@@ -81,18 +84,6 @@ if($rolename == "student"){
                     </div>';
         }
     }
-}
-
-
-
-
-
-    
-//category
-if(false){
-    $content .= '<h5 class="FFABold FFF-Blue" style="font-size:12px;">
-                     {{coursetype}} • {{category}} 
-                </h5>';
 }
 
 
@@ -134,23 +125,23 @@ if($rolename == "student"){
 }
 
 //ligue
-if(false){
+// if(false){
                 
-$content .= '
-                {{#ligue}}
-                <div class="fff-course-box-info-details">
-                    {{! <svg class="mr-2" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2ZM0 10C0 4.47715 4.47715 0 10 0C15.5228 0 20 4.47715 20 10C20 15.5228 15.5228 20 10 20C4.47715 20 0 15.5228 0 10ZM10 5C10.5523 5 11 5.44772 11 6V9.58579L13.7071 12.2929C14.0976 12.6834 14.0976 13.3166 13.7071 13.7071C13.3166 14.0976 12.6834 14.0976 12.2929 13.7071L9.29289 10.7071C9.10536 10.5196 9 10.2652 9 10V6C9 5.44772 9.44771 5 10 5Z" fill="#00315a"/>
-                    </svg> }}
-                    <svg class="mr-2 smartch_svg" width="24" height="24"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z" />
-                    </svg>
+// $content .= '
+//                 {{#ligue}}
+//                 <div class="fff-course-box-info-details">
+//                     {{! <svg class="mr-2" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+//                         <path fill-rule="evenodd" clip-rule="evenodd" d="M10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2ZM0 10C0 4.47715 4.47715 0 10 0C15.5228 0 20 4.47715 20 10C20 15.5228 15.5228 20 10 20C4.47715 20 0 15.5228 0 10ZM10 5C10.5523 5 11 5.44772 11 6V9.58579L13.7071 12.2929C14.0976 12.6834 14.0976 13.3166 13.7071 13.7071C13.3166 14.0976 12.6834 14.0976 12.2929 13.7071L9.29289 10.7071C9.10536 10.5196 9 10.2652 9 10V6C9 5.44772 9.44771 5 10 5Z" fill="#00315a"/>
+//                     </svg> }}
+//                     <svg class="mr-2 smartch_svg" width="24" height="24"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+//                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z" />
+//                     </svg>
 
-                    <span class="mr-4 FFABold" style="font-size:12px;">{{ligue}}</span>
-                </div>
-                {{/ligue}}
-               ';
-}
+//                     <span class="mr-4 FFABold" style="font-size:12px;">{{ligue}}</span>
+//                 </div>
+//                 {{/ligue}}
+//                ';
+// }
 
 $content .= '</div>';
 
@@ -160,7 +151,6 @@ $content .= '</div>';
 
 //course summary
 if($course->summary){
-    // $content .= '<h5 class="FFABold FFF-Blue" style="font-size:16px;padding:20px 0 10px 0px;">OBJECTIFS</h5>';
     $content .= '<div id="smartch_summary" class="FFARegular FFF-Blue" style="font-size: 14px; !important;max-height: 180px; overflow: hidden;">'.html_entity_decode($course->summary).'</div>';
     if(strlen(strip_tags($course->summary))> 800){
         $content .= '
@@ -171,18 +161,7 @@ if($course->summary){
     }
 }
 
-        
-//manager
-// if(false){
-
-// }
-// $content .= '
-//             <a href="{{editurl}}">
-//                 <svg style="width: auto;" data-toggle="tooltip" data-placement="top" title="Modifier le parcours" class="iconsvg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-//                     <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
-//                 </svg>
-//             </a>';
-               
+      
 $content .= '</div>';//col-6
 
 

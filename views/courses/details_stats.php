@@ -55,7 +55,9 @@ if($rolename == "super-admin" || $rolename == "manager" || $rolename == "smalled
 
 } else if($rolename == "student"){
 
-    $modulesstatus = getModulesStatus($courseid, null, $userid);
+    //on va chercher la session du gars
+
+    $modulesstatus = getModulesStatus($courseid, $session->id, $userid);
     $finished = $modulesstatus[0];
     $timespent = getTimeSpentOnCourse($USER->id, $courseid);
     $content .= '<div style="border:1px solid #3cafe3;border-radius:10px;padding:20px;margin-top:30px;">';

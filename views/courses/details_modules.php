@@ -496,9 +496,5 @@ if ($sectionid) {
 //     ';
 
 
-echo '
-
-  };
-    
-    </script>';
+echo '</script>';
 

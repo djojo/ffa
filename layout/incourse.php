@@ -103,3 +103,17 @@ require_once($CFG->dirroot.'/local/smartch_tracker/api/tracker.php');
 if($PAGE->cm->id && $COURSE){
     smartchTrackTime($PAGE->cm->id, $COURSE->id);    
 }
+
+//si c'est un scorm on rentre directement dedans
+if($PAGE->cm->modname == "scorm"){
+    
+    echo '<script>
+        let btnenterscorm = document.getElementById("scormviewform")
+        if(btnenterscorm){
+            //on cache la page
+            document.getElementById("topofscroll").style.display = "none";
+            //on clique sur le bouton pour rentrer dans le scorm
+            btnenterscorm.submit();
+        }
+    </script>';
+}

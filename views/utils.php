@@ -1101,6 +1101,8 @@ function getUserRoleSystem($userid = null)
         WHERE ra.userid = :userid
         AND c.contextlevel = :contextlevel
         ", ['userid' => $userid, 'contextlevel' => CONTEXT_SYSTEM]);
+    var_dump($assignments);
+    die();
     foreach ($assignments as $assignment) {
         $role = $DB->get_record('role', ['id' => $assignment->roleid]);
         break;
@@ -2437,8 +2439,6 @@ function getModulesStatus($courseid, $sessionid = null, $userid = null)
             WHERE c.id = ' . $courseid . ' AND sp.sessionid = ' . $sessionid . '
             ORDER BY sp.startdate ASC', null);
 
-        
-
         $planningactivities = 0;
         $planningcomplete = 0;
         foreach ($plannings as $planning) {
@@ -2468,7 +2468,7 @@ function getModulesStatus($courseid, $sessionid = null, $userid = null)
         $modulestocome = 0;
     }
 
-    return array($modulesfinished, $modulestocome);
+    return array($modulesfinished, $modulestocome, $totalactivities);
 }
 
 function getCompletionRatio($courseid)
@@ -2494,18 +2494,21 @@ function getCompletionRatio($courseid)
 
 function getCompletionPourcent($courseid, $userid = null)
 {
-    global $DB, $USER;
+    global $USER;
     if (!$userid) {
         $userid = $USER->id;
     }
 
     $modulesstatus = getModulesStatus($courseid, null, $userid);
-    $dividor = ($modulesstatus[0]+$modulesstatus[1])*100;
+    $dividor = $modulesstatus[2];
     if($dividor == 0){
         $dividor = 1;
     }
-    $pourcent = $modulesstatus[0]/$dividor;
-    return number_format($pourcent, 2);
+    $pourcent = ($modulesstatus[0]/$dividor)*100;
+    $formatpourcent = number_format($pourcent, 2);
+    // var_dump($formatpourcent);
+    // die();
+    return $formatpourcent;
     
 
 

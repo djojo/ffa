@@ -1,5 +1,7 @@
 <?php
 
+        
+
 
         $coursescompleted = 0;
         $activitiescomplete = 0;
@@ -7,7 +9,7 @@
         $totalactivities = 0;
 
         $querycourses = 'SELECT c.id, c.fullname FROM mdl_course c
-            JOIN mdl_role_assignments ra ON ra.userid = ' . $USER->id . '
+            JOIN mdl_role_assignments ra ON ra.userid = ' . $userid . '
             JOIN mdl_context ct ON ct.id = ra.contextid AND c.id = ct.instanceid
             JOIN mdl_role r ON r.id = ra.roleid
             WHERE c.format != "site" AND c.visible = 1';
@@ -81,7 +83,7 @@
                 $query = 'SELECT cmc.id, cmc.completionstate
                     FROM mdl_course_modules_completion cmc
 
-                    WHERE cmc.userid = ' . $USER->id . ' AND cmc.coursemoduleid = ' . $activity->id;
+                    WHERE cmc.userid = ' . $userid . ' AND cmc.coursemoduleid = ' . $activity->id;
                 $arr = $DB->get_records_sql($query, null);
                 $arrobject = reset($arr);
                 if ($arrobject) {
@@ -95,7 +97,7 @@
             //on va chercher la session du cours
             $groups = $DB->get_records_sql('SELECT g.id, g.name FROM mdl_groups g
         JOIN mdl_groups_members gm ON gm.groupid = g.id
-        WHERE gm.userid = ' . $USER->id . ' AND g.courseid = ' . $course->id, null);
+        WHERE gm.userid = ' . $userid . ' AND g.courseid = ' . $course->id, null);
 
 
             if (count($groups) > 0) {
@@ -124,6 +126,8 @@
             }
         }
 
+        // var_dump()
+
         //on calcule
         if ($totalactivities == 0) {
             $activitiesprogress = '0%';
@@ -139,8 +143,9 @@
     // $finished = $modulesstatus[0];
     //on va chercher les logs de l'utilisateur
     $timetotal = 0;
-    $timetotal = $DB->get_records_sql('SELECT SUM(timespent) as totaltimespent FROM mdl_smartch_activity_log WHERE userid = ' . $USER->id, null);
-    $timespent = convert_to_string_time($timetotal->totaltimespent);
+    $timetotal = $DB->get_record_sql('SELECT SUM(timespent) as totaltimespent FROM mdl_smartch_activity_log WHERE userid = ' . $userid, null);
+    $timespent = convert_to_string_time(intval($timetotal->totaltimespent));
+    
 
     if($userid == $USER->id){
         $pronom = "Mes";
