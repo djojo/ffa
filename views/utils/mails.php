@@ -1,7 +1,7 @@
 <?php
 
 require_once(__DIR__ . '/../../../../config.php');
-require_once('../utils.php');
+require_once($CFG->dirroot.'/theme/remui/views/utils.php');
 require_once($CFG->libdir . '/moodlelib.php');
 
 require_login();
