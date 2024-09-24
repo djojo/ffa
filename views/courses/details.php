@@ -66,18 +66,17 @@ if (!$rolename) {
 
 $content = "";
 
-
 // on check si l'utilisateur est enrollé
-if (!checkIfUserIsEnrolled($courseid, $userid)) {
+if ($rolename == "student" && !checkIfUserIsEnrolled($courseid, $userid)) {
     //on récupère l'id de la formation gratuite
-    $catfree = $DB->get_record_sql('SELECT * from mdl_course_categories WHERE name = "Formation gratuite"', null);
-    if ($course->category == $catfree->id) {
-        //on va vers la page d'inscription
-        redirect(new moodle_url('/theme/remui/views/subscribe.php?courseid=' . $courseid));
-    } else {
+    // $catfree = $DB->get_record_sql('SELECT * from mdl_course_categories WHERE name = "Formation gratuite"', null);
+    // if ($course->category == $catfree->id) {
+    //     //on va vers la page d'inscription
+    //     redirect(new moodle_url('/theme/remui/views/subscribe.php?courseid=' . $courseid));
+    // } else {
         //on redirige vers l'accueil
         redirect(new moodle_url('/'));
-    }
+    // }
 }
 
 //le bouton de retour
