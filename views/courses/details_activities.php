@@ -189,6 +189,11 @@ foreach ($sections as $section) {
                 }
             } else {
 
+                //on vire les forums
+                if ($activity->activitytype == "forum") {
+                    continue;
+                }
+
                 //pour les dossiers saint pierre &amp;...
                 // var_dump($activity->activityname);
                 if (!$activity->activityname) {
@@ -199,7 +204,7 @@ foreach ($sections as $section) {
                 $completion = "";
 
                 //si le rôle est etudiant
-                if ($rolename == "student" || $userid) {
+                if ($rolename == "student") {
                     //on va chercher la complétion de l'activité
                     if ($activity->moduleid) {
                         // $completion = getActivityCompletionStatus($activity->moduleid, $activity->activityid);

@@ -79,13 +79,14 @@ if($rolename == "student"){
     //     display:none;
     // }
     // </style>';
+} else {
+    $isadmin = true;
 }
-
 
 
 //modification smartch ffa incourse.php
 $inmodule = true;
-$isadmin = true;
+
 $templatecontext['inmodule'] = $inmodule;
 $templatecontext['completion'] = $completion;
 $templatecontext['isadmin'] = $isadmin;
@@ -103,6 +104,7 @@ require_once($CFG->dirroot.'/local/smartch_tracker/api/tracker.php');
 if($PAGE->cm->id && $COURSE){
     smartchTrackTime($PAGE->cm->id, $COURSE->id);    
 }
+
 
 //si c'est un scorm on rentre directement dedans
 if($PAGE->cm->modname == "scorm"){

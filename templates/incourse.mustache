@@ -70,7 +70,10 @@
     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
         <div class="smartch_flex_mobile" style="padding:20px 30px;" style="justify-content: space-between;align-items: center;">
             <h2 style="letter-spacing:1px;max-width:70%;cursor:pointer;" onclick="location.href='{{formurl}}'" class="FFARegular FFF-Blue"><span style="text-transform: uppercase;">{{sectionname}}</span> • {{activityname}}</h2> 
-            {{{completion}}}
+            {{^isadmin}}
+                {{{completion}}}
+            {{/isadmin}}
+            
         </div>
   
 {{! 
