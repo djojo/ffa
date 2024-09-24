@@ -102,7 +102,7 @@ $content .= '<div style="display:flex;align-items:center;">
 }
 
 //on recupère le champs personnalisé diplome
-$diplome = getCourseCustom($course->id, "type");
+$diplome = getCourseCustomSelect($course->id, "type");
 if(!empty($diplome)){
 $content .= '<div style="display:flex;align-items:center;">
                 <svg style="width:20px;" class="mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
