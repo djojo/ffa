@@ -1302,6 +1302,15 @@ section#region-main .maincalendar .calendarmonth [data-region="day-content"] ul 
     width: 33%;
     border-radius: 15px;
   }
+  .smartch_progress_bar_gain_mini {
+    color: #333 !important;
+    background-color: $ffalightblue !important;
+    z-index: 8;
+    position: relative;
+    height: 100%;
+    width: 33%;
+    border-radius: 15px;
+  }
 
 
 //teams 

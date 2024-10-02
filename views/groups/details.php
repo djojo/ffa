@@ -545,7 +545,7 @@ foreach ($teamates as $teamate) {
     $content .= '<div class="smartch_progress_bar_box" style="width: 100%;">
                                 <div class="smartch_progress_bar_mini">
                                     <div class="smartch_progress_bar_number"></div>
-                                    <div class="smartch_progress_bar_gain" style="width:' . $courseprog . '% !important;"></div>
+                                    <div class="smartch_progress_bar_gain_mini" style="width:' . $courseprog . '% !important;"></div>
                                 </div>
                             </div>
                         </div>
