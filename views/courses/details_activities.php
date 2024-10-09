@@ -77,24 +77,6 @@ foreach ($sections as $section) {
                             break; // Sortir de la boucle une fois que le planning est trouvé
                         }
                     }
-                    // if (isset($planningTrouve)) {
-                    //     // Faites quelque chose avec $objetTrouve
-                    //     //var_dump($objetTrouve);
-                    // }
-                    // var_dump('DUMP');
-                    // $content .= "<div>Il reste " . count($plannings) . ' plannings</div> ';
-
-
-                    // $content .= '<div>--------------------------</div> ';
-                    // $indexToRetrieve = 1;
-
-                    // foreach ($plannings as $key => $value) {
-                    //     if ($indexToRetrieve == 0) {
-                    //         $planning = $value;
-                    //         break;
-                    //     }
-                    //     $indexToRetrieve--;
-                    // }
 
                     // var_dump($planning);
                     if ($planningTrouve  && $countplanning <= $countactivityplanning) {
@@ -337,26 +319,23 @@ foreach ($sections as $section) {
                     $available = $info->is_available($warnings);
                     
 
-                    if($available){
                         $content .= '<div style="display: flex;justify-content:space-between;">';
-                    } else {
-
-                        if (!empty($warnings)) {
-                            $content .= '<div style="color: #FF5733; position: absolute; padding: 30px; width: 100%; text-align: center; font-weight: bold;">' . $warnings . '</div>';
-
-                        }
-                        $content .= '<div style="display: flex; justify-content: space-between; background: rgba(0, 0, 0, 0.1); padding: 20px; border-radius: 3px;filter:blur(3px);">';
-
-                    }
                                         
                             $content .= '<div>';
                                 
                                 
-                                if ($activity->activitytype != "face2face") {
+                                if ($activity->activitytype != "face2face" && ($available || $rolename != "student")) {
                                     $content .= '<a href="' . $urlactivity . '">';
                                 }
-                                $content .= '<div class="FFABold fff-name-activity">' . $activity->activityname . '</div>';
-                                
+                                if($available || $rolename != "student"){
+                                    $content .= '<div class="FFABold fff-name-activity">' . $activity->activityname . '</div>';
+                                } else {
+                                    $content .= '<div style="color:grey;" class="FFABold fff-name-activity">' . $activity->activityname . '</div>';
+                                }
+                                if (!$available && !empty($warnings) && $rolename == "student") {
+                                    $content .= '<div style="color: #FF5733;font-weight: bold;">' . $warnings . '</div>';
+        
+                                }
                                 
                                 if ($activity->activitytype != "face2face") {
                                     $content .= '</a>'; //flex
