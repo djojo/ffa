@@ -323,42 +323,59 @@ foreach ($sections as $section) {
                     }
 
                     
+                    require_once($CFG->dirroot . '/course/lib.php');
+                    require_once($CFG->dirroot . '/availability/classes/info.php');
+                    // Récupérer les informations de l'activité
+                    $modinfo = get_fast_modinfo($courseid);
+                    $info = new \core_availability\info_module($modinfo->get_cm($activity->id));
+
+                    // Vérifier si l'activité est disponible pour l'utilisateur actuel
+                    // Variable pour stocker les messages de warning ou d'indisponibilité
+                    $warnings = '';
+
+                    // Vérifier si l'activité est disponible pour l'utilisateur actuel
+                    $available = $info->is_available($warnings);
                     
 
-                    $content .= '<div style="display: flex;justify-content:space-between;">';
-                    // if ($activity->activitytype != "face2face") {
-                    //     $content .= '<a href="' . $urlactivity . '">';
-                    // }
-                    // $content .= '<div class="course_activity_icon">
-                    //                         <svg style="padding:5px;" class="smartchactivityicon mr-4" width="18" height="21"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white"">
-                    //                             <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    //                             <path stroke-linecap="round" fill="white" stroke-linejoin="round" d="M15.91 11.672a.375.375 0 010 .656l-5.603 3.113a.375.375 0 01-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112z" />
-                    //                         </svg>
-    
-                    //                     </div>';
+                    if($available){
+                        $content .= '<div style="display: flex;justify-content:space-between;">';
+                    } else {
+
+                        if (!empty($warnings)) {
+                            $content .= '<div style="color: #FF5733; position: absolute; padding: 30px; width: 100%; text-align: center; font-weight: bold;">' . $warnings . '</div>';
+
+                        }
+                        $content .= '<div style="display: flex; justify-content: space-between; background: rgba(0, 0, 0, 0.1); padding: 20px; border-radius: 3px;filter:blur(3px);">';
+
+                    }
                                         
                             $content .= '<div>';
-                                            if ($activity->activitytype != "face2face") {
-                                                $content .= '<a href="' . $urlactivity . '">';
-                                            }
-                                            $content .= '<div class="FFABold fff-name-activity">' . $activity->activityname . '</div>';
-                                            if ($activity->activitytype != "face2face") {
-                                                $content .= '</a>'; //flex
-                                            }
-                                            $content .= '<div class="smartchmoduletype" style="font-size: 0.8rem;">' . $type . '</div>';
-                                    
-                                        $content .= '</div>';
-                                            //on affiche les tentatives
-                                            if($activity->activitytype == "quiz"){
-                                                $content .= $attemptshtml;
-                                                //on affiche la complétion si la certification est terminé
-                                                // (il y a plus ou autant de attempts que de session)
-                                                if(count($useractualsessions) >= count($userattempts)){
-                                                    $content .= '<div>' . $completion . '</div>';
-                                                }
-                                            } else {
-                                                $content .= '<div>' . $completion . '</div>';
-                                            }
+                                
+                                
+                                if ($activity->activitytype != "face2face") {
+                                    $content .= '<a href="' . $urlactivity . '">';
+                                }
+                                $content .= '<div class="FFABold fff-name-activity">' . $activity->activityname . '</div>';
+                                
+                                
+                                if ($activity->activitytype != "face2face") {
+                                    $content .= '</a>'; //flex
+                                }
+                                $content .= '<div class="smartchmoduletype" style="font-size: 0.8rem;">' . $type . '</div>';
+                        
+                                $content .= '</div>';
+                                //on affiche les tentatives
+                                if($activity->activitytype == "quiz"){
+                                    $content .= $attemptshtml;
+                                    //on affiche la complétion si la certification est terminé
+                                    // (il y a plus ou autant de attempts que de session)
+                                    if(count($useractualsessions) >= count($userattempts)){
+                                        $content .= '<div>' . $completion . '</div>';
+                                    }
+                                } else {
+                                    $content .= '<div>' . $completion . '</div>';
+                                }
+
                                             
                                             
                     

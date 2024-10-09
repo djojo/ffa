@@ -886,7 +886,7 @@ function countCourseActivities($courseid)
 function getCourseActivities($courseid)
 {
     global $DB;
-    $results = $DB->get_records_sql("SELECT cm.id as id, cm.deletioninprogress, activity.summary as summary,
+    $results = $DB->get_records_sql("SELECT cm.id as id, cm.availability, cm.deletioninprogress, activity.summary as summary,
     activity.activityname, c.id AS courseid, c.fullname AS coursename,
     cm.instance AS activityid, m.id as activitytypeid, m.name AS activitytype, cm.section as moduleid
     FROM mdl_course_modules cm
@@ -1723,7 +1723,8 @@ ORDER BY u.lastname ASC';
                 }
             }
             if ($activity) {
-                if ($activity->activityname && $activity->activitytype == "quiz") {
+                // if ($activity->activityname && $activity->activitytype == "quiz") {
+                if ($activity->activityname) {
                     $nbmodule++;
                 }
             }
@@ -1757,7 +1758,8 @@ ORDER BY u.lastname ASC';
                     break; // Sortir de la boucle dès que l'élément est trouvé
                 }
             }
-            if ($activity->activityname && $activity->activitytype == "quiz") {
+            // if ($activity->activityname && $activity->activitytype == "quiz") {
+            if ($activity->activityname) {
                 array_push($sectiontable, $activity->activityname);
             }
         }

@@ -54,7 +54,8 @@ $sections = getCourseSections($course->id);
 
 //on va chercher toutes les activités
 $activities = getCourseActivitiesRapport($course->id);
-
+// var_dump($activities);
+// die();
 
 $content .= '<table>';
 $content .= '<tbody>';
@@ -129,7 +130,7 @@ foreach ($sections as $section) {
       }
     }
     if($activity){
-      if ($activity->activityname && $activity->activitytype == "quiz") {
+      if ($activity->activityname) {
         $content .= '<td>' . $activity->activityname . '</td>';
       }
     }
@@ -148,19 +149,20 @@ foreach ($groupmembers as $groupmember) {
   $content .= '<td>' . $groupmember->id . '</td>';
 
   foreach ($sections as $section) {
-    
     //on compte le nombre de matière
     $tableau = explode(',', $section->sequence);
     foreach ($tableau as $moduleid) {
       //on cherche dans le tableau des activités
       foreach ($activities as $activityy) {
         if ($activityy->id == $moduleid) {
+          
           $activity = $activityy;
           break; // Sortir de la boucle dès que l'élément est trouvé
         }
       }
       if($activity){
-        if ($activity->activityname && $activity->activitytype == "quiz") {
+        // $content .= '<td>' . $activityy->activityname . '</td>';
+        if ($activity->activityname) {
           $grade = getModuleGrade($groupmember->id, $activity->id);
           $content .= '<td>' . $grade . '</td>';
         }
