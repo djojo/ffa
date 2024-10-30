@@ -29,7 +29,7 @@ $content .= '<div class="row">';
 
 $content .= '<div class="col-xs-12 col-md-12 col-lg-6">';
 
-if($rolename == "student"){
+if($rolename == "student" || $rolename == "teacher"){
     //on va chercher les groupes session de l'utilisateur
     $groups = $DB->get_records_sql('SELECT g.id, g.name FROM mdl_groups g
     JOIN mdl_groups_members gm ON gm.groupid = g.id
@@ -113,7 +113,7 @@ $content .= '<div style="display:flex;align-items:center;">
 }
 
 //on va chercher la session si on est etudiant
-if($rolename == "student"){
+if($rolename == "student" || $rolename == "teacher"){
     if($sessiondate){
         $content .= '<div style="display:flex;align-items:center;">
                     <svg style="width:20px;" class="mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">

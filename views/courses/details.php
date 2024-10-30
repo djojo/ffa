@@ -58,7 +58,7 @@ echo '<style>
 
 
 // echo html_writer::start_div('container');
-
+// echo '<script>alert("'.$rolename.'");</script>';
 if (!$rolename) {
     $rolename = "student";
 }
