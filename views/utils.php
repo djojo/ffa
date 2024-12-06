@@ -629,6 +629,40 @@ function getResponsablePedagogique($groupid, $courseid)
     // }
 }
 
+function getFormateur($groupid)
+{
+    global $DB;
+
+    //on va chercher le cours
+
+    $group = $DB->get_record('groups', ['id' => $groupid]);
+    $courseid = $group->courseid;
+
+    //on va chercher le premier membre du groupe avec le role formateur
+    $queryformateur = 'SELECT DISTINCT u.id, u.firstname, u.lastname 
+        FROM mdl_groups g
+        JOIN mdl_groups_members gm ON gm.groupid = g.id
+        JOIN mdl_user u ON u.id = gm.userid
+        JOIN mdl_role_assignments ra ON ra.userid = u.id
+        JOIN mdl_role r ON r.id = ra.roleid
+        WHERE g.id = ' . $groupid . ' 
+        AND r.shortname = "teacher"';
+
+        // var_dump($queryresponsable);
+        $findresponsable = $DB->get_records_sql($queryformateur, null);
+        // var_dump($findresponsable);
+        $found = reset($findresponsable);
+        $coach = "";
+        if ($found) {
+            $coach = $found->firstname . ' ' . $found->lastname;
+        } else {
+            $coach = "Aucun intervenant";
+        }
+
+        return array($coach, $found);
+    // }
+}
+
 
 function isStudent()
 {

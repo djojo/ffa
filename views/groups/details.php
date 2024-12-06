@@ -5,8 +5,6 @@ use core\session\redis;
 require_once(__DIR__ . '/../../../../config.php');
 require_once('../utils.php');
 
-
-
 require_login();
 
 global $USER, $DB, $CFG;
@@ -209,129 +207,8 @@ if ($course->category == $freecat->id) {
 }
 
 
-//On créer l'url pour le retour
-$portail = getConfigPortail();
-
-// if($portail == "portailformation"){
-    $backurl = new moodle_url('/theme/remui/views/groups/index.php');
-// } else if($portail == "portailrh"){
-//     //on va chercher la cohort
-//     $enrol = $DB->get_record_sql('SELECT * 
-//     FROM mdl_enrol
-//     WHERE customint2 = ' . $groupid, null);
-//     $backurl = new moodle_url('/theme/remui/views/cohort?id=.php' . $enrol->customint1);
-// }
-
-//le context du template header pour le retour
-// $templatecontextheader = (object)[
-//     'url' => $backurl,
-//     'coursename' => $course->fullname,
-//     // 'coursename' => $course->fullname . ' (Vue pour le ' . $rolename . ')',
-//     'textcontent' => 'Retour aux parcours'
-
-// ];
-// $content .= $OUTPUT->render_from_template('theme_remui/smartch_course_header', $templatecontextheader);
-
-
-
-
-
-
-
 //on va chercher les informations de session 
 $session = $DB->get_record('smartch_session', ['groupid' => $group->id]);
-
-// if ($session) {
-//     $sessiondate = 'Session du ' . userdate($session->startdate, get_string('strftimedate')) . ' au ' . userdate($session->enddate, get_string('strftimedate'));
-//     $sessionadress = $session->adress1 . ', ' . $session->adress2 . ', ' . $session->zip . ',  ' . $session->city;
-
-//     //on recupère les champs personnalisés
-//     $diplomeobjects = $DB->get_records_sql('
-//      SELECT cd.value 
-//      FROM mdl_customfield_data cd
-//      JOIN mdl_customfield_field cf ON cf.id = cd.fieldid
-//      WHERE cd.instanceid = ' . $courseid . ' AND cf.shortname = "diplome"', null);
-
-//     $diplome = '';
-//     $diplomeobject = reset($diplomeobjects);
-//     if ($diplomeobject) {
-//         $diplome = $diplomeobject->value;
-//     }
-
-//     if (isFreeCourse($courseid)) {
-//         $coursetyperesult = $DB->get_records_sql('
-//             SELECT cd.value 
-//             FROM mdl_customfield_data cd
-//             JOIN mdl_customfield_field cf ON cf.id = cd.fieldid
-//             WHERE cd.instanceid = ' . $courseid . ' AND cf.shortname = "freecoursetype"', null);
-//         $coursetypeobject = reset($coursetyperesult);
-//         if ($coursetypeobject) {
-//             // $coursetype = 'FORMATION GRATUITE';
-//             $res = $coursetypeobject->value;
-//             if ($res == 1) {
-//                 $diplome = "Tous publics";
-//             } else if ($res == 2) {
-//                 $diplome = "Licenciés";
-//             } else {
-//                 $diplome = $res;
-//             }
-//         }
-//     } else {
-//         $coursetypeobjects = $DB->get_records_sql('
-//      SELECT cd.value 
-//      FROM mdl_customfield_data cd
-//      JOIN mdl_customfield_field cf ON cf.id = cd.fieldid
-//      WHERE cd.instanceid = ' . $courseid . ' AND cf.shortname = "coursetype"', null);
-//         $coursetypeobject = reset($coursetypeobjects);
-//         $coursetype = '';
-//         if ($coursetypeobject) {
-//             $coursetype = $coursetypeobject->value;
-//         }
-//     }
-
-
-//     $coursedurationobjects = $DB->get_records_sql('
-//      SELECT cd.value 
-//      FROM mdl_customfield_data cd
-//      JOIN mdl_customfield_field cf ON cf.id = cd.fieldid
-//      WHERE cd.instanceid = ' . $courseid . ' AND cf.shortname = "courseduration"', null);
-
-//     $coursedurationobject = reset($coursedurationobjects);
-//     $courseduration = '';
-//     if ($coursedurationobject) {
-//         $courseduration = $coursedurationobject->value;
-//     }
-
-//     //On va chercher le responsable pédagogique
-//     $coach = getResponsablePedagogique($group->id, $courseid);
-
-//     $urlmessageresponsable = "";
-//     if ($coach[1]) {
-//         //$backurl = $_SERVER['REQUEST_URI'];
-//         if ($coach[1]->id != $USER->id) {
-//             $urlmessageresponsable = new moodle_url('/theme/remui/views/adminusermessage.php?userid=' . $coach[1]->id) . '&return=group&groupid=' . $groupid;
-//         }
-//     }
-
-//     //le context du template du parcours
-//     $templatecontextcourse = (object)[
-//         'course' => $course,
-//         'urlmessageresponsable' => $urlmessageresponsable,
-//         'coursesummary' => html_entity_decode($course->summary),
-//         'session' => true,
-//         'teamname' => $groupname = extraireNomEquipe($group->name),
-//         'sessionadress' => $sessionadress,
-//         'sessiondate' => $sessiondate,
-//         'courseduration' => $courseduration,
-//         'coursetype' => $coursetype,
-//         'diplome' => $diplome,
-//         'coach' => $coach[0],
-//         'format' => "fff-course-box-info-team"
-//     ];
-//     //la présentation du parcours
-//     $content .= $OUTPUT->render_from_template('theme_remui/smartch_course_info', $templatecontextcourse);
-// }
-
 
 $content .= '<div id="group">
 </div>';
@@ -343,8 +220,8 @@ $param1['paramname'] = "groupid";
 $param1['paramvalue'] = $groupid;
 array_push($params, $param1);
 
-//On va chercher le responsable pédagogique
-$coach = getResponsablePedagogique($group->id, $course->id);
+//On va chercher le formateur du groupe
+$coach = getFormateur($group->id);
 
 if($session){
     $sessiondate = '<div>Du ' . userdate($session->startdate, '%d/%m/%Y') . ' au ' . userdate($session->enddate, '%d/%m/%Y') . '</div>';
@@ -387,7 +264,7 @@ $content .= '<div class="row">
     <div class="smartch_flex_mobile" style="margin-top:30px;">
         <div style="margin: 0 20px;">
             <div style="display:flex;align-items:center;">
-                <div style="font-size:1.2rem;font-weight:bold;">'.count($teamates).' membres</div>
+                <div style="font-size:1.2rem;font-weight:bold;">'.count($teamates).' membre'.(count($teamates) > 1 ? 's' : '').'</div>
                 <a href="' . new moodle_url('/theme/remui/views/groups/message.php') . '?groupid=' . $groupid . '&returnurl='.$PAGE->url.'">
                     <svg class="ml-2" width="20" height="16" viewBox="0 0 20 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M1 4L8.8906 9.2604C9.5624 9.70827 10.4376 9.70827 11.1094 9.2604L19 4M3 15H17C18.1046 15 19 14.1046 19 13V3C19 1.89543 18.1046 1 17 1H3C1.89543 1 1 1.89543 1 3V13C1 14.1046 1.89543 15 3 15Z" stroke="#00315a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -623,47 +500,12 @@ if (!$userid) {
 }
 
 
-
-// $content .= '<h3 id="sendmessageteam" class="FFF-title1" style="display:none;margin-bottom:100px; display: flex; align-items: center;">
-
-// <span class="FFABlack FFF-Blue" style="letter-spacing:1px;margin-right:10px;">Envoyer un message </span><span class="FFABlack FFF-Gold" style="letter-spacing:1px;margin-right:20px;"> à l\'équipe</span> 
-
-// <span style="cursor:pointer;">
-//     <svg class="FFF-Gold" onclick="this.style.display=\'none\';document.getElementById(\'upmessage\').style.display=\'block\';document.getElementById(\'messageteam\').style.display=\'block\';" id="downmessage" style="width:35px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-//     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-//     </svg>
-
-//     <svg class="FFF-Gold" onclick="this.style.display=\'none\';document.getElementById(\'downmessage\').style.display=\'block\';document.getElementById(\'messageteam\').style.display=\'none\';" id="upmessage" style="width:35px;display:none;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-//     <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
-//     </svg>
-// </span>
-
-
-// </h3>';
-
-
 if ($sent) {
     displayMessageSent();
 }
 
 echo $content;
 
-
-// echo '<div id="messageteam" style="display:none;">';
-
-// require_once('./include_message_team.php');
-
-// echo '</div>';
-
-
-// $content = "";
-
-// require_once('../courses/details_modules.php');
-
-// echo $content;
-
-//les dépots (caché pour l'instant)
-// require_once('./team_dropbox.php');
 
 echo $OUTPUT->footer();
 
