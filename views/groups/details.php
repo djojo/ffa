@@ -224,13 +224,7 @@ array_push($params, $param1);
 $coach = getFormateur($group->id);
 
 if($session){
-    if($session->startdate == $session->enddate){
-        $sessiondate = '<div>Le ' . userdate($session->startdate, '%d/%m/%Y') . '</div>';
-    } else if($session->startdate && $session->enddate){
-        $sessiondate = '<div>Du ' . userdate($session->startdate, '%d/%m/%Y') . ' au ' . userdate($session->enddate, '%d/%m/%Y') . '</div>';
-    } else if($session->startdate) {
-        $sessiondate = '<div>Le ' . userdate($session->startdate, '%d/%m/%Y') . '</div>';
-    }
+    $sessiondate = formatSessionDate($session);
 }
 
 $blocksessiondate = "";

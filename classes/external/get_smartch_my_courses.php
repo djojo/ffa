@@ -271,8 +271,16 @@ trait get_smartch_my_courses
                                         }
                                         
                                     } else if ($onesession) {
-                                        $el['date1'] = 'Du  ' . userdate($onesession->startdate, '%d/%m/%Y');
-                                        $el['date2'] = 'Au ' . userdate($onesession->enddate, '%d/%m/%Y');
+                                        
+                                        if($onesession->startdate == $onesession->enddate){
+                                            $el['date1'] = 'Le ' . userdate($onesession->startdate, '%d/%m/%Y');
+                                        } else if($onesession->startdate && $onesession->enddate){
+                                            $el['date1'] = 'Du  ' . userdate($onesession->startdate, '%d/%m/%Y');
+                                            $el['date2'] = 'Au ' . userdate($onesession->enddate, '%d/%m/%Y');
+                                        } else if($onesession->startdate) {
+                                            $el['date1'] = 'Le ' . userdate($onesession->startdate, '%d/%m/%Y');
+                                        }
+                                        
                                     } else {
                                         $el['date1'] = '';
                                         $el['date2'] = '';

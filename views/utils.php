@@ -700,6 +700,19 @@ function longTitlesModules($chaine)
     return $chaine;
 }
 
+
+function formatSessionDate($session){
+    $sessiondate = "";
+    if($session->startdate == $session->enddate){
+        $sessiondate = '<div>Le ' . userdate($session->startdate, '%d/%m/%Y') . '</div>';
+    } else if($session->startdate && $session->enddate){
+        $sessiondate = '<div>Du ' . userdate($session->startdate, '%d/%m/%Y') . ' au ' . userdate($session->enddate, '%d/%m/%Y') . '</div>';
+    } else if($session->startdate) {
+        $sessiondate = '<div>Le ' . userdate($session->startdate, '%d/%m/%Y') . '</div>';
+    }
+    return $sessiondate;
+}
+
 require_once("$CFG->dirroot/enrol/cohort/locallib.php");
 require_once($CFG->dirroot.'/group/lib.php');
 
