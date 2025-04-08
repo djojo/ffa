@@ -250,16 +250,12 @@ fading();
 			    }
 			]);
 			cusercourses[0].done(function(response) {
-                {{! alert(response) }}
 				let data = JSON.parse(response);
                 let courses = data.mycourses
                 let html = "";
-
-                {{! alert(data.rolename) }}
                 
                 //wait for the block to be ready 
                 $('#fff-my-courses').ready(function() {
-                    //alert(courses.length)
                     
                     courses.forEach(el=>{
 

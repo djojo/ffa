@@ -380,10 +380,12 @@ foreach ($allcourses as $onecourse) {
             // var_dump($session);
             // var_dump($group->id, $onecourse->id);
 
-            if ($session && $session->startdate && $session->enddate) {
-                $sessiondate .= '<div>Session du ' . userdate($session->startdate, '%d/%m/%Y') . ' au ' . userdate($session->enddate, '%d/%m/%Y') . '</div>';
-                // $sessiondate .= '<div>Responsable pédagogique : ' . $coach[0] . '</div>';
-            }
+            $sessiondate = formatSessionDate($session);
+
+            // if ($session && $session->startdate && $session->enddate) {
+            //     $sessiondate .= '<div>Session du ' . userdate($session->startdate, '%d/%m/%Y') . ' au ' . userdate($session->enddate, '%d/%m/%Y') . '</div>';
+            //     // $sessiondate .= '<div>Responsable pédagogique : ' . $coach[0] . '</div>';
+            // }
 
         }
     } else {
