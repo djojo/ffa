@@ -327,11 +327,13 @@ trait get_smartch_my_courses
                         } else if ($session) {
                             if($session->startdate == $session->enddate){
                                 $el['date1'] = 'Le ' . userdate($session->startdate, '%d/%m/%Y');
+                                $el['date2'] = '';
                             } else if($session->startdate && $session->enddate){
                                 $el['date1'] = 'Du  ' . userdate($session->startdate, '%d/%m/%Y');
                                 $el['date2'] = 'Au ' . userdate($session->enddate, '%d/%m/%Y');
                             } else if($session->startdate) {
                                 $el['date1'] = 'Le ' . userdate($session->startdate, '%d/%m/%Y');
+                                $el['date2'] = '';
                             }
                         } else {
                             $el['date1'] = '';
