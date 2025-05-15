@@ -228,7 +228,7 @@ $templatecontextpagination = (object)[
     'prevurl' => $prevurl,
     'nexturl' => $nexturl,
     'paginationarray' => array_values($paginationarray),
-    'formurl' => new moodle_url('/theme/remui/views/courses/users/index.php.php')
+    'formurl' => new moodle_url('/theme/remui/views/courses/users/index.php')
 ];
 
 if (count($users) > 0) {

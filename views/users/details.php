@@ -284,7 +284,7 @@ $templatecontextpagination = (object)[
     'total_pages' => $total_pages,
     'pageno' => $pageno,
     'paginationarray' => array_values($paginationarray),
-    'formurl' => new moodle_url('/theme/remui/views/users/details.php.php')
+    'formurl' => new moodle_url('/theme/remui/views/users/details.php')
 ];
 $content .= $OUTPUT->render_from_template('theme_remui/smartch_header_pagination', $templatecontextpagination);
 
