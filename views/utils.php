@@ -1057,7 +1057,12 @@ function getCourseActivitiesRapport($courseid)
         SELECT a.id, a.name AS activityname, 'face2face' AS activitytype, a.intro AS summary
         FROM mdl_face2face a
     ) activity ON activity.id = cm.instance AND activity.activitytype = m.name
-    WHERE c.id = " . $courseid, null);
+    WHERE c.id = " . $courseid . "
+    AND activity.activitytype != 'folder'
+    AND activity.activitytype != 'forum'
+    AND activity.activitytype != 'resource'
+    AND activity.activitytype != 'url'
+    ", null);
 
     // $coursemodules = get_course_mods($courseid);
     // $results = array();
@@ -2370,7 +2375,8 @@ function getCourseActivitiesStats($courseid)
     WHERE activity.activitytype != 'folder'
     AND activity.activitytype != 'face2face'
     AND activity.activitytype != 'forum'
-    -- AND activity.activitytype != 'resource'
+    AND activity.activitytype != 'resource'
+    AND activity.activitytype != 'url'
     -- AND activity.activitytype != 'page'
     -- AND activity.activitytype != 'quiz'
     -- AND activity.activitytype != 'feedback'
@@ -2378,7 +2384,123 @@ function getCourseActivitiesStats($courseid)
     -- AND activity.activitytype != 'label'
     -- AND activity.activitytype != 'book'
     -- AND activity.activitytype != 'assign'
-    -- AND activity.activitytype != 'url'
+    -- AND activity.activitytype != 'bigbluebuttonbn'
+    -- AND activity.activitytype != 'lesson'
+    AND c.id = " . $courseid, null);
+
+    return $results;
+}
+
+function reportGetScormGrade($userid, $activityid)
+{
+    global $DB;
+
+    $query = 'SELECT gi.courseid, g.rawgrade, cm.id AS moduleid, gi.itemname AS modulename, gi.itemmodule
+    FROM mdl_grade_items gi
+    JOIN mdl_grade_grades g ON gi.id = g.itemid
+    JOIN mdl_course_modules cm ON cm.course = gi.courseid AND cm.instance = gi.iteminstance
+    JOIN mdl_modules md ON cm.module = md.id AND md.name = gi.itemmodule
+    WHERE gi.itemtype = "mod" AND g.userid = ' . $userid . ' AND cm.id = ' . $activityid;
+
+    $result = $DB->get_record_sql($query, null);
+
+    if($result){
+        //le score
+        $grade = $result->rawgrade;
+        //le score max
+        $rawgrademax = $result->rawgrademax;
+        if($rawgrademax == 0){
+            return floor($grade);
+        } else{
+            //le score sur 100
+            $score = floor($grade/$rawgrademax) * 100;
+            return $score;
+        }
+    } else{
+        return null;
+    }
+}
+
+
+function reportGetModuleGradeQuiz($user_id, $activity_id)
+{
+    global $DB;
+    $query = 'SELECT * FROM mdl_quiz_attempts WHERE userid = ' . $user_id . ' AND quiz = ' . $activity_id;
+    $arr = $DB->get_record_sql($query, null);
+
+    $result = $arr->sumgrades;
+    if ($result) {
+        // return round($result);
+        return floor($result);
+    } else {
+        return "";
+    }
+}
+
+function getCourseActivitiesStatsElearning($courseid)
+{
+    global $DB;
+    $results = $DB->get_records_sql("SELECT cm.id as id, activity.summary as summary,
+    activity.activityname, c.id AS courseid, c.fullname AS coursename,
+    cm.instance AS activityid, m.id as activitytypeid, m.name AS activitytype, cm.section as moduleid
+    FROM mdl_course_modules cm
+    JOIN mdl_course c ON c.id = cm.course
+    JOIN mdl_modules m ON m.id = cm.module
+    LEFT JOIN (
+        SELECT a.id, a.name AS activityname, 'scorm' AS activitytype, a.intro AS summary
+        FROM mdl_scorm a
+        UNION
+        SELECT a.id, a.name AS activityname, 'forum' AS activitytype, a.intro AS summary
+        FROM mdl_forum a
+        UNION
+        SELECT a.id, a.name AS activityname, 'label' AS activitytype, a.intro AS summary
+        FROM mdl_label a
+        UNION
+        SELECT a.id, a.name AS activityname, 'url' AS activitytype, a.intro AS summary
+        FROM mdl_url a
+        UNION
+        SELECT a.id, a.name AS activityname, 'page' AS activitytype, a.intro AS summary
+        FROM mdl_page a
+        UNION
+        SELECT a.id, a.name AS activityname, 'quiz' AS activitytype, a.intro AS summary
+        FROM mdl_quiz a
+        UNION
+        SELECT a.id, a.name AS activityname, 'data' AS activitytype, a.intro AS summary
+        FROM mdl_data a
+        UNION
+        SELECT a.id, a.name AS activityname, 'assign' AS activitytype, a.intro AS summary
+        FROM mdl_assign a
+        UNION
+        SELECT a.id, a.name AS activityname, 'folder' AS activitytype, a.intro AS summary
+        FROM mdl_folder a
+        UNION
+        SELECT a.id, a.name AS activityname, 'resource' AS activitytype, a.intro AS summary
+        FROM mdl_resource a
+        UNION
+        SELECT a.id, a.name AS activityname, 'lesson' AS activitytype, a.intro AS summary
+        FROM mdl_lesson a
+        UNION
+        SELECT a.id, a.name AS activityname, 'feedback' AS activitytype, a.intro AS summary
+        FROM mdl_feedback a
+        UNION
+        SELECT a.id, a.name AS activityname, 'bigbluebuttonbn' AS activitytype, a.intro AS summary
+        FROM mdl_bigbluebuttonbn a
+        UNION
+        SELECT a.id, a.name AS activityname, 'book' AS activitytype, a.intro AS summary
+        FROM mdl_book a
+        UNION
+        SELECT a.id, a.name AS activityname, 'face2face' AS activitytype, a.intro AS summary
+        FROM mdl_face2face a
+        
+    ) activity ON activity.id = cm.instance AND activity.activitytype = m.name
+    WHERE activity.activitytype = 'scorm'
+    -- AND activity.activitytype != 'page'
+    -- AND activity.activitytype != 'quiz'
+    -- AND activity.activitytype != 'feedback'
+    -- AND activity.activitytype != 'scorm'
+    -- AND activity.activitytype != 'label'
+    -- AND activity.activitytype != 'book'
+    -- AND activity.activitytype != 'assign'
     -- AND activity.activitytype != 'bigbluebuttonbn'
     -- AND activity.activitytype != 'lesson'
     AND c.id = " . $courseid, null);
@@ -2555,8 +2677,7 @@ function getCompletionPourcent($courseid, $userid = null)
     }
     $pourcent = ($modulesstatus[0]/$dividor)*100;
     $formatpourcent = number_format($pourcent, 2);
-    // var_dump($formatpourcent);
-    // die();
+
     return $formatpourcent;
     
 

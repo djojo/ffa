@@ -28,7 +28,13 @@ $content .= '<h1>' . $course->fullname . '</h1>';
 $session = $DB->get_record('smartch_session', ['groupid' => $groupid]);
 
 if ($session) {
-  $content .= '<div>Session du ' . userdate($session->startdate, get_string('strftimedate')) . ' au ' . userdate($session->enddate, get_string('strftimedate') . '</div>');
+  if ($session->startdate) {
+    if ($session->enddate) {
+      $content .= '<div>Session du ' . userdate($session->startdate, get_string('strftimedate')) . ' au ' . userdate($session->enddate, get_string('strftimedate')) . '</div>';
+    } else {
+      $content .= '<div>Session du ' . userdate($session->startdate, get_string('strftimedate')) . '</div>';
+    }
+  }
 }
 
 $content .= '<div style="margin:10px 0;">Extraction du rapport le ' . userdate(Time(), get_string('strftimedate')) . '</div>';
