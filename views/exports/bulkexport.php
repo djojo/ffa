@@ -49,19 +49,18 @@ if (isset($_GET['download']) && $_GET['download'] === 'csv') {
             // le taux de complétion des activités 
             $progression = getCompletionPourcent($course->id, $user->id);
     
-            //on va chercher toutes les activités scorm du cours
-            $activities = getCourseActivitiesStatsElearning($course->id);
+            // //on va chercher toutes les activités scorm du cours
+            // $activities = getCourseActivitiesStatsElearning($course->id);
     
+            // //pour chaque scorm, on va chercher le score
+            // foreach($activities as $activity) {
+            //     $scormScore += reportGetScormGrade($user->id, $activity->activityid);
+            //     $countScorms++;
+            // }
     
-            //pour chaque scorm, on va chercher le score
-            foreach($activities as $activity) {
-                $scormScore += reportGetScormGrade($user->id, $activity->activityid);
-                $countScorms++;
-            }
-    
-            if($countScorms > 0) {
-                $scormScoreMoyen = $scormScore / $countScorms;
-            }
+            // if($countScorms > 0) {
+            //     $scormScoreMoyen = $scormScore / $countScorms;
+            // }
     
             $inscription = new stdClass();
             $inscription->idnumber = $course->idnumber; //id du cours
@@ -69,9 +68,9 @@ if (isset($_GET['download']) && $_GET['download'] === 'csv') {
             $inscription->liccod = $user->username; //code de licence
             $inscription->evtsq = $group->idnumber; // N° groupe
             $inscription->tauxelearning = $progression; // Taux de complétion elearning
-            $inscription->tauxpresence = 0; // Taux de complétion présentiel
-            $inscription->tauxqcm = $scormScoreMoyen; // Taux de complétion QCM
-            $inscription->qcm = "O"; // Réussite QCM ?? à voir avec David
+            $inscription->tauxpresence = "N/A"; // Taux de complétion présentiel
+            $inscription->tauxqcm = "N/A"; // Taux de complétion QCM
+            $inscription->qcm = "N/A"; // Réussite QCM ?? à voir avec David
             $inscription->date = date('Y-m-d H:i:s');
     
             array_push($inscriptions, $inscription);

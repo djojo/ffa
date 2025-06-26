@@ -2642,9 +2642,12 @@ function getModulesStatus($courseid, $sessionid = null, $userid = null)
     return array($modulesfinished, $modulestocome, $totalactivities);
 }
 
-function getCompletionRatio($courseid)
+function getCompletionRatio($courseid, $userid = null)
 {
     global $DB, $USER;
+    if (!$userid) {
+        $userid = $USER->id;
+    }
     //les activités 
     $activities = getCourseActivitiesStats($courseid);
     $complete = 0;
