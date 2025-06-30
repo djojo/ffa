@@ -17,7 +17,7 @@ if (isset($_GET['download']) && $_GET['download'] === 'csv') {
     
     foreach ($users as $user) {
     
-        $querycourses = 'SELECT DISTINCT c.id, c.shortname, c.fullname, c.summary, cc.name as category, e.enrolstartdate as dateadded
+        $querycourses = 'SELECT DISTINCT c.id, c.shortname, c.idnumber, c.fullname, c.summary, cc.name as category, e.enrolstartdate as dateadded
         FROM mdl_user_enrolments ue
         JOIN mdl_enrol e ON e.id = ue.enrolid
         JOIN mdl_course c ON c.id = e.courseid
@@ -61,7 +61,7 @@ if (isset($_GET['download']) && $_GET['download'] === 'csv') {
             // if($countScorms > 0) {
             //     $scormScoreMoyen = $scormScore / $countScorms;
             // }
-    
+            
             $inscription = new stdClass();
             $inscription->idnumber = $course->idnumber; //id du cours
             $inscription->email = $user->email; //email de l'utilisateur
