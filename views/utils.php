@@ -1062,6 +1062,7 @@ function getCourseActivitiesRapport($courseid)
     AND activity.activitytype != 'forum'
     AND activity.activitytype != 'resource'
     AND activity.activitytype != 'url'
+    AND cm.deletioninprogress = 0
     ", null);
 
     // $coursemodules = get_course_mods($courseid);
@@ -2765,7 +2766,7 @@ function getCompletionPourcent($courseid, $userid = null)
     } else {
         $pourcent = ceil($complete / $totalactivities * 100);
     }
-    
+
     return $pourcent;
 }
 
