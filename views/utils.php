@@ -4,6 +4,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 require_once(__DIR__ . '/../../../lib/phpspreadsheet/vendor/autoload.php');
+require_once(__DIR__ . '/../../../lib/completionlib.php');
 
 // retourne le plus haut rôle de l'utilisateur connecté
 function getMainRole($userid = null)
