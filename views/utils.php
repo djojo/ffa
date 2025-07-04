@@ -1338,11 +1338,14 @@ ORDER BY u.lastname ASC';
         if ($sectionname == "") {
             $sectionname = "Généralités";
         }
-        $textmodule = $sectionname;
-        array_push($headertable, $textmodule);
-        $nbmodule--;
-        for ($i = 0; $i < $nbmodule; $i++) {
-            array_push($headertable, "");
+        // N'afficher la section que si elle contient des activités
+        if ($nbmodule > 0) {
+            $textmodule = $sectionname;
+            array_push($headertable, $textmodule);
+            $nbmodule--;
+            for ($i = 0; $i < $nbmodule; $i++) {
+                array_push($headertable, "");
+            }
         }
     }
 
@@ -1351,31 +1354,50 @@ ORDER BY u.lastname ASC';
 
     $sectiontable = ['', '', '', '', ''];
     foreach ($sections as $section) {
-
-        if ($session) {
-            //on va chercher le nombre de planning dans la section disponible
-            $sectionsplannings = getSectionPlannings($course->id, $session->id, $section->id);
-            $totalsectionsplannings = count($sectionsplannings);
-        }
-
-        //on compte le nombre de matière
+        // Vérifier si la section a des activités (même logique que pour les en-têtes)
         $tableau = explode(',', $section->sequence);
+        $hasActivities = false;
         foreach ($tableau as $moduleid) {
-            //on cherche dans le tableau des activités
+            $activity = null;
             foreach ($activities as $activityy) {
                 if ($activityy->id == $moduleid) {
                     $activity = $activityy;
-                    break; // Sortir de la boucle dès que l'élément est trouvé
+                    break;
                 }
             }
-            if ($activity->activitytype == 'face2face') {
-                //On va chercher le nombre de planning dans cette section
-                if ($totalsectionsplannings > 0) {
-                    $totalsectionsplannings--;
+            if ($activity && $activity->activityname && $activity->activitytype != "folder") {
+                $hasActivities = true;
+                break;
+            }
+        }
+        
+        if ($hasActivities) {
+            if ($session) {
+                //on va chercher le nombre de planning dans la section disponible
+                $sectionsplannings = getSectionPlannings($course->id, $session->id, $section->id);
+                $totalsectionsplannings = count($sectionsplannings);
+            }
+
+            //on compte le nombre de matière
+            $tableau = explode(',', $section->sequence);
+            foreach ($tableau as $moduleid) {
+                $activity = null; // Réinitialisation avant chaque recherche
+                //on cherche dans le tableau des activités
+                foreach ($activities as $activityy) {
+                    if ($activityy->id == $moduleid) {
+                        $activity = $activityy;
+                        break; // Sortir de la boucle dès que l'élément est trouvé
+                    }
+                }
+                if ($activity && $activity->activitytype == 'face2face') {
+                    //On va chercher le nombre de planning dans cette section
+                    if ($totalsectionsplannings > 0) {
+                        $totalsectionsplannings--;
+                        array_push($sectiontable, $activity->activityname);
+                    }
+                } else if ($activity && $activity->activityname && $activity->activitytype != "folder") {
                     array_push($sectiontable, $activity->activityname);
                 }
-            } else if ($activity->activityname && $activity->activitytype != "folder") {
-                array_push($sectiontable, $activity->activityname);
             }
         }
     }
@@ -1401,33 +1423,52 @@ ORDER BY u.lastname ASC';
 
 
         foreach ($sections as $section) {
-
-            if ($session) {
-                $sectionsplannings = getSectionPlannings($course->id, $session->id, $section->id);
-                $totalsectionsplannings = count($sectionsplannings);
-            }
-
-            //on compte le nombre de matière
+            // Vérifier si la section a des activités (même logique que pour les en-têtes)
             $tableau = explode(',', $section->sequence);
+            $hasActivities = false;
             foreach ($tableau as $moduleid) {
-                //on cherche dans le tableau des activités
+                $activity = null;
                 foreach ($activities as $activityy) {
                     if ($activityy->id == $moduleid) {
                         $activity = $activityy;
-                        break; // Sortir de la boucle dès que l'élément est trouvé
+                        break;
                     }
                 }
-                if ($activity->activitytype == 'face2face') {
-                    if ($totalsectionsplannings > 0) {
-                        //on va chercher le planning correspondant
-                        $completion = getPlanningCompletion($course->id, $session->id, $section->id);
-                        array_push($membertable, $completion);
-                        //si il reste des plannings dans cette section à mettre
-                        $totalsectionsplannings--;
+                if ($activity && $activity->activityname && $activity->activitytype != "folder") {
+                    $hasActivities = true;
+                    break;
+                }
+            }
+            
+            if ($hasActivities) {
+                if ($session) {
+                    $sectionsplannings = getSectionPlannings($course->id, $session->id, $section->id);
+                    $totalsectionsplannings = count($sectionsplannings);
+                }
+
+                //on compte le nombre de matière
+                $tableau = explode(',', $section->sequence);
+                foreach ($tableau as $moduleid) {
+                    $activity = null; // Réinitialisation avant chaque recherche
+                    //on cherche dans le tableau des activités
+                    foreach ($activities as $activityy) {
+                        if ($activityy->id == $moduleid) {
+                            $activity = $activityy;
+                            break; // Sortir de la boucle dès que l'élément est trouvé
+                        }
                     }
-                } else if ($activity->activityname && $activity->activitytype != "folder") {
-                    $completion = getActivityCompletionStatusRapport($moduleid, $groupmember->id);
-                    array_push($membertable, $completion);
+                    if ($activity && $activity->activitytype == 'face2face') {
+                        if ($totalsectionsplannings > 0) {
+                            //on va chercher le planning correspondant
+                            $completion = getPlanningCompletion($course->id, $session->id, $section->id);
+                            array_push($membertable, $completion);
+                            //si il reste des plannings dans cette section à mettre
+                            $totalsectionsplannings--;
+                        }
+                    } else if ($activity && $activity->activityname && $activity->activitytype != "folder") {
+                        $completion = getActivityCompletionStatusRapport($moduleid, $groupmember->id);
+                        array_push($membertable, $completion);
+                    }
                 }
             }
         }
@@ -1551,11 +1592,14 @@ ORDER BY u.lastname ASC';
         if ($sectionname == "") {
             $sectionname = "Généralités";
         }
-        $textmodule = $sectionname;
-        array_push($headertable, $textmodule);
-        $nbmodule--;
-        for ($i = 0; $i < $nbmodule; $i++) {
-            array_push($headertable, "");
+        // N'afficher la section que si elle contient des activités
+        if ($nbmodule > 0) {
+            $textmodule = $sectionname;
+            array_push($headertable, $textmodule);
+            $nbmodule--;
+            for ($i = 0; $i < $nbmodule; $i++) {
+                array_push($headertable, "");
+            }
         }
     }
 
@@ -1564,31 +1608,50 @@ ORDER BY u.lastname ASC';
 
     $sectiontable = ['', '', '', '', ''];
     foreach ($sections as $section) {
-
-        if ($session) {
-            //on va chercher le nombre de planning dans la section disponible
-            $sectionsplannings = getSectionPlannings($course->id, $session->id, $section->id);
-            $totalsectionsplannings = count($sectionsplannings);
-        }
-
-        //on compte le nombre de matière
+        // Vérifier si la section a des activités (même logique que pour les en-têtes)
         $tableau = explode(',', $section->sequence);
+        $hasActivities = false;
         foreach ($tableau as $moduleid) {
-            //on cherche dans le tableau des activités
+            $activity = null;
             foreach ($activities as $activityy) {
                 if ($activityy->id == $moduleid) {
                     $activity = $activityy;
-                    break; // Sortir de la boucle dès que l'élément est trouvé
+                    break;
                 }
             }
-            if ($activity->activitytype == 'face2face') {
-                //On va chercher le nombre de planning dans cette section
-                if ($totalsectionsplannings > 0) {
-                    $totalsectionsplannings--;
+            if ($activity && $activity->activityname && $activity->activitytype != "folder") {
+                $hasActivities = true;
+                break;
+            }
+        }
+        
+        if ($hasActivities) {
+            if ($session) {
+                //on va chercher le nombre de planning dans la section disponible
+                $sectionsplannings = getSectionPlannings($course->id, $session->id, $section->id);
+                $totalsectionsplannings = count($sectionsplannings);
+            }
+
+            //on compte le nombre de matière
+            $tableau = explode(',', $section->sequence);
+            foreach ($tableau as $moduleid) {
+                $activity = null; // Réinitialisation avant chaque recherche
+                //on cherche dans le tableau des activités
+                foreach ($activities as $activityy) {
+                    if ($activityy->id == $moduleid) {
+                        $activity = $activityy;
+                        break; // Sortir de la boucle dès que l'élément est trouvé
+                    }
+                }
+                if ($activity && $activity->activitytype == 'face2face') {
+                    //On va chercher le nombre de planning dans cette section
+                    if ($totalsectionsplannings > 0) {
+                        $totalsectionsplannings--;
+                        array_push($sectiontable, $activity->activityname);
+                    }
+                } else if ($activity && $activity->activityname && $activity->activitytype != "folder") {
                     array_push($sectiontable, $activity->activityname);
                 }
-            } else if ($activity->activityname && $activity->activitytype != "folder") {
-                array_push($sectiontable, $activity->activityname);
             }
         }
     }
@@ -1614,34 +1677,52 @@ ORDER BY u.lastname ASC';
 
 
         foreach ($sections as $section) {
-
-            if ($session) {
-                $sectionsplannings = getSectionPlannings($course->id, $session->id, $section->id);
-                $totalsectionsplannings = count($sectionsplannings);
-            }
-
-
-            //on compte le nombre de matière
+            // Vérifier si la section a des activités (même logique que pour les en-têtes)
             $tableau = explode(',', $section->sequence);
+            $hasActivities = false;
             foreach ($tableau as $moduleid) {
-                //on cherche dans le tableau des activités
+                $activity = null;
                 foreach ($activities as $activityy) {
                     if ($activityy->id == $moduleid) {
                         $activity = $activityy;
-                        break; // Sortir de la boucle dès que l'élément est trouvé
+                        break;
                     }
                 }
-                if ($activity->activitytype == 'face2face') {
-                    if ($totalsectionsplannings > 0) {
-                        //on va chercher le planning correspondant
-                        $completion = getPlanningCompletion($course->id, $session->id, $section->id);
-                        array_push($membertable, $completion);
-                        //si il reste des plannings dans cette section à mettre
-                        $totalsectionsplannings--;
+                if ($activity && $activity->activityname && $activity->activitytype != "folder") {
+                    $hasActivities = true;
+                    break;
+                }
+            }
+            
+            if ($hasActivities) {
+                if ($session) {
+                    $sectionsplannings = getSectionPlannings($course->id, $session->id, $section->id);
+                    $totalsectionsplannings = count($sectionsplannings);
+                }
+
+                //on compte le nombre de matière
+                $tableau = explode(',', $section->sequence);
+                foreach ($tableau as $moduleid) {
+                    $activity = null; // Réinitialisation avant chaque recherche
+                    //on cherche dans le tableau des activités
+                    foreach ($activities as $activityy) {
+                        if ($activityy->id == $moduleid) {
+                            $activity = $activityy;
+                            break; // Sortir de la boucle dès que l'élément est trouvé
+                        }
                     }
-                } else if ($activity->activityname && $activity->activitytype != "folder") {
-                    $completion = getActivityCompletionStatusRapport($moduleid, $groupmember->id);
-                    array_push($membertable, $completion);
+                    if ($activity && $activity->activitytype == 'face2face') {
+                        if ($totalsectionsplannings > 0) {
+                            //on va chercher le planning correspondant
+                            $completion = getPlanningCompletion($course->id, $session->id, $section->id);
+                            array_push($membertable, $completion);
+                            //si il reste des plannings dans cette section à mettre
+                            $totalsectionsplannings--;
+                        }
+                    } else if ($activity && $activity->activityname && $activity->activitytype != "folder") {
+                        $completion = getActivityCompletionStatusRapport($moduleid, $groupmember->id);
+                        array_push($membertable, $completion);
+                    }
                 }
             }
         }
@@ -1805,6 +1886,7 @@ ORDER BY u.lastname ASC';
         //on compte le nombre de matière
         $tableau = explode(',', $section->sequence);
         foreach ($tableau as $moduleid) {
+            $activity = null; // Réinitialisation avant chaque recherche
             //on cherche dans le tableau des activités
             foreach ($activities as $activityy) {
                 if ($activityy->id == $moduleid) {
@@ -1813,7 +1895,7 @@ ORDER BY u.lastname ASC';
                 }
             }
             // if ($activity->activityname && $activity->activitytype == "quiz") {
-            if ($activity->activityname) {
+            if ($activity && $activity->activityname) {
                 array_push($sectiontable, $activity->activityname);
             }
         }
@@ -1836,25 +1918,44 @@ ORDER BY u.lastname ASC';
 
 
         foreach ($sections as $section) {
-
-            if ($session) {
-                $sectionsplannings = getSectionPlannings($course->id, $session->id, $section->id);
-                $totalsectionsplannings = count($sectionsplannings);
-            }
-
-            //on compte le nombre de matière
+            // Vérifier si la section a des activités (même logique que pour les en-têtes)
             $tableau = explode(',', $section->sequence);
+            $hasActivities = false;
             foreach ($tableau as $moduleid) {
-                //on cherche dans le tableau des activités
+                $activity = null;
                 foreach ($activities as $activityy) {
                     if ($activityy->id == $moduleid) {
                         $activity = $activityy;
-                        break; // Sortir de la boucle dès que l'élément est trouvé
+                        break;
                     }
                 }
-                if ($activity->activityname && $activity->activitytype == "quiz") {
-                    $grade = getModuleGrade($groupmember->id, $activity->id);
-                    array_push($membertable, $grade);
+                if ($activity && $activity->activityname) {
+                    $hasActivities = true;
+                    break;
+                }
+            }
+            
+            if ($hasActivities) {
+                if ($session) {
+                    $sectionsplannings = getSectionPlannings($course->id, $session->id, $section->id);
+                    $totalsectionsplannings = count($sectionsplannings);
+                }
+
+                //on compte le nombre de matière
+                $tableau = explode(',', $section->sequence);
+                foreach ($tableau as $moduleid) {
+                    $activity = null; // Réinitialisation avant chaque recherche
+                    //on cherche dans le tableau des activités
+                    foreach ($activities as $activityy) {
+                        if ($activityy->id == $moduleid) {
+                            $activity = $activityy;
+                            break; // Sortir de la boucle dès que l'élément est trouvé
+                        }
+                    }
+                    if ($activity && $activity->activityname && $activity->activitytype == "quiz") {
+                        $grade = getModuleGrade($groupmember->id, $activity->id);
+                        array_push($membertable, $grade);
+                    }
                 }
             }
         }

@@ -82,6 +82,7 @@ foreach ($sections as $section) {
   
   $nbmodule = 0;
   foreach ($tableau as $moduleid) {
+    $activity = null; // Réinitialisation avant chaque recherche
     //on cherche dans le tableau des activités
     foreach ($activities as $activityy) {
       if ($activityy->id == $moduleid) {
@@ -89,7 +90,7 @@ foreach ($sections as $section) {
         break; // Sortir de la boucle dès que l'élément est trouvé
       }
     }
-    if(isset($activity)){
+    if($activity){
       if ($activity->activitytype == 'face2face') {
         //On va chercher le nombre de planning dans cette section
         if ($totalsectionsplannings > 0) {
@@ -107,8 +108,8 @@ foreach ($sections as $section) {
   if ($sectionname == "") {
     $sectionname = "Généralités";
   }
-  // si il n'y a rien dans la section on la passe
-  if(reset($tableau) != ''){
+  // N'afficher la section que si elle contient des activités
+  if($nbmodule > 0){
     $content .= '<td  colspan="' . $nbmodule . '">' . $sectionname . '</td>';
   }
   
@@ -122,6 +123,7 @@ foreach ($sections as $section) {
   //on compte le nombre de matière
   $tableau = explode(',', $section->sequence);
   foreach ($tableau as $moduleid) {
+    $activity = null; // Réinitialisation avant chaque recherche
     //on cherche dans le tableau des activités
     foreach ($activities as $activityy) {
       if ($activityy->id == $moduleid) {
@@ -152,6 +154,7 @@ foreach ($groupmembers as $groupmember) {
     //on compte le nombre de matière
     $tableau = explode(',', $section->sequence);
     foreach ($tableau as $moduleid) {
+      $activity = null; // Réinitialisation avant chaque recherche
       //on cherche dans le tableau des activités
       foreach ($activities as $activityy) {
         if ($activityy->id == $moduleid) {
