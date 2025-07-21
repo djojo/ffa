@@ -36,6 +36,7 @@ if (isset($_GET['download']) && $_GET['download'] === 'csv') {
             JOIN mdl_groups_members gm ON gm.groupid = g.id
             JOIN mdl_course c ON c.id = g.courseid
             WHERE c.id = ' . $course->id . '
+            AND g.idnumber IS NOT NULL
             AND gm.userid = ' . $user->id, null);
     
             if(!$group) {
