@@ -9,14 +9,14 @@ global $USER, $DB, $CFG;
 
 // Vérifier si on demande le téléchargement du CSV
 if (isset($_GET['download']) && $_GET['download'] === 'csv') {
-    
+
     // Calculer les inscriptions
     $users = $DB->get_records_sql('SELECT u.id, u.email, u.username FROM mdl_user u', null);
-    
+
     $inscriptions = [];
-    
+
     foreach ($users as $user) {
-    
+
         $querycourses = 'SELECT DISTINCT c.id, c.shortname, c.idnumber, c.fullname, c.summary, cc.name as category, e.enrolstartdate as dateadded
         FROM mdl_user_enrolments ue
         JOIN mdl_enrol e ON e.id = ue.enrolid
@@ -25,44 +25,53 @@ if (isset($_GET['download']) && $_GET['download'] === 'csv') {
         WHERE ue.userid = ' . $user->id . '
         AND c.visible = 1
         AND c.format != "site"';
-    
+
         $courses = $DB->get_records_sql($querycourses, null);
-    
+
         foreach ($courses as $course) {
-    
+
             //on va chercher l'idnumber du groupe via la session de l'utilisateur sur le cours
-            $group = $DB->get_record_sql('SELECT g.id, g.idnumber
-            FROM mdl_groups g 
+            /*$group = $DB->get_record_sql('SELECT g.id, g.idnumber
+            FROM mdl_groups g
             JOIN mdl_groups_members gm ON gm.groupid = g.id
             JOIN mdl_course c ON c.id = g.courseid
             WHERE c.id = ' . $course->id . '
             AND g.idnumber IS NOT NULL
-            AND gm.userid = ' . $user->id, null);
-    
-            if(!$group) {
+            AND gm.userid = ' . $user->id, null);*/
+            $group = $DB->get_record_sql('SELECT g.id, g.idnumber
+            FROM mdl_groups g
+            JOIN mdl_groups_members gm ON gm.groupid = g.id
+            JOIN mdl_course c ON c.id = g.courseid
+            WHERE c.id = ' . $course->id . '
+            AND g.idnumber IS NOT NULL
+            AND gm.userid = ' . $user->id . '
+            ORDER BY gm.timeadded DESC
+            LIMIT 1', null);
+
+            if (!$group) {
                 continue;
             }
-    
+
             $scormScoreMoyen = 0;
             $scormScore = 0;
             $countScorms = 0;
-    
-            // le taux de complétion des activités 
+
+            // le taux de complétion des activités
             $progression = getCompletionPourcent($course->id, $user->id);
-    
+
             // //on va chercher toutes les activités scorm du cours
             // $activities = getCourseActivitiesStatsElearning($course->id);
-    
+
             // //pour chaque scorm, on va chercher le score
             // foreach($activities as $activity) {
             //     $scormScore += reportGetScormGrade($user->id, $activity->activityid);
             //     $countScorms++;
             // }
-    
+
             // if($countScorms > 0) {
             //     $scormScoreMoyen = $scormScore / $countScorms;
             // }
-            
+
             $inscription = new stdClass();
             $inscription->idnumber = $course->idnumber; //id du cours
             $inscription->email = $user->email; //email de l'utilisateur
@@ -73,21 +82,21 @@ if (isset($_GET['download']) && $_GET['download'] === 'csv') {
             $inscription->tauxqcm = "N/A"; // Taux de complétion QCM
             $inscription->qcm = "N/A"; // Réussite QCM ?? à voir avec David
             $inscription->date = date('Y-m-d H:i:s');
-    
+
             array_push($inscriptions, $inscription);
         }
     }
-    
+
     // Générer le fichier CSV
     $filename = 'export_inscriptions_' . date('Y-m-d_H-i-s') . '.csv';
-    
+
     header('Content-Type: text/csv; charset=utf-8');
     header('Content-Disposition: attachment; filename="' . $filename . '"');
     header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
     header('Expires: 0');
-    
+
     $output = fopen('php://output', 'w');
-    
+
     // En-têtes du CSV
     fputcsv($output, [
         'ID Cours',
@@ -100,7 +109,7 @@ if (isset($_GET['download']) && $_GET['download'] === 'csv') {
         'Réussite QCM',
         'Date'
     ]);
-    
+
     // Données
     foreach ($inscriptions as $inscription) {
         fputcsv($output, [
@@ -115,7 +124,7 @@ if (isset($_GET['download']) && $_GET['download'] === 'csv') {
             $inscription->date
         ]);
     }
-    
+
     fclose($output);
     exit;
 }
@@ -124,6 +133,7 @@ if (isset($_GET['download']) && $_GET['download'] === 'csv') {
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Export des inscriptions</title>
     <style>
@@ -133,13 +143,15 @@ if (isset($_GET['download']) && $_GET['download'] === 'csv') {
             margin: 50px auto;
             padding: 20px;
         }
+
         .export-container {
             text-align: center;
             background: #f9f9f9;
             padding: 40px;
             border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
+
         .btn-download {
             background-color: #007cba;
             color: white;
@@ -152,21 +164,25 @@ if (isset($_GET['download']) && $_GET['download'] === 'csv') {
             display: inline-block;
             transition: background-color 0.3s;
         }
+
         .btn-download:hover {
             background-color: #005a87;
             text-decoration: none;
             color: white;
         }
+
         h2 {
             color: #333;
             margin-bottom: 20px;
         }
+
         p {
             color: #666;
             margin-bottom: 30px;
         }
     </style>
 </head>
+
 <body>
     <div class="export-container">
         <h2>Export des inscriptions</h2>
@@ -174,5 +190,5 @@ if (isset($_GET['download']) && $_GET['download'] === 'csv') {
         <a href="?download=csv" class="btn-download">Télécharger le fichier CSV</a>
     </div>
 </body>
-</html>
 
+</html>
