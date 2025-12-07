@@ -18,65 +18,62 @@
 
 }}
 {{!
-    @template theme_remui/smartch_my_courses
+    @template theme_remui/smartch_dashboard_my_formations
 }}
 
+{{! modification smartch dashboard my formations avec carrousel }}
 
-{{! modification smartch dashboard my courses}}
+<section id="my_formations" style="margin:60px 0; background: white; padding: 40px 60px; border-radius: 8px;">
 
-{{! <h3 class="FFF-title1" style="display: flex;align-items: center;">
+<h3 class="FFF-title1" style="display: flex; align-items: center; gap: 15px;">
     
-    <svg class="fff-icon" onclick="document.getElementById('fff-my-formations').scrollBy({top: 0, left: -30, behavior: 'smooth'});" width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg class="fff-icon" style="cursor: pointer;" onclick="document.getElementById('fff-my-formations').scrollBy({top: 0, left: -400, behavior: 'smooth'});" width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path fill-rule="evenodd" clip-rule="evenodd" d="M22.7071 11.2929C23.0976 11.6834 23.0976 12.3166 22.7071 12.7071L16.4142 19L22.7071 25.2929C23.0976 25.6834 23.0976 26.3166 22.7071 26.7071C22.3166 27.0976 21.6834 27.0976 21.2929 26.7071L14.2929 19.7071C13.9024 19.3166 13.9024 18.6834 14.2929 18.2929L21.2929 11.2929C21.6834 10.9024 22.3166 10.9024 22.7071 11.2929Z" fill="#00315a"/>
         <rect x="1" y="1" width="36" height="36" rx="18" stroke="#00315a" stroke-width="2"/>
     </svg>
 
+    <span class="FFABlack FFF-Blue" style="margin-right:10px;">Mes </span><span class="FFABlack FFF-Gold">Formations</span> 
 
-    <svg class="fff-icon" onclick="document.getElementById('fff-my-formations').scrollBy({top: 0, left: 30, behavior: 'smooth'});" width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg class="fff-icon" style="cursor: pointer;" onclick="document.getElementById('fff-my-formations').scrollBy({top: 0, left: 400, behavior: 'smooth'});" width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path fill-rule="evenodd" clip-rule="evenodd" d="M15.2929 26.7071C14.9024 26.3166 14.9024 25.6834 15.2929 25.2929L21.5858 19L15.2929 12.7071C14.9024 12.3166 14.9024 11.6834 15.2929 11.2929C15.6834 10.9024 16.3166 10.9024 16.7071 11.2929L23.7071 18.2929C24.0976 18.6834 24.0976 19.3166 23.7071 19.7071L16.7071 26.7071C16.3166 27.0976 15.6834 27.0976 15.2929 26.7071Z" fill="#00315a"/>
         <rect x="1" y="1" width="36" height="36" rx="18" stroke="#00315a" stroke-width="2"/>
     </svg>
-
-    <span class="FFABlack FFF-Blue" style="margin-right:10px;">Mes </span><span class="FFABlack FFF-Gold">Formations</span> 
 </h3>
 
 <div class="fff-my-courses-caroussel">
-
     <div class="fff-my-courses-caroussel-items" id="fff-my-formations">
-
     </div>
+</div>
 
-</div> }}
-
+</section>
 
 {{#js}}
-	require(['jquery', 'core/ajax'], function($, Ajax) {
-		$(document).ready(function(){
-			let service_name = 'theme_remui_get_smartch_my_formations';
-			let cuserformations = Ajax.call([
-			    {
-			        methodname: service_name,
-			        args: {}
-			    }
-			]);
-			cuserformations[0].done(function(response) {
-                console.log(response)
-
-                let data = JSON.parse(response);
-                let formations = data.mycourses
-                let html = "";
-                {{! alert(response) }}
-                let html = "";
-                //wait for the block to be ready 
-                $('#fff-my-formations').ready(function() {
-                    
-                    formations.forEach(el=>{
-                        html += '<div onclick="location.href=`'+el.url+'`" class="fff-course-thumbnail-box" style="background-image:url('+el.img+');"><h5 class="fff-course-thumbnail-title">'+el.fullname+'</h5></div>';
-                    });
-                    document.getElementById('fff-my-formations').innerHTML = html;
+require(['jquery', 'core/ajax'], function($, Ajax) {
+    $(document).ready(function(){
+        let service_name = 'theme_remui_get_smartch_my_formations';
+        let cuserformations = Ajax.call([
+            {
+                methodname: service_name,
+                args: {}
+            }
+        ]);
+        cuserformations[0].done(function(response) {
+            console.log("Response:", response);
+            
+            let formations = JSON.parse(response);
+            console.log("Formations:", formations);
+            
+            let html = "";
+            
+            //wait for the block to be ready 
+            $('#fff-my-formations').ready(function() {
+                formations.forEach(el => {
+                    html += '<div onclick="location.href=`'+el.url+'`" class="fff-course-thumbnail-box" style="background-image:url('+el.img+');"><h5 class="fff-course-thumbnail-title">'+el.fullname+'</h5></div>';
                 });
-			    
-			});
-		});
-	});
+                document.getElementById('fff-my-formations').innerHTML = html;
+                console.log("Formations chargées:", formations.length);
+            });
+        });
+    });
+});
 {{/js}}

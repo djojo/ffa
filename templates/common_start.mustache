@@ -91,11 +91,12 @@
             
             {{#isdashboardstatsshow}}
                 {{> theme_remui/smartch/smartch_info }}
-                {{> theme_remui/smartch/my_courses }}
+                {{! {{> theme_remui/smartch/my_courses }} 
                 {{#isadminsmartch}}
                 {{> theme_remui/smartch/planning }}
                 {{/isadminsmartch}}
                 {{> theme_remui/smartch_dashboard_stats }}
+                {{> theme_remui/smartch_dashboard_my_formations }} 
                 {{> theme_remui/smartch_pub }}
             {{/isdashboardstatsshow}}
 

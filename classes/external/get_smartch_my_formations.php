@@ -54,32 +54,25 @@ trait get_smartch_my_formations
     }
 
 
-    /**
-     * Save order of sections in array of configuration format
-     * @param  int $courseid Course id
-     * @return boolean       true
-     */
     public static function get_smartch_my_formations()
     {
         global $DB, $CFG;
-        // Validation for context is needed.
         $context = \context_system::instance();
         self::validate_context($context);
 
+        // Récupère TOUS les cours visibles (sauf le site)
+        $courses = $DB->get_records_sql('SELECT * FROM mdl_course WHERE visible = 1 AND format != "site" ORDER BY fullname ASC');
 
-
-        $categories = $DB->get_records_sql('SELECT * from mdl_course_categories WHERE depth = 2');
         $parcours = array();
-        foreach ($categories as $category) {
-            //on va chercher le premier cours de la catégorie UO (non visible)
-            $courses = $DB->get_records_sql('SELECT * from mdl_course WHERE category = ' . $category->id . ' AND visible = 0');
-            $course = reset($courses);
+        foreach ($courses as $course) {
             $el['fullname'] = $course->fullname;
-            $el['id'] = $category->id;
-            $el['url'] = $CFG->wwwroot . "/theme/remui/views/formation.php?id=" . $course->id;
+            $el['id'] = $course->id;
+            $el['url'] = $CFG->wwwroot . "/course/view.php?id=" . $course->id;
 
-            //On va chercher l'image du cours
-            $course2 = new core_course_list_element($course);
+            // Image du cours
+            $course2 = new \core_course_list_element($course);
+            $el['img'] = $CFG->wwwroot . '/theme/remui/pix/background.jpg'; // Image par défaut
+
             foreach ($course2->get_course_overviewfiles() as $file) {
                 if ($file->is_valid_image()) {
                     $imagepath = '/' . $file->get_contextid() .
@@ -93,7 +86,6 @@ trait get_smartch_my_formations
                         false
                     );
                     $el['img'] = $imageurl;
-                    // Use the first image found.
                     break;
                 }
             }
@@ -101,7 +93,7 @@ trait get_smartch_my_formations
             array_push($parcours, $el);
         }
 
-        // $out = array_values($courses);
+        error_log("FORMATIONS COUNT: " . count($parcours));
         return json_encode($parcours);
     }
 
