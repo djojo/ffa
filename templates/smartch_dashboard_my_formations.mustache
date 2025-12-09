@@ -58,20 +58,27 @@ require(['jquery', 'core/ajax'], function($, Ajax) {
             }
         ]);
         cuserformations[0].done(function(response) {
-            console.log("Response:", response);
-            
             let formations = JSON.parse(response);
-            console.log("Formations:", formations);
-            
             let html = "";
             
-            //wait for the block to be ready 
             $('#fff-my-formations').ready(function() {
                 formations.forEach(el => {
-                    html += '<div onclick="location.href=`'+el.url+'`" class="fff-course-thumbnail-box" style="background-image:url('+el.img+');"><h5 class="fff-course-thumbnail-title">'+el.fullname+'</h5></div>';
+                    html += '<div onclick="location.href=`'+el.url+'`" class="fff-course-thumbnail-box" style="background-image:url('+el.img+');"><h5 class="fff-course-thumbnail-title">'+el.fullname+'</h5>';
+                    
+                    // Ajoute les métadonnées (durée, type, modalité)
+                    html += '<div class="fff-course-meta">';
+                    if(el.duration) {
+                        html += '<span><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="white" stroke-width="2"/><path d="M8 4v4l3 3" stroke="white" stroke-width="2" stroke-linecap="round"/></svg> '+el.duration+'</span>';
+                    }
+                    if(el.type) {
+                        html += '<span><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 6l6-4 6 4v7a1 1 0 01-1 1H3a1 1 0 01-1-1V6z" stroke="white" stroke-width="2" fill="none"/></svg> '+el.type+'</span>';
+                    }
+                    html += '<span><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2l2 4h4l-3 3 1 4-4-2-4 2 1-4-3-3h4l2-4z" stroke="white" stroke-width="2" fill="white"/></svg> 100% e-learning</span>';
+                    html += '</div>';
+                    
+                    html += '</div>';
                 });
                 document.getElementById('fff-my-formations').innerHTML = html;
-                console.log("Formations chargées:", formations.length);
             });
         });
     });

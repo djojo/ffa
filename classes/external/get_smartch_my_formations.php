@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Get course stats service
+ * Get smartch my formations - returns ALL published courses with metadata
  *
  * @package   theme_remui
  * @copyright (c) 2023 WisdmLabs (https://wisdmlabs.com/) <support@wisdmlabs.com>
@@ -28,16 +28,13 @@ defined('MOODLE_INTERNAL') || die;
 
 use external_function_parameters;
 use external_value;
-use core_course_list_element;
 
 require_once($CFG->dirroot . '/course/lib.php');
 require_once($CFG->libdir . '/completionlib.php');
-// require_once($CFG->dirroot . '/course/lib.php');
-// require_once('./smartch_functions.php');
 
 /**
- * Get course stats trait
- * @copyright (c) 2022 WisdmLabs (https://wisdmlabs.com/) <support@wisdmlabs.com>
+ * Get smartch my formations trait
+ * @copyright (c) 2023 WisdmLabs (https://wisdmlabs.com/) <support@wisdmlabs.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 trait get_smartch_my_formations
@@ -53,26 +50,91 @@ trait get_smartch_my_formations
         );
     }
 
+    /**
+     * Helper function: Convert numeric value to text option
+     * 
+     * @param int $fieldid Custom field ID
+     * @param string $value Numeric value (1, 2, etc.)
+     * @return string Text value from field options
+     */
+    public static function get_select_option_text($fieldid, $value) {
+        global $DB;
+        
+        $field = $DB->get_record('customfield_field', array('id' => $fieldid));
+        if (!$field) {
+            return '';
+        }
+        
+        $config = json_decode($field->configdata, true);
+        if (!isset($config['options'])) {
+            return '';
+        }
+        
+        $options = preg_split('/\r\n|\r|\n/', $config['options']);
+        $index = intval($value) - 1;
+        
+        if (isset($options[$index])) {
+            return trim($options[$index]);
+        }
+        
+        return '';
+    }
 
+    /**
+     * Get all published courses with metadata
+     * @return string JSON encoded array of courses
+     */
     public static function get_smartch_my_formations()
     {
         global $DB, $CFG;
+
         $context = \context_system::instance();
         self::validate_context($context);
 
-        // Récupère TOUS les cours visibles (sauf le site)
-        $courses = $DB->get_records_sql('SELECT * FROM mdl_course WHERE visible = 1 AND format != "site" ORDER BY fullname ASC');
+        $courses = $DB->get_records_sql(
+            'SELECT * FROM {course} WHERE visible = 1 AND format != ? ORDER BY fullname ASC',
+            array('site')
+        );
 
         $parcours = array();
+
         foreach ($courses as $course) {
+            $el = array();
             $el['fullname'] = $course->fullname;
             $el['id'] = $course->id;
             $el['url'] = $CFG->wwwroot . "/course/view.php?id=" . $course->id;
 
-            // Image du cours
-            $course2 = new \core_course_list_element($course);
-            $el['img'] = $CFG->wwwroot . '/theme/remui/pix/background.jpg'; // Image par défaut
+            // Retrieve custom fields
+            $customfields_data = $DB->get_records_sql(
+                'SELECT cd.*, cf.shortname, cf.configdata, cf.id as fieldid
+                 FROM {customfield_data} cd
+                 JOIN {customfield_field} cf ON cf.id = cd.fieldid
+                 WHERE cd.instanceid = ?',
+                array($course->id)
+            );
 
+            $el['type'] = '';
+            $el['duration'] = '';
+
+            foreach ($customfields_data as $data) {
+                if ($data->shortname == 'type') {
+                    $el['type'] = self::get_select_option_text($data->fieldid, $data->value);
+                } elseif ($data->shortname == 'duration') {
+                    $el['duration'] = $data->value;
+                }
+            }
+
+            // Category
+            if ($course->category > 0) {
+                $category = $DB->get_record('course_categories', array('id' => $course->category));
+                if ($category) {
+                    $el['category'] = $category->name;
+                }
+            }
+
+            // Course image
+            $imgcourse = "";
+            $course2 = new \core_course_list_element($course);
             foreach ($course2->get_course_overviewfiles() as $file) {
                 if ($file->is_valid_image()) {
                     $imagepath = '/' . $file->get_contextid() .
@@ -80,29 +142,28 @@ trait get_smartch_my_formations
                         '/' . $file->get_filearea() .
                         $file->get_filepath() .
                         $file->get_filename();
-                    $imageurl = file_encode_url(
-                        $CFG->wwwroot . '/pluginfile.php',
-                        $imagepath,
-                        false
-                    );
-                    $el['img'] = $imageurl;
+                    $imageurl = new \moodle_url('/pluginfile.php' . $imagepath);
+                    $imgcourse = $imageurl->out(false);
                     break;
                 }
             }
+            if ($imgcourse == "") {
+                $imgcourse = $CFG->wwwroot . '/theme/remui/pix/background.jpg';
+            }
+            $el['img'] = $imgcourse;
 
-            array_push($parcours, $el);
+            $parcours[] = $el;
         }
 
-        error_log("FORMATIONS COUNT: " . count($parcours));
         return json_encode($parcours);
     }
 
     /**
-     * Describes the get_smartch_my_courses return value
+     * Describes the get_smartch_my_formations return value
      * @return external_value
      */
     public static function get_smartch_my_formations_returns()
     {
-        return new external_value(PARAM_RAW, 'Courses of a user in JSON Format');
+        return new external_value(PARAM_RAW, 'Courses in JSON Format');
     }
 }
