@@ -28,7 +28,6 @@ defined('MOODLE_INTERNAL') || die;
 
 use external_function_parameters;
 use external_value;
-use core_course_list_element;
 
 require_once($CFG->dirroot . '/course/lib.php');
 require_once($CFG->libdir . '/completionlib.php');
@@ -52,27 +51,26 @@ trait get_smartch_my_formations
     }
 
     /**
-     * ✅ FONCTION HELPER : Convertit la valeur numérique en texte
+     * Helper function: Convert numeric value to text option
+     * 
+     * @param int $fieldid Custom field ID
+     * @param string $value Numeric value (1, 2, etc.)
+     * @return string Text value from field options
      */
     public static function get_select_option_text($fieldid, $value) {
         global $DB;
         
-        // Récupère la configuration du champ
         $field = $DB->get_record('customfield_field', array('id' => $fieldid));
         if (!$field) {
             return '';
         }
         
-        // Décode le JSON configdata
         $config = json_decode($field->configdata, true);
         if (!isset($config['options'])) {
             return '';
         }
         
-        // Split les options (séparées par \r\n)
         $options = preg_split('/\r\n|\r|\n/', $config['options']);
-        
-        // La valeur 1 = première option, 2 = deuxième option, etc.
         $index = intval($value) - 1;
         
         if (isset($options[$index])) {
@@ -83,7 +81,7 @@ trait get_smartch_my_formations
     }
 
     /**
-     * Get all published courses with metadata (like UAT get_smartch_my_courses)
+     * Get all published courses with metadata
      * @return string JSON encoded array of courses
      */
     public static function get_smartch_my_formations()
@@ -93,7 +91,6 @@ trait get_smartch_my_formations
         $context = \context_system::instance();
         self::validate_context($context);
 
-        // ✅ Récupère TOUS les cours visibles (sauf le site)
         $courses = $DB->get_records_sql(
             'SELECT * FROM {course} WHERE visible = 1 AND format != ? ORDER BY fullname ASC',
             array('site')
@@ -107,7 +104,7 @@ trait get_smartch_my_formations
             $el['id'] = $course->id;
             $el['url'] = $CFG->wwwroot . "/course/view.php?id=" . $course->id;
 
-            // ✅ CORRECTION : Récupère les custom fields avec leur valeur TEXTE
+            // Retrieve custom fields
             $customfields_data = $DB->get_records_sql(
                 'SELECT cd.*, cf.shortname, cf.configdata, cf.id as fieldid
                  FROM {customfield_data} cd
@@ -121,21 +118,13 @@ trait get_smartch_my_formations
 
             foreach ($customfields_data as $data) {
                 if ($data->shortname == 'type') {
-                    // ✅ Convertit "2" en "100% e-learning"
                     $el['type'] = self::get_select_option_text($data->fieldid, $data->value);
                 } elseif ($data->shortname == 'duration') {
                     $el['duration'] = $data->value;
                 }
             }
 
-            // ✅ Détection automatique de la modalité (e-learning/hybride)
-            if ($el['type'] == '100% e-learning') {
-                $el['elearning'] = '100% e-learning';
-            } elseif ($el['type'] == 'Hybride') {
-                $el['hybride'] = 'Hybride';
-            }
-
-            // ✅ Catégorie
+            // Category
             if ($course->category > 0) {
                 $category = $DB->get_record('course_categories', array('id' => $course->category));
                 if ($category) {
@@ -143,7 +132,7 @@ trait get_smartch_my_formations
                 }
             }
 
-            // ✅ Image du cours (comme UAT)
+            // Course image
             $imgcourse = "";
             $course2 = new \core_course_list_element($course);
             foreach ($course2->get_course_overviewfiles() as $file) {
@@ -153,12 +142,8 @@ trait get_smartch_my_formations
                         '/' . $file->get_filearea() .
                         $file->get_filepath() .
                         $file->get_filename();
-                    $imageurl = file_encode_url(
-                        $CFG->wwwroot . '/pluginfile.php',
-                        $imagepath,
-                        false
-                    );
-                    $imgcourse = $imageurl;
+                    $imageurl = new \moodle_url('/pluginfile.php' . $imagepath);
+                    $imgcourse = $imageurl->out(false);
                     break;
                 }
             }
@@ -167,7 +152,7 @@ trait get_smartch_my_formations
             }
             $el['img'] = $imgcourse;
 
-            array_push($parcours, $el);
+            $parcours[] = $el;
         }
 
         return json_encode($parcours);

@@ -46,175 +46,111 @@
 </section>
 
 <script>
-    var maxelements = 0;
-    var numbercourses = 0;
+var maxelements = 0;
+var numbercourses = 0;
 
-    function goToTeam(){
-        let team = document.getElementById('adminteams');
-        let top = team.getBoundingClientRect().top;
-        var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        var topPositionRelativeToPage = top + scrollTop;
-        window.scrollTo({
-            top: topPositionRelativeToPage - 100,
-            behavior: "smooth"
-        });
-    }
+function goToTeam(){
+let team = document.getElementById('adminteams');
+let top = team.getBoundingClientRect().top;
+var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+var topPositionRelativeToPage = top + scrollTop;
+window.scrollTo({top: topPositionRelativeToPage - 100, behavior: "smooth"});
+}
 
-    function getTeams(courseid){
-        document.querySelector("#adminteams").style.display = "block";
-        document.getElementById('mycourseteams').innerHTML = '<div class="loader_container"><div class="loader-06"></div></div>';
-        require(['jquery', 'core/ajax'], function($, Ajax) {
-            $(document).ready(function(){
-                let service_name = 'theme_remui_get_smartch_my_teams_course';
-                let cusercourses = Ajax.call([
-                    {
-                        methodname: service_name,
-                        args: {courseid:courseid}
-                    }
-                ]);
-                cusercourses[0].done(function(response) {
-                    let data = JSON.parse(response);
-                    let html = "";
-                    
-                    $('#mycourseteams').ready(function() {   
-                        if(data == "noteam"){
-                            html+= ' <div class="col-md-12 smartch_team_selected" style="opacity:0;">';
-                                html+= '<h3 class="nothing_to_display">Vous n\'avez pas de groupe associé sur cette formation...</h3>';
-                            html+= ' </div>';
-                        } else {
-                            document.querySelector("#selectedcoursename").innerHTML = data[0].coursename;
-                            data.forEach(el=>{
-                            html += '<div class="col-md-6 smartch_team_selected" style="opacity:0;padding: 0px 20px 20px 20px; margin-bottom: 20px; border-radius: 15px;">';
-                                html += '<div class="row">';
-                                    html += '<div class="col-md-12 smartch_flex_mobile" style="padding: 20px 0;min-height: 60px;">';
-                                        html += '<div>';
-                                        html += '<a href="' + el.url +'/theme/remui/views/adminteam.php?return=dashboard&teamid=' + el.team.id + '"><span class="fff-title-team">' + el.team.name + '</span></a>';
-                                        html += '<div style="font-size:0.8rem";>' + el.date + '</div>';
-                                        html += '</div>';
-                                        html += '<div >';
-                                        let nbmembres = (el.total>1) ? el.total + ' membres' : el.total + ' membre';
-                                            html += '<span style="margin-right:10px;font-size: 0.8rem;">' + nbmembres + '</span>';
-                                            html += '<svg onclick="window.location.href=\'' + el.url +'/theme/remui/views/adminteam.php?return=dashboard&message=1&teamid=' + el.team.id + '#sendmessageteam\'" style="cursor:pointer;" width="20" height="16" viewBox="0 0 20 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 4L8.8906 9.2604C9.5624 9.70827 10.4376 9.70827 11.1094 9.2604L19 4M3 15H17C18.1046 15 19 14.1046 19 13V3C19 1.89543 18.1046 1 17 1H3C1.89543 1 1 1.89543 1 3V13C1 14.1046 1.89543 15 3 15Z" stroke="#0B427C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-                                        html += '</div>';
-                                    html += '</div>';
-                                html += '</div>';
+function getTeams(courseid){
+document.querySelector("#adminteams").style.display = "block";
+document.getElementById('mycourseteams').innerHTML = '<div class="loader_container"><div class="loader-06"></div></div>';
+require(['jquery', 'core/ajax'], function($, Ajax) {
+$(document).ready(function(){
+let cusercourses = Ajax.call([{methodname: 'theme_remui_get_smartch_my_teams_course', args: {courseid:courseid}}]);
+cusercourses[0].done(function(response) {
+let data = JSON.parse(response);
+let html = "";
+$('#mycourseteams').ready(function() {
+if(data == "noteam"){
+html+= ' <div class="col-md-12 smartch_team_selected" style="opacity:0;"><h3 class="nothing_to_display">Vous n\'avez pas de groupe associé sur cette formation...</h3></div>';
+} else {
+document.querySelector("#selectedcoursename").innerHTML = data[0].coursename;
+data.forEach(el=>{
+html += '<div class="col-md-6 smartch_team_selected" style="opacity:0;padding: 0px 20px 20px 20px; margin-bottom: 20px; border-radius: 15px;"><div class="row"><div class="col-md-12 smartch_flex_mobile" style="padding: 20px 0;min-height: 60px;"><div><a href="' + el.url +'/theme/remui/views/adminteam.php?return=dashboard&teamid=' + el.team.id + '"><span class="fff-title-team">' + el.team.name + '</span></a><div style="font-size:0.8rem";>' + el.date + '</div></div><div >';
+let nbmembres = (el.total>1) ? el.total + ' membres' : el.total + ' membre';
+html += '<span style="margin-right:10px;font-size: 0.8rem;">' + nbmembres + '</span><svg onclick="window.location.href=\'' + el.url +'/theme/remui/views/adminteam.php?return=dashboard&message=1&teamid=' + el.team.id + '#sendmessageteam\'" style="cursor:pointer;" width="20" height="16" viewBox="0 0 20 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 4L8.8906 9.2604C9.5624 9.70827 10.4376 9.70827 11.1094 9.2604L19 4M3 15H17C18.1046 15 19 14.1046 19 13V3C19 1.89543 18.1046 1 17 1H3C1.89543 1 1 1.89543 1 3V13C1 14.1046 1.89543 15 3 15Z" stroke="#0B427C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div></div><div class="row">';
+el.teamates.forEach(user=>{
+html += '<div class="col-xs-6 col-sm-6 col-md-6 col-lg-4" style="padding: 10px; margin-bottom: 20px; border-radius: 15px;"><div onclick="window.location.href=\'' + el.url +'/theme/remui/views/adminteam.php?return=dashboard&teamid=' + el.team.id + '&userid=' + user.id + '#equipe\'" style="cursor:pointer;display: flex;justify-content: space-between;width: 100%;"><div><svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="56" height="56" rx="4.2" fill="#EDF2F7"/><path d="M34.5354 20.2707C34.5354 23.6857 31.767 26.4541 28.3521 26.4541C24.9371 26.4541 22.1688 23.6857 22.1688 20.2707C22.1688 16.8558 24.9371 14.0874 28.3521 14.0874C31.767 14.0874 34.5354 16.8558 34.5354 20.2707Z" stroke="#CBD5E0" stroke-width="3.09167" stroke-linecap="round" stroke-linejoin="round"/><path d="M28.3521 31.0916C22.3759 31.0916 17.5312 35.9362 17.5312 41.9124H39.1729C39.1729 35.9362 34.3283 31.0916 28.3521 31.0916Z" stroke="#CBD5E0" stroke-width="3.09167" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div style="margin-left: 10px;width: 100%;"><div style="height: 50px;">' + user.firstname + '<br>' + user.lastname + '</div></div></div></div>';
+});
+html += '</div><div class="row" style="margin-top:20px;"><div class="col-md-12"><a class="smartch_btn" href="' + el.url +'/theme/remui/views/adminteam.php?return=dashboard&teamid=' + el.team.id + '">Voir plus</a></div></div></div>';
+});
+}
+document.getElementById('mycourseteams').innerHTML = html;
+document.querySelectorAll('.smartch_team_selected').forEach(el=>{ fading(el); });
+goToTeam();
+});
+});
+});
+});
+}
 
-                                html += '<div class="row">';
-                                el.teamates.forEach(user=>{
-                                    html += '<div class="col-xs-6 col-sm-6 col-md-6 col-lg-4" style="padding: 10px; margin-bottom: 20px; border-radius: 15px;"><div onclick="window.location.href=\'' + el.url +'/theme/remui/views/adminteam.php?return=dashboard&teamid=' + el.team.id + '&userid=' + user.id + '#equipe\'" style="cursor:pointer;display: flex;justify-content: space-between;width: 100%;"><div><svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="56" height="56" rx="4.2" fill="#EDF2F7"/><path d="M34.5354 20.2707C34.5354 23.6857 31.767 26.4541 28.3521 26.4541C24.9371 26.4541 22.1688 23.6857 22.1688 20.2707C22.1688 16.8558 24.9371 14.0874 28.3521 14.0874C31.767 14.0874 34.5354 16.8558 34.5354 20.2707Z" stroke="#CBD5E0" stroke-width="3.09167" stroke-linecap="round" stroke-linejoin="round"/><path d="M28.3521 31.0916C22.3759 31.0916 17.5312 35.9362 17.5312 41.9124H39.1729C39.1729 35.9362 34.3283 31.0916 28.3521 31.0916Z" stroke="#CBD5E0" stroke-width="3.09167" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div style="margin-left: 10px;width: 100%;"><div style="height: 50px;">' + user.firstname + '<br>' + user.lastname + '</div></div></div></div>';
-                                });
-                                html += '</div>';
-                                html += '<div class="row" style="margin-top:20px;"><div class="col-md-12"><a class="smartch_btn" href="' + el.url +'/theme/remui/views/adminteam.php?return=dashboard&teamid=' + el.team.id + '">Voir plus</a></div></div>';
-                                html += '</div>';
-                            });
-                        }          
-                        document.getElementById('mycourseteams').innerHTML = html;
-                        let elementstofade = document.getElementsByClassName('smartch_team_selected');
-                        elementstofade.forEach(el=>{ fading(el); })
-                        goToTeam()
-                    });
-                });
-            });
-        }); 
-    }
-    
-    function animateUp(element) {
-        element.style.transform = "translateY(-10px)";
-    }
-
-    function resetAnimation(element) {
-        element.style.transform = "translateY(0)";
-    }
-    
-    function fading(element){
-        var increment = 0.045;
-        var opacity = 0;
-        var instance = window.setInterval(function() {
-            if(element){
-                element.style.opacity = opacity;
-                opacity = opacity + increment;
-                if(opacity > 1){
-                    window.clearInterval(instance);
-                }
-            }
-        },30)
-    }
-    fading();
+function animateUp(element) { element.style.transform = "translateY(-10px)"; }
+function resetAnimation(element) { element.style.transform = "translateY(0)"; }
+function fading(element){
+var increment = 0.045, opacity = 0;
+var instance = window.setInterval(function() {
+if(element){ element.style.opacity = opacity; opacity = opacity + increment; if(opacity > 1) window.clearInterval(instance); }
+},30);
+}
 </script>
 
 {{#js}}
 require(['jquery', 'core/ajax'], function($, Ajax) {
-    $(document).ready(function(){
-        let service_name = 'theme_remui_get_smartch_my_formations';
-        let cusercourses = Ajax.call([
-            {
-                methodname: service_name,
-                args: {}
-            }
-        ]);
-        cusercourses[0].done(function(response) {
-            let formations = JSON.parse(response);
-            let html = "";
-            
-            console.log(" DEBUG - Formations reçues:", formations);
-            
-            $('#fff-my-courses').ready(function() {
-                formations.forEach(el=>{
-                    console.log(" Formation:", el.fullname, "| Type:", el.type, "| Duration:", el.duration);
-                    
-                    html += '<div onmouseover="animateUp(this.childNodes[1])" onmouseout="resetAnimation(this.childNodes[1])" onclick="location.href=`'+el.url+'`" class="fff-course-thumbnail-box" style="opacity:0;background-position: center;background-image:url('+el.img+');">';
-                    html += '<div class="smartch_layer_thumbnail"></div>';
-                    html += '<h5 class="fff-course-thumbnail-title">'+el.fullname+'<br>';
-                    
-                   //  MÉTADONNÉES (3 icônes MAXIMUM)
+$(document).ready(function(){
+let cusercourses = Ajax.call([{methodname: 'theme_remui_get_smartch_my_formations', args: {}}]);
+cusercourses[0].done(function(response) {
+{{!console.log(" Réponse brute:", response); }}
+let formations = (typeof response === 'string') ? JSON.parse(response) : response;
+{{!console.log(" Formations parsées:", formations);}}
+
+if (!Array.isArray(formations)) {
+console.error(" formations n'est pas un tableau:", formations);
+document.getElementById('fff-my-courses').innerHTML = '<p style="color:red;">Erreur de chargement</p>';
+return;
+}
+
+let html = "";
+formations.forEach(el=>{
+html += '<div onmouseover="animateUp(this.childNodes[1])" onmouseout="resetAnimation(this.childNodes[1])" onclick="location.href=`'+el.url+'`" class="fff-course-thumbnail-box" style="opacity:0;background-position: center;background-image:url('+el.img+');">';
+html += '<div class="smartch_layer_thumbnail"></div>';
+html += '<h5 class="fff-course-thumbnail-title">'+el.fullname+'<br>';
 html += '<div style="font-size: 1rem;display:flex;align-items:center;justify-content:space-between;margin:10px;">';
 
-// 1️⃣ Durée
 if(el.duration){
-html += '<div style="display:flex;align-items:center;">';
-html += '<svg style="width:20px;" class="mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"></path></svg>';
-html += '<span class="mr-4 FFARegular">'+el.duration+'h</span>';
-html += '</div>';
+html += '<div style="display:flex;align-items:center;"><svg style="width:20px;" class="mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"></path></svg><span class="mr-4 FFARegular">'+el.duration+'h</span></div>';
 }
 
-// 2️⃣ Catégorie (Encadrement sportif) - ICÔNE TAG
 if(el.category && el.category !== ''){
-html += '<div style="display:flex;align-items:center;">';
-html += '<svg style="width:20px;" class="mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6Z" /></svg>';
-html += '<span class="mr-4 FFARegular">'+el.category+'</span>';
-html += '</div>';
+html += '<div style="display:flex;align-items:center;"><svg style="width:20px;" class="mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6Z" /></svg><span class="mr-4 FFARegular">'+el.category+'</span></div>';
 }
 
-// 3️⃣ Modalité (100% e-learning OU Hybride) - ICÔNE ACADÉMIQUE
 if(el.type){
-html += '<div style="display:flex;align-items:center;">';
-html += '<svg style="width:20px;" class="mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5" /></svg>';
-html += '<span class="mr-4 FFARegular">'+el.type+'</span>';
-html += '</div>';
+html += '<div style="display:flex;align-items:center;"><svg style="width:20px;" class="mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5" /></svg><span class="mr-4 FFARegular">'+el.type+'</span></div>';
 }
 
-html += '</div>'; // fin métadonnées
-                    html += '</h5>';
-                    html += '</div>';
-                });
+html += '</div></h5></div>';
+});
 
-                document.getElementById('fff-my-courses').innerHTML = html;
-                let elementstofade = document.getElementsByClassName('fff-course-thumbnail-box');
-                elementstofade.forEach(el=>{ fading(el); })
-                
-                console.log(" Total formations:", formations.length);
-            });
-        }).fail(function(error) {
-            console.error("❌ Erreur:", error);
-        });
-    });
+document.getElementById('fff-my-courses').innerHTML = html;
+document.querySelectorAll('.fff-course-thumbnail-box').forEach(el=>{ fading(el); });
+}).fail(function(error) {
+console.error(" Erreur:", error);
+document.getElementById('fff-my-courses').innerHTML = '<p style="color:red;">Erreur de chargement</p>';
+});
+});
 });
 {{/js}}
 
 <script>
 document.addEventListener("DOMContentLoaded", (event) => {
-    gsap.to("#my_courses", { top: 0 })
-    gsap.to(".FFF-title1-bonjour", { x: 0 })
-    gsap.to(".FFF-title1", { x: 0 })
+gsap.to("#my_courses", { top: 0 });
+gsap.to(".FFF-title1-bonjour", { x: 0 });
+gsap.to(".FFF-title1", { x: 0 });
 });
 </script>
