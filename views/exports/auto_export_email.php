@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Export automatique CSV + envoi email à Dina
  * Version corrigée pour LOCAL avec MailHog
@@ -87,9 +88,9 @@ foreach ($recordset as $row) {
     if (empty($row->group_idnumber)) {
         continue;
     }
-    
+
     $progression = isset($row->progression) && $row->progression !== null ? intval($row->progression) : 0;
-    
+
     $inscription = new stdClass();
     $inscription->idnumber = $row->course_idnumber;
     $inscription->email = $row->email;
@@ -98,7 +99,7 @@ foreach ($recordset as $row) {
     $inscription->liccod = $row->username;
     $inscription->evtsq = $row->group_idnumber;
     $inscription->tauxelearning = $progression;
-    
+
     $inscriptions[] = $inscription;
 }
 $recordset->close();
@@ -152,7 +153,7 @@ try {
     } elseif (strpos($CFG->wwwroot, 'moodle-ffa:8888') !== false) {
         $environment = 'LOCAL';
     }
-    
+
     // Créer un utilisateur fictif "noreply"
     $from = new stdClass();
     $from->email = 'noreply@formation360.athle.fr';
@@ -161,7 +162,7 @@ try {
     $from->maildisplay = true;
     $from->mailformat = 1;
     $from->id = -99;
-    
+
     // Destinataire Dina
     $to = new stdClass();
     $to->email = 'dina.toledano@athle.fr';
@@ -170,24 +171,24 @@ try {
     $to->maildisplay = true;
     $to->mailformat = 1;
     $to->id = -98;
-    
+
     $subject = "[$environment] Export FFA - " . date('d/m/Y');
-    
+
     $messagetext = "Bonjour Dina,\n\n"
-                . "Veuillez trouver ci-joint l'export quotidien des inscriptions.\n\n"
-                . "Statistiques :\n"
-                . "- Nombre d'inscriptions : " . count($inscriptions) . "\n"
-                . "- Date de génération : " . date('d/m/Y à H:i:s') . "\n"
-                . "- Environnement : $environment\n\n"
-                . "Cordialement,\n"
-                . "Système automatique Formation FFA";
-    
+        . "Veuillez trouver ci-joint l'export quotidien des inscriptions.\n\n"
+        . "Statistiques :\n"
+        . "- Nombre d'inscriptions : " . count($inscriptions) . "\n"
+        . "- Date de génération : " . date('d/m/Y à H:i:s') . "\n"
+        . "- Environnement : $environment\n\n"
+        . "Cordialement,\n"
+        . "Système automatique Formation FFA";
+
     $messagehtml = nl2br($messagetext);
-    
+
     //  UTILISE LA FONCTION MOODLE email_to_user avec attachement
     $attachment = $filepath;
     $attachname = $filename;
-    
+
     $result = email_to_user(
         $to,
         $from,
@@ -197,15 +198,14 @@ try {
         $attachment,
         $attachname
     );
-    
+
     if ($result) {
-        file_put_contents($log_file, " Email sent successfully to dina.toledano@athle.fr\n", FILE_APPEND);
+        file_put_contents($log_file, "✅ Email sent successfully to " . $to->email . "\n", FILE_APPEND);
         $success = true;
     } else {
-        file_put_contents($log_file, " Email failed\n", FILE_APPEND);
+        file_put_contents($log_file, "❌ Email failed for " . $to->email . "\n", FILE_APPEND);
         $success = false;
     }
-    
 } catch (Exception $e) {
     file_put_contents($log_file, " Error: " . $e->getMessage() . "\n", FILE_APPEND);
     $success = false;
@@ -223,7 +223,7 @@ echo json_encode([
     'success' => $success,
     'total' => count($inscriptions),
     'filename' => $filename,
-    'recipient' => 'dina.toledano@athle.fr',
+    'recipient' => $to->email,
     'environment' => $environment,
     'execution_time' => $execution_time . 's'
 ]);
