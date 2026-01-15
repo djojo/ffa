@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Export automatique CSV + envoi email à Dina
+ * Export automatique CSV + envoi email à FFa/admin
  * Version corrigée pour LOCAL avec MailHog
  */
 
@@ -163,10 +163,10 @@ try {
     $from->mailformat = 1;
     $from->id = -99;
 
-    // Destinataire Dina
+    // Destinataire FFA/Admin
     $to = new stdClass();
-    $to->email = 'dina.toledano@athle.fr';
-    $to->firstname = 'Dina';
+    $to->email = 'jomaytik@gmail.com';
+    $to->firstname = 'Jo';
     $to->lastname = 'Toledano';
     $to->maildisplay = true;
     $to->mailformat = 1;
@@ -174,7 +174,7 @@ try {
 
     $subject = "[$environment] Export FFA - " . date('d/m/Y');
 
-    $messagetext = "Bonjour Dina,\n\n"
+    $messagetext = "Bonjour Jo ,\n\n"
         . "Veuillez trouver ci-joint l'export quotidien des inscriptions.\n\n"
         . "Statistiques :\n"
         . "- Nombre d'inscriptions : " . count($inscriptions) . "\n"
@@ -200,10 +200,10 @@ try {
     );
 
     if ($result) {
-        file_put_contents($log_file, "✅ Email sent successfully to " . $to->email . "\n", FILE_APPEND);
+        file_put_contents($log_file, " Email sent successfully to " . $to->email . "\n", FILE_APPEND);
         $success = true;
     } else {
-        file_put_contents($log_file, "❌ Email failed for " . $to->email . "\n", FILE_APPEND);
+        file_put_contents($log_file, " Email failed for " . $to->email . "\n", FILE_APPEND);
         $success = false;
     }
 } catch (Exception $e) {
