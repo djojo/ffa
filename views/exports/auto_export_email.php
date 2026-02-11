@@ -1,12 +1,23 @@
 <?php
 
 /**
- * Export automatique CSV + envoi email à FFa/admin
- * Version corrigée pour LOCAL avec MailHog
+ * Envoi automatique des résultats de formation vers l'API FFA
+ *
+ * Pour chaque inscription Moodle, appelle :
+ * https://webservicesffa.athle.fr/FFa_Smartch/Maj_Resultat_Formation.aspx
+ *
+ * Paramètres API :
+ *   dbIDCours  = course idnumber (ex: M00001)
+ *   dbEmail    = email utilisateur
+ *   dbLicence  = username (code licence)
+ *   dbGroupe   = group idnumber (ex: 39826)
+ *   dbTauxE    = taux de complétion e-learning (%)
+ *   dbDate     = date au format dd/MM/yyyy HH:mm
+ *
+ * Déclenché par la tâche planifiée theme_remui\task\ffa_daily_export (7h/jour)
  */
 
 require_once(__DIR__ . '/../../../../config.php');
-// require_once($CFG->libdir . '/phpmailer/moodlephpmailer.php');
 
 global $DB, $CFG;
 
@@ -27,9 +38,22 @@ if (file_exists($log_file) && filesize($log_file) > 5242880) {
     rename($log_file, $log_file . '.' . date('Ymd_His') . '.old');
 }
 
-file_put_contents($log_file, "\n=== EXPORT AUTO " . date('Y-m-d H:i:s') . " ===\n", FILE_APPEND);
+file_put_contents($log_file, "\n=== EXPORT API FFA " . date('Y-m-d H:i:s') . " ===\n", FILE_APPEND);
 
-//  EXACTEMENT LA MÊME REQUÊTE QUE bulkexport.php
+// Détection environnement
+$environment = 'PROD';
+if (strpos($CFG->wwwroot, 'ffa-uat') !== false) {
+    $environment = 'UAT';
+} elseif (strpos($CFG->wwwroot, 'ffa-dev') !== false) {
+    $environment = 'DEV';
+} elseif (strpos($CFG->wwwroot, 'moodle-ffa:8888') !== false) {
+    $environment = 'LOCAL';
+}
+
+// URL de l'API FFA
+$ffa_api_base = 'https://webservicesffa.athle.fr/FFa_Smartch/Maj_Resultat_Formation.aspx';
+
+// Même requête SQL que bulkexport.php
 $sql = "SELECT DISTINCT
     u.id as userid,
     u.email,
@@ -51,13 +75,13 @@ $sql = "SELECT DISTINCT
     ) as group_idnumber,
     (
         SELECT ROUND(
-            (COUNT(CASE WHEN cmc.completionstate > 0 THEN 1 END) * 100.0) / 
-            NULLIF(COUNT(DISTINCT cm.id), 0), 
+            (COUNT(CASE WHEN cmc.completionstate > 0 THEN 1 END) * 100.0) /
+            NULLIF(COUNT(DISTINCT cm.id), 0),
             0
         )
         FROM mdl_course_modules cm
-        LEFT JOIN mdl_course_modules_completion cmc 
-            ON cmc.coursemoduleid = cm.id 
+        LEFT JOIN mdl_course_modules_completion cmc
+            ON cmc.coursemoduleid = cm.id
             AND cmc.userid = u.id
         WHERE cm.course = c.id
         AND cm.completion > 0
@@ -89,8 +113,6 @@ foreach ($recordset as $row) {
         continue;
     }
 
-    $progression = isset($row->progression) && $row->progression !== null ? intval($row->progression) : 0;
-
     $inscription = new stdClass();
     $inscription->idnumber = $row->course_idnumber;
     $inscription->email = $row->email;
@@ -98,63 +120,66 @@ foreach ($recordset as $row) {
     $inscription->lastname = $row->lastname;
     $inscription->liccod = $row->username;
     $inscription->evtsq = $row->group_idnumber;
-    $inscription->tauxelearning = $progression;
+    $inscription->tauxelearning = isset($row->progression) && $row->progression !== null ? intval($row->progression) : 0;
 
     $inscriptions[] = $inscription;
 }
 $recordset->close();
 
-file_put_contents($log_file, "Found " . count($inscriptions) . " inscriptions\n", FILE_APPEND);
+$total = count($inscriptions);
+file_put_contents($log_file, "Found {$total} inscriptions\n", FILE_APPEND);
 
-//  GÉNÈRE LE CSV (identique à bulkexport.php)
-$filename = 'export_inscriptions_' . date('Y-m-d_H-i-s') . '.csv';
-$filepath = '/tmp/' . $filename;
+// --- APPELS API FFA ---
+$now = date('d/m/Y H:i');
+$successes = [];
+$errors = [];
 
-$file = fopen($filepath, 'w');
+foreach ($inscriptions as $i => $insc) {
+    $params = [
+        'dbIDCours' => $insc->idnumber,
+        'dbEmail'   => $insc->email,
+        'dbLicence' => $insc->liccod,
+        'dbGroupe'  => $insc->evtsq,
+        'dbTauxE'   => $insc->tauxelearning,
+        'dbDate'    => $now,
+    ];
 
-fputcsv($file, [
-    'ID Cours',
-    'Email',
-    'Code Licence',
-    'N° Groupe',
-    'Taux E-learning',
-    'Taux Présentiel',
-    'Taux QCM',
-    'Réussite QCM',
-    'Date'
-]);
+    $url = $ffa_api_base . '?' . http_build_query($params);
 
-foreach ($inscriptions as $inscription) {
-    fputcsv($file, [
-        $inscription->idnumber,
-        $inscription->email,
-        $inscription->liccod,
-        $inscription->evtsq,
-        $inscription->tauxelearning,
-        'N/A',
-        'N/A',
-        'N/A',
-        date('Y-m-d H:i:s')
+    $ch = curl_init();
+    curl_setopt_array($ch, [
+        CURLOPT_URL            => $url,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT        => 30,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_SSL_VERIFYPEER => true,
     ]);
+
+    $response = curl_exec($ch);
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $curl_error = curl_error($ch);
+    curl_close($ch);
+
+    $num = $i + 1;
+
+    if ($curl_error) {
+        $error_msg = "[{$num}/{$total}] CURL ERROR {$insc->email} (cours {$insc->idnumber}): {$curl_error}";
+        file_put_contents($log_file, $error_msg . "\n", FILE_APPEND);
+        $errors[] = $error_msg;
+    } elseif ($http_code >= 400) {
+        $error_msg = "[{$num}/{$total}] HTTP {$http_code} {$insc->email} (cours {$insc->idnumber}): {$response}";
+        file_put_contents($log_file, $error_msg . "\n", FILE_APPEND);
+        $errors[] = $error_msg;
+    } else {
+        file_put_contents($log_file, "[{$num}/{$total}] OK {$insc->email} (cours {$insc->idnumber})\n", FILE_APPEND);
+        $successes[] = $insc;
+    }
 }
 
-fclose($file);
+file_put_contents($log_file, "API calls done: " . count($successes) . " OK, " . count($errors) . " errors\n", FILE_APPEND);
 
-file_put_contents($log_file, "CSV generated: $filepath\n", FILE_APPEND);
-
-//  ENVOI PAR EMAIL AVEC LA FONCTION MOODLE (compatible MailHog)
+// --- EMAIL RAPPORT AU CHEF DE PROJET ---
 try {
-    // Détermine l'environnement
-    $environment = 'PROD';
-    if (strpos($CFG->wwwroot, 'ffa-uat') !== false) {
-        $environment = 'UAT';
-    } elseif (strpos($CFG->wwwroot, 'ffa-dev') !== false) {
-        $environment = 'DEV';
-    } elseif (strpos($CFG->wwwroot, 'moodle-ffa:8888') !== false) {
-        $environment = 'LOCAL';
-    }
-
-    // Créer un utilisateur fictif "noreply"
     $from = new stdClass();
     $from->email = 'noreply@formation360.athle.fr';
     $from->firstname = 'Formation';
@@ -163,56 +188,46 @@ try {
     $from->mailformat = 1;
     $from->id = -99;
 
-    // Destinataire FFA/Admin
     $to = new stdClass();
     $to->email = 'jomaytik@gmail.com';
     $to->firstname = 'Jo';
-    $to->lastname = 'Toledano';
+    $to->lastname = 'Chef de projet';
     $to->maildisplay = true;
     $to->mailformat = 1;
     $to->id = -98;
 
-    $subject = "[$environment] Export FFA - " . date('d/m/Y');
+    $subject = "[{$environment}] Rapport API FFA - " . date('d/m/Y');
 
-    $messagetext = "Bonjour Jo ,\n\n"
-        . "Veuillez trouver ci-joint l'export quotidien des inscriptions.\n\n"
-        . "Statistiques :\n"
-        . "- Nombre d'inscriptions : " . count($inscriptions) . "\n"
-        . "- Date de génération : " . date('d/m/Y à H:i:s') . "\n"
-        . "- Environnement : $environment\n\n"
-        . "Cordialement,\n"
-        . "Système automatique Formation FFA";
+    $messagetext = "Bonjour,\n\n"
+        . "Rapport d'envoi automatique des resultats vers l'API FFA.\n\n"
+        . "Resultats :\n"
+        . "- Total inscriptions : {$total}\n"
+        . "- Envois reussis : " . count($successes) . "\n"
+        . "- Erreurs : " . count($errors) . "\n"
+        . "- Date d'execution : " . date('d/m/Y a H:i:s') . "\n"
+        . "- Environnement : {$environment}\n";
 
-    $messagehtml = nl2br($messagetext);
+    if (!empty($errors)) {
+        $messagetext .= "\nDetail des erreurs :\n";
+        foreach ($errors as $err) {
+            $messagetext .= "  - {$err}\n";
+        }
+    }
 
-    //  UTILISE LA FONCTION MOODLE email_to_user avec attachement
-    $attachment = $filepath;
-    $attachname = $filename;
+    $messagetext .= "\nCordialement,\nSysteme automatique Formation FFA";
+    $messagehtml = nl2br(htmlspecialchars($messagetext));
 
-    $result = email_to_user(
-        $to,
-        $from,
-        $subject,
-        $messagetext,
-        $messagehtml,
-        $attachment,
-        $attachname
-    );
+    $email_sent = email_to_user($to, $from, $subject, $messagetext, $messagehtml);
 
-    if ($result) {
-        file_put_contents($log_file, " Email sent successfully to " . $to->email . "\n", FILE_APPEND);
-        $success = true;
+    if ($email_sent) {
+        file_put_contents($log_file, "Report email sent to {$to->email}\n", FILE_APPEND);
     } else {
-        file_put_contents($log_file, " Email failed for " . $to->email . "\n", FILE_APPEND);
-        $success = false;
+        file_put_contents($log_file, "Report email FAILED for {$to->email}\n", FILE_APPEND);
     }
 } catch (Exception $e) {
-    file_put_contents($log_file, " Error: " . $e->getMessage() . "\n", FILE_APPEND);
-    $success = false;
+    file_put_contents($log_file, "Report email error: " . $e->getMessage() . "\n", FILE_APPEND);
+    $email_sent = false;
 }
-
-// Nettoie le fichier temporaire
-unlink($filepath);
 
 $execution_time = round(microtime(true) - $start_time, 2);
 
@@ -220,10 +235,12 @@ file_put_contents($log_file, "Total execution time: {$execution_time}s\n", FILE_
 file_put_contents($log_file, "=== END ===\n\n", FILE_APPEND);
 
 echo json_encode([
-    'success' => $success,
-    'total' => count($inscriptions),
-    'filename' => $filename,
-    'recipient' => $to->email,
-    'environment' => $environment,
-    'execution_time' => $execution_time . 's'
+    'success'        => empty($errors),
+    'total'          => $total,
+    'sent'           => count($successes),
+    'errors'         => count($errors),
+    'error_details'  => $errors,
+    'report_emailed' => $email_sent ?? false,
+    'environment'    => $environment,
+    'execution_time' => $execution_time . 's',
 ]);
