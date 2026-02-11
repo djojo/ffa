@@ -189,32 +189,47 @@ try {
     $from->id = -99;
 
     $to = new stdClass();
-    $to->email = 'jomaytik@gmail.com';
+    $to->email = 'maunick@smartch.fr';
     $to->firstname = 'Jo';
     $to->lastname = 'Chef de projet';
     $to->maildisplay = true;
     $to->mailformat = 1;
     $to->id = -98;
 
-    $subject = "[{$environment}] Rapport API FFA - " . date('d/m/Y');
+    $subject = "[{$environment}] Rapport synchronisation Formation FFA - " . date('d/m/Y');
+
+    $status_label = empty($errors) ? "SUCCES" : "ERREURS DETECTEES";
 
     $messagetext = "Bonjour,\n\n"
-        . "Rapport d'envoi automatique des resultats vers l'API FFA.\n\n"
-        . "Resultats :\n"
-        . "- Total inscriptions : {$total}\n"
-        . "- Envois reussis : " . count($successes) . "\n"
-        . "- Erreurs : " . count($errors) . "\n"
-        . "- Date d'execution : " . date('d/m/Y a H:i:s') . "\n"
-        . "- Environnement : {$environment}\n";
+        . "Voici le rapport quotidien de synchronisation des resultats de formation entre la plateforme Moodle et le systeme FFA.\n\n"
+        . "Statut : {$status_label}\n"
+        . "-----------------------------------\n"
+        . "Date d'execution  : " . date('d/m/Y H:i:s') . "\n"
+        . "Environnement     : {$environment}\n"
+        . "-----------------------------------\n\n"
+        . "Resultats de la synchronisation :\n"
+        . "- Nombre total d'inscriptions traitees : {$total}\n"
+        . "- Envois reussis vers l'API FFA        : " . count($successes) . "\n"
+        . "- Erreurs                              : " . count($errors) . "\n\n"
+        . "Pour chaque inscription, les donnees suivantes ont ete transmises a la FFA :\n"
+        . "  - Identifiant du cours (dbIDCours)\n"
+        . "  - Email de l'utilisateur (dbEmail)\n"
+        . "  - Code licence (dbLicence)\n"
+        . "  - Numero de groupe (dbGroupe)\n"
+        . "  - Taux de completion e-learning en % (dbTauxE)\n"
+        . "  - Date de synchronisation (dbDate)\n";
 
     if (!empty($errors)) {
-        $messagetext .= "\nDetail des erreurs :\n";
+        $messagetext .= "\n--- DETAIL DES ERREURS ---\n";
         foreach ($errors as $err) {
             $messagetext .= "  - {$err}\n";
         }
+        $messagetext .= "\nMerci de signaler ces erreurs a l'equipe technique.\n";
+    } else {
+        $messagetext .= "\nAucune erreur detectee. Toutes les donnees ont ete transmises avec succes.\n";
     }
 
-    $messagetext .= "\nCordialement,\nSysteme automatique Formation FFA";
+    $messagetext .= "\n---\nCe rapport est genere automatiquement chaque jour a 7h00.\nPlateforme : Formation FFA (Moodle)\n";
     $messagehtml = nl2br(htmlspecialchars($messagetext));
 
     $email_sent = email_to_user($to, $from, $subject, $messagetext, $messagehtml);
