@@ -178,7 +178,9 @@ foreach ($inscriptions as $i => $insc) {
 
 file_put_contents($log_file, "API calls done: " . count($successes) . " OK, " . count($errors) . " errors\n", FILE_APPEND);
 
-// --- EMAIL RAPPORT AU CHEF DE PROJET ---
+// --- EMAIL RAPPORT ---
+$email_sent = false;
+
 try {
     $from = new stdClass();
     $from->email = 'noreply@formation360.athle.fr';
@@ -188,17 +190,11 @@ try {
     $from->mailformat = 1;
     $from->id = -99;
 
-    $to = new stdClass();
-    $to->email = 'maunick@smartch.fr';
-    $to->firstname = 'Jo';
-    $to->lastname = 'Chef de projet';
-    $to->maildisplay = true;
-    $to->mailformat = 1;
-    $to->id = -98;
+    $nb_successes = count($successes);
+    $nb_errors = count($errors);
+    $status_label = empty($errors) ? "SUCCES" : "ERREURS DETECTEES";
 
     $subject = "[{$environment}] Rapport synchronisation Formation FFA - " . date('d/m/Y');
-
-    $status_label = empty($errors) ? "SUCCES" : "ERREURS DETECTEES";
 
     $messagetext = "Bonjour,\n\n"
         . "Voici le rapport quotidien de synchronisation des resultats de formation entre la plateforme Moodle et le systeme FFA.\n\n"
@@ -209,8 +205,8 @@ try {
         . "-----------------------------------\n\n"
         . "Resultats de la synchronisation :\n"
         . "- Nombre total d'inscriptions traitees : {$total}\n"
-        . "- Envois reussis vers l'API FFA        : " . count($successes) . "\n"
-        . "- Erreurs                              : " . count($errors) . "\n\n"
+        . "- Envois reussis vers l'API FFA        : {$nb_successes}\n"
+        . "- Erreurs                              : {$nb_errors}\n\n"
         . "Pour chaque inscription, les donnees suivantes ont ete transmises a la FFA :\n"
         . "  - Identifiant du cours (dbIDCours)\n"
         . "  - Email de l'utilisateur (dbEmail)\n"
@@ -232,16 +228,42 @@ try {
     $messagetext .= "\n---\nCe rapport est genere automatiquement chaque jour a 7h00.\nPlateforme : Formation FFA (Moodle)\n";
     $messagehtml = nl2br(htmlspecialchars($messagetext));
 
-    $email_sent = email_to_user($to, $from, $subject, $messagetext, $messagehtml);
+    // daviddumas@smartch.fr : recoit le rapport tous les jours
+    $to_david = new stdClass();
+    $to_david->email = 'daviddumas@smartch.fr';
+    $to_david->firstname = 'David';
+    $to_david->lastname = 'Dumas';
+    $to_david->maildisplay = true;
+    $to_david->mailformat = 1;
+    $to_david->id = -97;
 
-    if ($email_sent) {
-        file_put_contents($log_file, "Report email sent to {$to->email}\n", FILE_APPEND);
+    $result = email_to_user($to_david, $from, $subject, $messagetext, $messagehtml);
+    if ($result) {
+        file_put_contents($log_file, "Report email sent to {$to_david->email}\n", FILE_APPEND);
+        $email_sent = true;
     } else {
-        file_put_contents($log_file, "Report email FAILED for {$to->email}\n", FILE_APPEND);
+        file_put_contents($log_file, "Report email FAILED for {$to_david->email}\n", FILE_APPEND);
+    }
+
+    // maunick@smartch.fr : recoit le rapport uniquement en cas d'erreurs
+    if (!empty($errors)) {
+        $to_jo = new stdClass();
+        $to_jo->email = 'maunick@smartch.fr';
+        $to_jo->firstname = 'Jo';
+        $to_jo->lastname = 'Maunick';
+        $to_jo->maildisplay = true;
+        $to_jo->mailformat = 1;
+        $to_jo->id = -98;
+
+        $result = email_to_user($to_jo, $from, $subject, $messagetext, $messagehtml);
+        if ($result) {
+            file_put_contents($log_file, "Error report email sent to {$to_jo->email}\n", FILE_APPEND);
+        } else {
+            file_put_contents($log_file, "Error report email FAILED for {$to_jo->email}\n", FILE_APPEND);
+        }
     }
 } catch (Exception $e) {
     file_put_contents($log_file, "Report email error: " . $e->getMessage() . "\n", FILE_APPEND);
-    $email_sent = false;
 }
 
 $execution_time = round(microtime(true) - $start_time, 2);

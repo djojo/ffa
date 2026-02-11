@@ -83,3 +83,20 @@ if ($result) {
 } else {
     echo "ECHEC de l'envoi du mail a {$to->email}\n";
 }
+
+// Envoyer aussi au chef de projet (test avec erreurs fictives)
+$to_cdp = new stdClass();
+$to_cdp->email = 'daviddumas@smartch.fr';
+$to_cdp->firstname = 'David';
+$to_cdp->lastname = 'Dumas';
+$to_cdp->maildisplay = true;
+$to_cdp->mailformat = 1;
+$to_cdp->id = -97;
+
+$result_cdp = email_to_user($to_cdp, $from, $subject, $messagetext, $messagehtml);
+
+if ($result_cdp) {
+    echo "Mail envoye avec succes a {$to_cdp->email}\n";
+} else {
+    echo "ECHEC de l'envoi du mail a {$to_cdp->email}\n";
+}
