@@ -187,8 +187,31 @@ foreach ($inscriptions as $i => $insc) {
             }
         }
 
-        $ffa_retour = $ffa_result[0]['retour'] ?? $ffa_result['retour'] ?? null;
-        $ffa_msg = $ffa_result[0]['msg'] ?? $ffa_result['msg'] ?? '';
+        // Cas 1: réponse directe [{"retour":1,"msg":""}]
+        // Cas 2: JSON imbriqué {"retour":-1,"msg":"[{\"retour\":1,\"msg\":\"\"}]"}
+        $ffa_retour = null;
+        $ffa_msg = '';
+
+        if (isset($ffa_result[0]['retour'])) {
+            // Cas 1: array indexé
+            $ffa_retour = $ffa_result[0]['retour'];
+            $ffa_msg = $ffa_result[0]['msg'] ?? '';
+        } elseif (isset($ffa_result['retour'])) {
+            // Cas 2: objet avec possible JSON imbriqué dans msg
+            if (isset($ffa_result['msg']) && is_string($ffa_result['msg'])) {
+                $inner = json_decode($ffa_result['msg'], true);
+                if (is_array($inner) && isset($inner[0]['retour'])) {
+                    $ffa_retour = $inner[0]['retour'];
+                    $ffa_msg = $inner[0]['msg'] ?? '';
+                } else {
+                    $ffa_retour = $ffa_result['retour'];
+                    $ffa_msg = $ffa_result['msg'];
+                }
+            } else {
+                $ffa_retour = $ffa_result['retour'];
+                $ffa_msg = $ffa_result['msg'] ?? '';
+            }
+        }
 
         if ($ffa_retour !== null && $ffa_retour == 1) {
             file_put_contents($log_file, "[{$num}/{$total}] OK {$insc->email} (cours {$insc->idnumber})\n", FILE_APPEND);
