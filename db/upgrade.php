@@ -80,18 +80,23 @@ function xmldb_theme_remui_upgrade($oldversion) {
 
     }
 
+    if ($oldversion < 2024042505) {
+        // Table to track FFA API exports for differential sending.
+        $table = new xmldb_table('smartch_ffa_export_log');
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('courseid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('group_idnumber', XMLDB_TYPE_CHAR, '50', null, null, null, null);
+        $table->add_field('last_sent_progression', XMLDB_TYPE_INTEGER, '3', null, null, null, null);
+        $table->add_field('last_sent_timestamp', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
 
-    //theme_remui_course_custom_fields();
-    // new_colors_compatibility();
-    // import_user_tour();
-    // footer_migration_compatibility();
-    // theme_remui_handle_orphan_settings();
-    // buttons_compatibility();
-    // login_compatibility($oldversion);
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $table->add_index('unique_user_course', XMLDB_INDEX_UNIQUE, ['userid', 'courseid']);
 
-    // if (get_config('theme_remui', 'header-primary-border-bottom-size') != 0) {
-    //     set_config('hds-boxshadow-enable', 'enabled', 'theme_remui');
-    // }
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+    }
 
     return true;
 }
