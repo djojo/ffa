@@ -176,16 +176,28 @@ foreach ($inscriptions as $i => $insc) {
         file_put_contents($log_file, $error_msg . "\n", FILE_APPEND);
         $errors[] = $error_msg;
     } else {
-        // Vérifier le contenu JSON de la réponse FFA
-        $json_response = json_decode($response, true);
-        if ($json_response !== null && isset($json_response['retour']) && $json_response['retour'] != 1) {
-            $ffa_msg = $json_response['msg'] ?? 'pas de message';
-            $error_msg = "[{$num}/{$total}] API FFA retour={$json_response['retour']} {$insc->email} (cours {$insc->idnumber}): {$ffa_msg}";
-            file_put_contents($log_file, $error_msg . "\n", FILE_APPEND);
-            $errors[] = $error_msg;
-        } else {
+        // La réponse FFA contient 2 JSON concaténés : le résultat puis le wrapper
+        // Ex: [{"retour":1,"msg":""}]{"retour":-1,"msg":"..."}
+        // On parse le premier JSON (le vrai résultat)
+        $ffa_result = json_decode($response, true);
+        if ($ffa_result === null) {
+            // Tenter d'extraire le premier JSON si concaténé
+            if (preg_match('/^\[.*?\]/', $response, $matches)) {
+                $ffa_result = json_decode($matches[0], true);
+            }
+        }
+
+        $ffa_retour = $ffa_result[0]['retour'] ?? $ffa_result['retour'] ?? null;
+        $ffa_msg = $ffa_result[0]['msg'] ?? $ffa_result['msg'] ?? '';
+
+        if ($ffa_retour !== null && $ffa_retour == 1) {
             file_put_contents($log_file, "[{$num}/{$total}] OK {$insc->email} (cours {$insc->idnumber})\n", FILE_APPEND);
             $successes[] = $insc;
+        } else {
+            $ffa_msg_clean = trim($ffa_msg) ?: 'pas de message';
+            $error_msg = "[{$num}/{$total}] API FFA retour={$ffa_retour} {$insc->email} (cours {$insc->idnumber}): {$ffa_msg_clean}";
+            file_put_contents($log_file, $error_msg . "\n", FILE_APPEND);
+            $errors[] = $error_msg;
         }
     }
 }
