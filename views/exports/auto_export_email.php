@@ -176,40 +176,38 @@ foreach ($inscriptions as $i => $insc) {
         file_put_contents($log_file, $error_msg . "\n", FILE_APPEND);
         $errors[] = $error_msg;
     } else {
-        // La réponse FFA contient 2 JSON concaténés : le résultat puis le wrapper
-        // Ex: [{"retour":1,"msg":""}]{"retour":-1,"msg":"..."}
-        // On parse le premier JSON (le vrai résultat)
-        $ffa_result = json_decode($response, true);
-        if ($ffa_result === null) {
-            // Tenter d'extraire le premier JSON si concaténé
-            if (preg_match('/^\[.*?\]/', $response, $matches)) {
-                $ffa_result = json_decode($matches[0], true);
-            }
-        }
-
-        // Cas 1: réponse directe [{"retour":1,"msg":""}]
-        // Cas 2: JSON imbriqué {"retour":-1,"msg":"[{\"retour\":1,\"msg\":\"\"}]"}
+        // L'API FFA retourne un JSON mal formé avec du JSON non-échappé dans msg :
+        // { "retour": -1, "msg": "[{"retour": 1, "msg": ""}]"}
+        // On extrait le retour interne via regex
         $ffa_retour = null;
         $ffa_msg = '';
 
-        if (isset($ffa_result[0]['retour'])) {
-            // Cas 1: array indexé
-            $ffa_retour = $ffa_result[0]['retour'];
-            $ffa_msg = $ffa_result[0]['msg'] ?? '';
-        } elseif (isset($ffa_result['retour'])) {
-            // Cas 2: objet avec possible JSON imbriqué dans msg
-            if (isset($ffa_result['msg']) && is_string($ffa_result['msg'])) {
-                $inner = json_decode($ffa_result['msg'], true);
-                if (is_array($inner) && isset($inner[0]['retour'])) {
-                    $ffa_retour = $inner[0]['retour'];
-                    $ffa_msg = $inner[0]['msg'] ?? '';
-                } else {
-                    $ffa_retour = $ffa_result['retour'];
-                    $ffa_msg = $ffa_result['msg'];
-                }
-            } else {
+        // Essayer json_decode direct d'abord (au cas où le format change)
+        $ffa_result = json_decode($response, true);
+
+        if ($ffa_result !== null) {
+            // JSON valide
+            if (isset($ffa_result[0]['retour'])) {
+                $ffa_retour = $ffa_result[0]['retour'];
+                $ffa_msg = $ffa_result[0]['msg'] ?? '';
+            } elseif (isset($ffa_result['retour'])) {
                 $ffa_retour = $ffa_result['retour'];
                 $ffa_msg = $ffa_result['msg'] ?? '';
+            }
+        }
+
+        // Si json_decode échoue (JSON mal formé), extraire via regex
+        if ($ffa_retour === null) {
+            // Chercher le pattern [{"retour": X, "msg": "..."}] dans la réponse
+            if (preg_match('/\[\{"retour":\s*(\d+),\s*"msg":\s*"([^"]*)"\}\]/', $response, $matches)) {
+                $ffa_retour = intval($matches[1]);
+                $ffa_msg = $matches[2];
+            // Aussi chercher {"retour": X, "msg": "..."} simple
+            } elseif (preg_match('/"retour":\s*(\d+)/', $response, $matches)) {
+                $ffa_retour = intval($matches[1]);
+                if (preg_match('/"msg":\s*"([^"]*)"/', $response, $msg_matches)) {
+                    $ffa_msg = $msg_matches[1];
+                }
             }
         }
 
