@@ -92,6 +92,7 @@ JOIN mdl_enrol e ON e.id = ue.enrolid
 JOIN mdl_course c ON c.id = e.courseid
 WHERE c.visible = 1
 AND c.format != 'site'
+AND u.username REGEXP '^[0-9]+$'
 AND EXISTS (
     SELECT 1
     FROM mdl_groups_members gm3
