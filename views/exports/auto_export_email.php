@@ -144,7 +144,7 @@ foreach ($inscriptions as $i => $insc) {
         'dbDate'    => $now,
     ];
 
-    $url = $ffa_api_base . '?' . http_build_query($params);
+    $url = $ffa_api_base . '?' . http_build_query($params, '', '&');
 
     // Log URL pour les 3 premiers appels (debug)
     if ($i < 3) {
