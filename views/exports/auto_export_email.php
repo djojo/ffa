@@ -115,6 +115,8 @@ foreach ($recordset as $row) {
     }
 
     $inscription = new stdClass();
+    $inscription->userid = $row->userid;
+    $inscription->courseid = $row->courseid;
     $inscription->idnumber = $row->course_idnumber;
     $inscription->email = $row->email;
     $inscription->firstname = $row->firstname;
@@ -130,12 +132,36 @@ $recordset->close();
 $total = count($inscriptions);
 file_put_contents($log_file, "Found {$total} inscriptions\n", FILE_APPEND);
 
+// --- FILTRAGE DIFFERENTIEL ---
+// Charger les derniers envois réussis pour ne renvoyer que les inscriptions nouvelles ou modifiées
+$existing_logs = [];
+if ($DB->get_manager()->table_exists('smartch_ffa_export_log')) {
+    $log_records = $DB->get_records('smartch_ffa_export_log');
+    foreach ($log_records as $lr) {
+        $existing_logs[$lr->userid . '_' . $lr->courseid] = $lr;
+    }
+}
+
+$to_send = [];
+$skipped = 0;
+foreach ($inscriptions as $insc) {
+    $key = $insc->userid . '_' . $insc->courseid;
+    if (isset($existing_logs[$key]) && intval($existing_logs[$key]->last_sent_progression) === $insc->tauxelearning) {
+        $skipped++;
+        continue;
+    }
+    $to_send[] = $insc;
+}
+
+$nb_to_send = count($to_send);
+file_put_contents($log_file, "Differential: {$skipped} unchanged (skipped), {$nb_to_send} to send\n", FILE_APPEND);
+
 // --- APPELS API FFA ---
 $now = date('d/m/Y H:i');
 $successes = [];
 $errors = [];
 
-foreach ($inscriptions as $i => $insc) {
+foreach ($to_send as $i => $insc) {
     $params = [
         'dbIDCours' => $insc->idnumber,
         'dbEmail'   => $insc->email,
@@ -152,6 +178,8 @@ foreach ($inscriptions as $i => $insc) {
         file_put_contents($log_file, "URL: {$url}\n", FILE_APPEND);
     }
 
+    $num = $i + 1;
+
     $ch = curl_init();
     curl_setopt_array($ch, [
         CURLOPT_URL            => $url,
@@ -166,14 +194,12 @@ foreach ($inscriptions as $i => $insc) {
     $curl_error = curl_error($ch);
     curl_close($ch);
 
-    $num = $i + 1;
-
     if ($curl_error) {
-        $error_msg = "[{$num}/{$total}] CURL ERROR {$insc->email} (cours {$insc->idnumber}): {$curl_error}";
+        $error_msg = "[{$num}/{$nb_to_send}] CURL ERROR {$insc->email} (cours {$insc->idnumber}): {$curl_error}";
         file_put_contents($log_file, $error_msg . "\n", FILE_APPEND);
         $errors[] = $error_msg;
     } elseif ($http_code >= 400) {
-        $error_msg = "[{$num}/{$total}] HTTP {$http_code} {$insc->email} (cours {$insc->idnumber}): {$response}";
+        $error_msg = "[{$num}/{$nb_to_send}] HTTP {$http_code} {$insc->email} (cours {$insc->idnumber}): {$response}";
         file_put_contents($log_file, $error_msg . "\n", FILE_APPEND);
         $errors[] = $error_msg;
     } else {
@@ -213,18 +239,35 @@ foreach ($inscriptions as $i => $insc) {
         }
 
         if ($ffa_retour !== null && $ffa_retour == 1) {
-            file_put_contents($log_file, "[{$num}/{$total}] OK {$insc->email} (cours {$insc->idnumber})\n", FILE_APPEND);
+            file_put_contents($log_file, "[{$num}/{$nb_to_send}] OK {$insc->email} (cours {$insc->idnumber})\n", FILE_APPEND);
             $successes[] = $insc;
+
+            // Mettre à jour le log différentiel
+            $log_key = $insc->userid . '_' . $insc->courseid;
+            if (isset($existing_logs[$log_key])) {
+                $existing_logs[$log_key]->last_sent_progression = $insc->tauxelearning;
+                $existing_logs[$log_key]->last_sent_timestamp = time();
+                $existing_logs[$log_key]->group_idnumber = $insc->evtsq;
+                $DB->update_record('smartch_ffa_export_log', $existing_logs[$log_key]);
+            } else {
+                $DB->insert_record('smartch_ffa_export_log', (object)[
+                    'userid' => $insc->userid,
+                    'courseid' => $insc->courseid,
+                    'group_idnumber' => $insc->evtsq,
+                    'last_sent_progression' => $insc->tauxelearning,
+                    'last_sent_timestamp' => time(),
+                ]);
+            }
         } else {
             $ffa_msg_clean = trim($ffa_msg) ?: 'pas de message';
-            $error_msg = "[{$num}/{$total}] API FFA retour={$ffa_retour} {$insc->email} (cours {$insc->idnumber}): {$ffa_msg_clean}";
+            $error_msg = "[{$num}/{$nb_to_send}] API FFA retour={$ffa_retour} {$insc->email} (cours {$insc->idnumber}): {$ffa_msg_clean}";
             file_put_contents($log_file, $error_msg . "\n", FILE_APPEND);
             $errors[] = $error_msg;
         }
     }
 }
 
-file_put_contents($log_file, "API calls done: " . count($successes) . " OK, " . count($errors) . " errors\n", FILE_APPEND);
+file_put_contents($log_file, "API calls done: " . count($successes) . " OK, " . count($errors) . " errors, {$skipped} skipped (unchanged)\n", FILE_APPEND);
 
 // --- EMAIL RAPPORT ---
 $email_sent = false;
@@ -252,10 +295,12 @@ try {
         . "Environnement     : {$environment}\n"
         . "-----------------------------------\n\n"
         . "Resultats de la synchronisation :\n"
-        . "- Nombre total d'inscriptions traitees : {$total}\n"
+        . "- Inscriptions totales en base         : {$total}\n"
+        . "- Inchangees (non renvoyees)           : {$skipped}\n"
+        . "- Envoyees (nouvelles ou modifiees)     : {$nb_to_send}\n"
         . "- Envois reussis vers l'API FFA        : {$nb_successes}\n"
         . "- Erreurs                              : {$nb_errors}\n\n"
-        . "Pour chaque inscription, les donnees suivantes ont ete transmises a la FFA :\n"
+        . "Pour chaque inscription envoyee, les donnees suivantes ont ete transmises a la FFA :\n"
         . "  - Identifiant du cours (dbIDCours)\n"
         . "  - Email de l'utilisateur (dbEmail)\n"
         . "  - Code licence (dbLicence)\n"
@@ -322,6 +367,8 @@ file_put_contents($log_file, "=== END ===\n\n", FILE_APPEND);
 echo json_encode([
     'success'        => empty($errors),
     'total'          => $total,
+    'skipped'        => $skipped,
+    'to_send'        => $nb_to_send,
     'sent'           => count($successes),
     'errors'         => count($errors),
     'error_details'  => $errors,
