@@ -146,6 +146,11 @@ foreach ($inscriptions as $i => $insc) {
 
     $url = $ffa_api_base . '?' . http_build_query($params);
 
+    // Log URL pour les 3 premiers appels (debug)
+    if ($i < 3) {
+        file_put_contents($log_file, "URL: {$url}\n", FILE_APPEND);
+    }
+
     $ch = curl_init();
     curl_setopt_array($ch, [
         CURLOPT_URL            => $url,
@@ -171,8 +176,17 @@ foreach ($inscriptions as $i => $insc) {
         file_put_contents($log_file, $error_msg . "\n", FILE_APPEND);
         $errors[] = $error_msg;
     } else {
-        file_put_contents($log_file, "[{$num}/{$total}] OK {$insc->email} (cours {$insc->idnumber})\n", FILE_APPEND);
-        $successes[] = $insc;
+        // Vérifier le contenu JSON de la réponse FFA
+        $json_response = json_decode($response, true);
+        if ($json_response !== null && isset($json_response['retour']) && $json_response['retour'] != 1) {
+            $ffa_msg = $json_response['msg'] ?? 'pas de message';
+            $error_msg = "[{$num}/{$total}] API FFA retour={$json_response['retour']} {$insc->email} (cours {$insc->idnumber}): {$ffa_msg}";
+            file_put_contents($log_file, $error_msg . "\n", FILE_APPEND);
+            $errors[] = $error_msg;
+        } else {
+            file_put_contents($log_file, "[{$num}/{$total}] OK {$insc->email} (cours {$insc->idnumber})\n", FILE_APPEND);
+            $successes[] = $insc;
+        }
     }
 }
 
