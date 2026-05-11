@@ -115,12 +115,12 @@ trait get_smartch_my_courses
         } else {
             //on va chercher les cours de l'utilisateur
             $querycourses = 'SELECT c.id, c.fullname, c.category FROM mdl_course c
-            JOIN mdl_role_assignments ra ON ra.userid = ' . $USER->id . '
-            JOIN mdl_context ct ON ct.id = ra.contextid AND c.id = ct.instanceid
-            JOIN mdl_role r ON r.id = ra.roleid
+            JOIN mdl_enrol e ON e.courseid = c.id
+            JOIN mdl_user_enrolments ue ON ue.enrolid = e.id AND ue.userid = ' . $USER->id . '
             WHERE c.format != "site" AND c.visible = 1
+            AND ue.status = 0
             ORDER BY
-            CASE 
+            CASE
                 WHEN c.fullname LIKE "%Aide%" THEN 0
                 ELSE 1
             END,
